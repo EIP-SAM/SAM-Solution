@@ -1,6 +1,5 @@
 *.o
 *~
 
-deployment/admin_client_build/build/*
-deployment/server_build/build/*
-deployment/user_client_build/build/*
+*.pro.user*
+*build*

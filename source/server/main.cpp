@@ -1,18 +1,14 @@
-//
-// main.cpp for SAM-Solution
-//
-// Made by Nicolas Chauvin
-// Email <chauvin.nico@gmail.com>
-//
-// Started on  Wed Jul 15 01:14:40 2015 Nicolas Chauvin
-// Last update Thu Jul 16 21:11:56 2015 Nicolas Chauvin
-//
+#include <QCoreApplication>
 
+//#include <QDebug>
 #include "HelloWorld.hpp"
 
-int main(int ac, char **av)
+int main(int argc, char *argv[])
 {
-  HelloWorld::sayHello();
-  qDebug() << "I'm the server";
-  return (0);
+    QCoreApplication a(argc, argv);
+
+    qDebug() << "Server: Hello world!";
+    HelloWorld::sayHello();
+
+    return a.exec();
 }
