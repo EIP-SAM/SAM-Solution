@@ -37,3 +37,17 @@ std::vector<std::string>	FileManagerUtils::parseFileKeyValue(const std::string &
     file.close();
     return valueKeywords;
 }
+
+//
+// This function create a file with write and read access;
+//
+
+std::fstream 			*FileManagerUtils::createFile(const std::string filePath)
+{
+    std::fstream *file = new std::fstream(filePath.c_str(),
+				std::ios_base::in | std::ios_base::out | std::ios_base::trunc);
+
+    if (!file)
+        std::cerr << "Error cannot create file" << std::endl;
+    return file;
+}
