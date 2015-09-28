@@ -1,10 +1,11 @@
 #include	<stdio.h>
 #include	<iostream>
 #include	"NetworkClientManager.hpp"
+#include	<QApplication>
 
 NetworkClientManager::NetworkClientManager()
 {
-  connect(&client, SIGNAL(encrypted()), this, SLOT(send()));
+  connect(&client, SIGNAL(encrypted()), this, SLOT(sendtest()));
 }
 
 NetworkClientManager::~NetworkClientManager()
@@ -15,10 +16,11 @@ void		NetworkClientManager::connected()
 {
   // TODO
   // remove address and port
-  QString address;
-  quint16 port;
+  QString address = "127.0.0.1";
+  quint16 port = 42042;
 
   client.setProtocol(QSsl::TlsV1_2);
+  client.addCaCertificates("server.crt");
   client.connectToHostEncrypted(address, port);
   if (client.waitForEncrypted(3000))
     {
@@ -31,7 +33,7 @@ void		NetworkClientManager::connected()
     }
 }
 
-bool		NetworkClientManager::send()
+bool		NetworkClientManager::sendtest()
 {
   qDebug() << "Send a msg";
   client.write("HELLO", 5);
@@ -47,9 +49,12 @@ void		NetworkClientManager::disconnect()
 {
 }
 
-int main() {
+int main(int argc, char **argv) {
+
+  QApplication app(argc, argv);
+
   NetworkClientManager *ncm = new NetworkClientManager();
 
   ncm->connected();
-  return 0;
+  return app.exec();
 }

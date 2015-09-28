@@ -14,7 +14,7 @@ public:
   void		disconnect();
 
 public slots:
-    bool	send();
+    bool	sendtest();
 
 private:
   QSslSocket	client;

@@ -10,3 +10,4 @@ INCLUDEPATH += .
 HEADERS += INetworkClientManager.hpp NetworkClientManager.hpp
 SOURCES += NetworkClientManager.cpp
 QT += network
+QT += widgets
