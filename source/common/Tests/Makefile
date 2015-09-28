@@ -813,7 +813,8 @@ TestFileManagerUtils.o: TestFileManagerUtils.cpp /usr/include/qt5/QtTest/QtTest 
 		/usr/include/qt5/QtCore/QDebug \
 		/usr/include/qt5/QtTest/qtesttouch.h \
 		/usr/include/qt5/QtTest/qttestversion.h \
-		../FileManagerUtils.hpp
+		../FileManagerUtils.hpp \
+		TestFileManagerUtils.moc
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o TestFileManagerUtils.o TestFileManagerUtils.cpp
 
 FileManagerUtils.o: ../FileManagerUtils.cpp ../FileManagerUtils.hpp
