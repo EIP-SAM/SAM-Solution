@@ -1,19 +1,22 @@
-#ifndef						AINSTRUCTION_HPP_
-# define					AINSTRUCTION_HPP_
+#ifndef						AINSTRUCTION_MODEL_HPP_
+# define					AINSTRUCTION_MODEL_HPP_
 
 # include					<QByteArray>
 
-class						AInstruction
+class						AInstructionModel
 {
 public:
-  AInstruction();
-  ~AInstruction();
+  AInstructionModel();
+  AInstructionModel(QByteArray *byteArray);
+  ~AInstructionModel();
   void						setInstructionCode(int instructionCode);
   int						getInstructionCode() const;
   void						setReturnType(int returnType);
   int						getReturnType() const;
   void						setIsSynchrone(bool isSynchrone);
   bool						getIsSynchrone() const;
+  void						setByteArray(QByteArray *byteArray);
+  QByteArray					*getByteArray() const;
 private:
   int						*_instructionCode;
   int						*_returnType;
@@ -21,4 +24,4 @@ private:
   QByteArray					*_byteArray;
 };
 
-#endif		/* !AINSTRUCTION_HPP_ */
+#endif		/* !AINSTRUCTION_MODEL_HPP_ */

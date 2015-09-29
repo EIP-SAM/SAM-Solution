@@ -22,7 +22,7 @@ void		NetworkClientManager::startConnection(QString ip, quint16 port)
   if (client.waitForEncrypted(3000))
     {
       qDebug() << "Client connected";
-      writeMsg("HELLO my name is claire");
+      writeMsg("HELLO");
     }
   else
     {
@@ -34,8 +34,7 @@ bool		NetworkClientManager::writeMsg(const char *msg)
 {
   quint64	sizeMsg = strlen(msg);
 
-  AInstruction *instruction = new AInstruction();
-  qDebug() << "IN";
+  AInstructionModel *instruction = new AInstructionModel();
 
   if (client.write(msg, sizeMsg) == -1)
     {
