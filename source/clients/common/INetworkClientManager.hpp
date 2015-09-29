@@ -1,6 +1,8 @@
 #ifndef			INETWORK_CLIENT_MANAGER_HPP_
 # define		INETWORK_CLIENT_MANAGER_HPP_
 
+#include		"AInstruction.hpp"
+
 class			INetworkClientManager
 {
 public:

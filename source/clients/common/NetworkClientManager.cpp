@@ -1,6 +1,8 @@
 #include	<stdio.h>
 #include	<iostream>
 #include	<QApplication>
+#include	<QDataStream>
+#include	<QByteArray>
 #include	"NetworkClientManager.hpp"
 
 NetworkClientManager::NetworkClientManager()
@@ -31,6 +33,9 @@ void		NetworkClientManager::startConnection(QString ip, quint16 port)
 bool		NetworkClientManager::writeMsg(const char *msg)
 {
   quint64	sizeMsg = strlen(msg);
+
+  AInstruction *instruction = new AInstruction();
+  qDebug() << "IN";
 
   if (client.write(msg, sizeMsg) == -1)
     {
