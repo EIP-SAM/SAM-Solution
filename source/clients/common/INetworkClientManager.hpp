@@ -1,8 +1,13 @@
+#ifndef			INETWORK_CLIENT_MANAGER_HPP_
+# define		INETWORK_CLIENT_MANAGER_HPP_
+
 class			INetworkClientManager
 {
 public:
-  virtual void		connected() = 0;
-  virtual bool		sendtest() = 0;
-  virtual std::string	receive() = 0;
+  virtual void		startConnection(QString ip, quint16 port) = 0;
+  virtual bool		writeMsg(const char *msg) = 0;
+  virtual std::string	readMsg() = 0;
   virtual void		disconnect() = 0;
 };
+
+#endif			/* !INETWORK_CLIENT_MANAGER_HPP_ */
