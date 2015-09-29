@@ -1,48 +1,55 @@
 #include	<stdio.h>
 #include	<iostream>
-#include	"NetworkClientManager.hpp"
 #include	<QApplication>
+#include	"NetworkClientManager.hpp"
 
 NetworkClientManager::NetworkClientManager()
 {
-  connect(&client, SIGNAL(encrypted()), this, SLOT(sendtest()));
+  connect(&client, SIGNAL(readyRead()), this, SLOT(readMsg()));
 }
 
 NetworkClientManager::~NetworkClientManager()
 {
 }
 
-void		NetworkClientManager::connected()
+void		NetworkClientManager::startConnection(QString ip, quint16 port)
 {
-  // TODO
-  // remove address and port
-  QString address = "127.0.0.1";
-  quint16 port = 42042;
-
   client.setProtocol(QSsl::TlsV1_2);
   client.addCaCertificates("server.crt");
-  client.connectToHostEncrypted(address, port);
+  client.connectToHostEncrypted(ip, port);
   if (client.waitForEncrypted(3000))
     {
-      qDebug("connected");
+      qDebug() << "Client connected";
+      writeMsg("HELLO my name is claire");
     }
   else
     {
-      qDebug("Error");
-      qDebug() << client.errorString();
+      qDebug() << "Error: " << client.errorString();
     }
 }
 
-bool		NetworkClientManager::sendtest()
+bool		NetworkClientManager::writeMsg(const char *msg)
 {
-  qDebug() << "Send a msg";
-  client.write("HELLO", 5);
+  quint64	sizeMsg = strlen(msg);
+
+  if (client.write(msg, sizeMsg) == -1)
+    {
+      qDebug() << "Error message not send";
+      return (false);
+    }
   return (true);
 }
 
-std::string	NetworkClientManager:: receive()
+std::string	NetworkClientManager::readMsg()
 {
-  return ("FUCK");
+  char		buffer[1024];
+
+  if (client.read(buffer, 1024) == -1)
+    {
+      qDebug() << "Error can not ready";
+    }
+  qDebug() << "buffer: " << buffer;
+  return ("");
 }
 
 void		NetworkClientManager::disconnect()
@@ -55,6 +62,6 @@ int main(int argc, char **argv) {
 
   NetworkClientManager *ncm = new NetworkClientManager();
 
-  ncm->connected();
+  ncm->startConnection("127.0.0.1", 42042);
   return app.exec();
 }

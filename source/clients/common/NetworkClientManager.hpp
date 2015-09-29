@@ -1,3 +1,6 @@
+#ifndef		NETWORK_CLIENT_MANAGER_HPP_
+# define	NETWORK_CLIENT_MANAGER_HPP_
+
 #include	<QSslSocket>
 #include	<QObject>
 #include	"INetworkClientManager.hpp"
@@ -9,13 +12,15 @@ public:
   NetworkClientManager();
   ~NetworkClientManager();
 
-  void		connected();
-  std::string	receive();
+  void		startConnection(QString ip, quint16 port);
   void		disconnect();
 
 public slots:
-    bool	sendtest();
+  bool		writeMsg(const char *msg);
+  std::string	readMsg();
 
 private:
   QSslSocket	client;
 };
+
+#endif		/* !NETWORK_CLIENT_MANAGER_HPP_ */
