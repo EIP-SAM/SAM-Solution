@@ -25,13 +25,11 @@ public:
   QByteArray					*getByteArray() const;
 private:
   void						_init();
-  void						_refreshByteArray();
 private:
   int						*_instructionCode;
   int						*_returnType;
   bool						*_isSynchrone;
   QByteArray					*_byteArray;
-  char						_content[CONTENT_BYTE_SIZE];
 };
 
 #endif		/* !AINSTRUCTION_MODEL_HPP_ */
