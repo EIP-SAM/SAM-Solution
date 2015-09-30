@@ -1,73 +1,54 @@
-#include				<iostream>
-#include				<QString>
-#include				<QChar>
 #include				"AInstructionModel.hpp"
 
 AInstructionModel::AInstructionModel()
 {
-  _byteArray = new QByteArray();
-
-  QByteArray *instructionCode = new QByteArray(4, '\0');
-  _instructionCode = (int *)instructionCode->constData();
-  _byteArray->append(*instructionCode);
-
-  QByteArray *returnType = new QByteArray(4, '\0');
-  _returnType = (int *)returnType->constData();
-  _byteArray->append(*returnType);
-
-  QByteArray *isSynchrone = new QByteArray(1, '\0');
-  _isSynchrone = (bool *)isSynchrone->constData();
-  _byteArray->append(*isSynchrone);
-
-  // TODO
-  // rm it just a test
-  setInstructionCode(7);
-  setReturnType(2);
-  setIsSynchrone(true);
-  AInstructionModel *ins = new AInstructionModel(_byteArray);
-  (void) ins;
+  _init();
 }
 
 AInstructionModel::AInstructionModel(QByteArray *byteArray)
 {
-  int					nbBytes[3] = {4, 4, 1};
-  QString				currentValue;
-  int					bytePos = 0;
-  QChar					currentByte;
+  int					*intPtr;
+  bool					*boolPtr;
+  const char				*content;
 
-  for (int i = 0; i < 3; i++)
-    {
-      std::cout << "aaaaaaaaaaaaaaaaaaaaaaa" << std::endl;
-      for (int j = 0; j < nbBytes[i]; j++)
-	{
-	  std::cout << "bbbbbbbbbbbbbbbbbbbbbb" << std::endl;
-	  std::cout << bytePos << std::endl;
-	  currentByte = byteArray->at(bytePos);
-	  currentValue.append(currentByte);
-	  bytePos++;
-	}
-      std::cout << "ccccccccccccccccccccccccc" << std::endl;
-      if (i == 0)
-	setInstructionCode(currentValue.toInt());
-      else if (i == 1)
-	setReturnType(currentValue.toInt());
-      else
-	setIsSynchrone((bool) currentByte.row());
-      std::cout << "dddddddddddddddddddddddddddddd" << std::endl;
-    }
-  // _byteArray = byteArray;
-  std::cout << getInstructionCode() << std::endl;
-  std::cout << getReturnType() << std::endl;
-  std::cout << getIsSynchrone() << std::endl;
+  _init();
+
+  content = byteArray->constData();
+  intPtr = (int*)&(content[INDEX_BYTE_INSTRUCTIONCODE]);
+  setInstructionCode(*intPtr);
+  intPtr = (int*)&(content[INDEX_BYTE_RETURNTYPE]);
+  setReturnType(*intPtr);
+  boolPtr = (bool*)&(content[INDEX_BYTE_ISSYNCHRONE]);
+  setIsSynchrone(*boolPtr);
 }
 
 AInstructionModel::~AInstructionModel()
 {
 }
 
+void					AInstructionModel::_refreshByteArray() {
+  _byteArray->clear();
+  for (int i = 0; i < CONTENT_BYTE_SIZE; ++i) {
+    _byteArray->append(_content[i]);
+  }
+}
+
+void					AInstructionModel::_init() {
+  _byteArray = new QByteArray();
+
+  _instructionCode = (int*)&(_content[INDEX_BYTE_INSTRUCTIONCODE]);
+  _returnType = (int*)&(_content[INDEX_BYTE_RETURNTYPE]);
+  _isSynchrone = (bool*)&(_content[INDEX_BYTE_ISSYNCHRONE]);
+  _content[CONTENT_BYTE_SIZE - 1] = '\0';
+
+  _refreshByteArray();
+
+}
+
 void					AInstructionModel::setInstructionCode(int instructionCode)
 {
   *_instructionCode = instructionCode;
+  _refreshByteArray();
 }
 
 int					AInstructionModel::getInstructionCode() const
@@ -78,6 +59,7 @@ int					AInstructionModel::getInstructionCode() const
 void					AInstructionModel::setReturnType(int returnType)
 {
   *_returnType = returnType;
+  _refreshByteArray();
 }
 
 int					AInstructionModel::getReturnType() const
@@ -88,6 +70,7 @@ int					AInstructionModel::getReturnType() const
 void					AInstructionModel::setIsSynchrone(bool isSynchrone)
 {
   *_isSynchrone = isSynchrone;
+  _refreshByteArray();
 }
 
 bool					AInstructionModel::getIsSynchrone() const

@@ -1,6 +1,12 @@
 #ifndef						AINSTRUCTION_MODEL_HPP_
 # define					AINSTRUCTION_MODEL_HPP_
 
+# define					CONTENT_BYTE_SIZE 10
+# define					INDEX_BYTE_INSTRUCTIONCODE 0
+# define					INDEX_BYTE_RETURNTYPE 4
+# define					INDEX_BYTE_ISSYNCHRONE 8
+
+
 # include					<QByteArray>
 
 class						AInstructionModel
@@ -18,10 +24,14 @@ public:
   void						setByteArray(QByteArray *byteArray);
   QByteArray					*getByteArray() const;
 private:
+  void						_init();
+  void						_refreshByteArray();
+private:
   int						*_instructionCode;
   int						*_returnType;
   bool						*_isSynchrone;
   QByteArray					*_byteArray;
+  char						_content[CONTENT_BYTE_SIZE];
 };
 
 #endif		/* !AINSTRUCTION_MODEL_HPP_ */

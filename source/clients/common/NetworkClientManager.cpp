@@ -34,8 +34,6 @@ bool		NetworkClientManager::writeMsg(const char *msg)
 {
   quint64	sizeMsg = strlen(msg);
 
-  AInstructionModel *instruction = new AInstructionModel();
-
   if (client.write(msg, sizeMsg) == -1)
     {
       qDebug() << "Error message not send";
