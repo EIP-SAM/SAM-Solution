@@ -24,6 +24,7 @@ AInstructionModel::AInstructionModel(QByteArray *byteArray)
 
 AInstructionModel::~AInstructionModel()
 {
+  delete(_byteArray);
 }
 
 void					AInstructionModel::_init()
