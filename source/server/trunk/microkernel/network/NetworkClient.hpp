@@ -15,15 +15,18 @@ public:
     explicit NetworkClient(QObject *parent = 0);
     ~NetworkClient();
 
-    bool init(QSsl::SslProtocol, qintptr socketDescriptor,
+    bool init(QSsl::SslProtocol protocol, qintptr socketDescriptor,
               QSslKey &encryptionKey, QSslCertificate &encryptionCertificate);
 
 signals:
+    void stateChanged(QAbstractSocket::SocketState);
 
 public slots:
-    void readEvent();
+    void read();
+    void write(void *instruction);
     void isEncrypted();
     void newEncryptionError(QList<QSslError> errors);
+    void onStateChanged(QAbstractSocket::SocketState socketState);
 };
 
 #endif      // NETWORKCLIENT_HPP
