@@ -26,30 +26,28 @@ AInstructionModel::~AInstructionModel()
 {
 }
 
-void					AInstructionModel::_refreshByteArray() {
-  _byteArray->clear();
-  for (int i = 0; i < CONTENT_BYTE_SIZE; ++i) {
-    _byteArray->append(_content[i]);
-  }
-}
+void					AInstructionModel::_init()
+{
+  char					*ptr = NULL;
 
-void					AInstructionModel::_init() {
-  _byteArray = new QByteArray();
+  _byteArray = new QByteArray(10, '\0');
 
-  _instructionCode = (int*)&(_content[INDEX_BYTE_INSTRUCTIONCODE]);
-  _returnType = (int*)&(_content[INDEX_BYTE_RETURNTYPE]);
-  _isSynchrone = (bool*)&(_content[INDEX_BYTE_ISSYNCHRONE]);
-  _content[CONTENT_BYTE_SIZE - 1] = '\0';
+  ptr = _byteArray->data();
+  _instructionCode = (int*)&(ptr[INDEX_BYTE_INSTRUCTIONCODE]);
+  _returnType = (int*)&(ptr[INDEX_BYTE_RETURNTYPE]);
+  _isSynchrone = (bool*)&(ptr[INDEX_BYTE_ISSYNCHRONE]);
 
-  _refreshByteArray();
+  setInstructionCode(0);
+  setReturnType(0);
+  setIsSynchrone(false);
+
 
 }
 
 void					AInstructionModel::setInstructionCode(int instructionCode)
 {
   *_instructionCode = instructionCode;
-  _refreshByteArray();
-}
+ }
 
 int					AInstructionModel::getInstructionCode() const
 {
@@ -59,8 +57,7 @@ int					AInstructionModel::getInstructionCode() const
 void					AInstructionModel::setReturnType(int returnType)
 {
   *_returnType = returnType;
-  _refreshByteArray();
-}
+ }
 
 int					AInstructionModel::getReturnType() const
 {
@@ -70,8 +67,7 @@ int					AInstructionModel::getReturnType() const
 void					AInstructionModel::setIsSynchrone(bool isSynchrone)
 {
   *_isSynchrone = isSynchrone;
-  _refreshByteArray();
-}
+ }
 
 bool					AInstructionModel::getIsSynchrone() const
 {
