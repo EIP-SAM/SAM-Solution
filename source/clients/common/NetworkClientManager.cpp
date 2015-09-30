@@ -33,8 +33,6 @@ void		NetworkClientManager::startConnection(QString ip, quint16 port)
 
 bool		NetworkClientManager::writeMsg(AInstructionModel *instruction)
 {
-  AInstructionModel *instruction2 = new AInstructionModel(instruction->getByteArray());
-  (void) instruction2;
   if (client.write(*(instruction->getByteArray())) == -1)
     {
       qDebug() << "Error message not send";
