@@ -16,8 +16,8 @@ public:
   void		disconnect();
 
 public slots:
-  bool		writeMsg(const char *msg);
-  std::string	readMsg();
+  bool		writeMsg(AInstructionModel *instruction);
+  QByteArray	*readMsg();
 
 private:
   QSslSocket	client;

@@ -22,7 +22,8 @@ void		NetworkClientManager::startConnection(QString ip, quint16 port)
   if (client.waitForEncrypted(3000))
     {
       qDebug() << "Client connected";
-      writeMsg("HELLO");
+      AInstructionModel *instruction = new AInstructionModel();
+      writeMsg(instruction);
     }
   else
     {
@@ -30,11 +31,9 @@ void		NetworkClientManager::startConnection(QString ip, quint16 port)
     }
 }
 
-bool		NetworkClientManager::writeMsg(const char *msg)
+bool		NetworkClientManager::writeMsg(AInstructionModel *instruction)
 {
-  quint64	sizeMsg = strlen(msg);
-
-  if (client.write(msg, sizeMsg) == -1)
+  if (client.write(*(instruction->getByteArray())) == -1)
     {
       qDebug() << "Error message not send";
       return (false);
@@ -42,16 +41,13 @@ bool		NetworkClientManager::writeMsg(const char *msg)
   return (true);
 }
 
-std::string	NetworkClientManager::readMsg()
+QByteArray	*NetworkClientManager::readMsg()
 {
-  char		buffer[1024];
+  QByteArray	*byteArray = new QByteArray();
 
-  if (client.read(buffer, 1024) == -1)
-    {
-      qDebug() << "Error can not ready";
-    }
-  qDebug() << "buffer: " << buffer;
-  return ("");
+  *byteArray = client.read(1024);
+  qDebug() << "buffer: " << *byteArray;
+  return (byteArray);
 }
 
 void		NetworkClientManager::disconnect()

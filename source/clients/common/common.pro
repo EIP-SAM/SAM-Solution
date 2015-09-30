@@ -7,7 +7,7 @@ TARGET = common
 INCLUDEPATH += .
 
 # Input
-HEADERS += INetworkClientManager.hpp NetworkClientManager.hpp AInstruction.hpp
-SOURCES += NetworkClientManager.cpp AInstruction.cpp
+HEADERS += INetworkClientManager.hpp NetworkClientManager.hpp AInstructionModel.hpp
+SOURCES += NetworkClientManager.cpp AInstructionModel.cpp
 QT += network
 QT += widgets
