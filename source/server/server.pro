@@ -19,21 +19,22 @@ TEMPLATE = app
 COMMON_ALL = $${PWD}/../common
 
 INCLUDEPATH += \
-    $${COMMON_ALL} \
-    $${COMMON_ALL}/qt_extensions \
-    trunk/microkernel/main_controller \
-    trunk/microkernel/network
-
-SOURCES += \
-    trunk/main.cpp \
-    $${COMMON_ALL}/qt_extensions/_QFile.cpp \
-    trunk/microkernel/network/NetworkServer.cpp \
-    trunk/microkernel/main_controller/MainController.cpp \
-    trunk/microkernel/network/NetworkClient.cpp
+    $${COMMON_ALL}/qt_custom_extensions \
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions \
+    microkernel_architecture/microkernel_modules/main_controller \
+    microkernel_architecture/microkernel_modules/network_manager
 
 HEADERS += \
-    $${COMMON_ALL}/HelloWorld.hpp \
-    $${COMMON_ALL}/qt_extensions/_QFile.hpp \
-    trunk/microkernel/network/NetworkServer.hpp \
-    trunk/microkernel/main_controller/MainController.hpp \
-    trunk/microkernel/network/NetworkClient.hpp
+    $${COMMON_ALL}/qt_custom_extensions/_QFile.hpp \
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionModel.hpp \
+    microkernel_architecture/microkernel_modules/network_manager/NetworkServer.hpp \
+    microkernel_architecture/microkernel_modules/main_controller/MainController.hpp \
+    microkernel_architecture/microkernel_modules/network_manager/NetworkClient.hpp
+
+SOURCES += \
+    $${COMMON_ALL}/qt_custom_extensions/_QFile.cpp \
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionModel.cpp \
+    microkernel_architecture/main.cpp \
+    microkernel_architecture/microkernel_modules/network_manager/NetworkServer.cpp \
+    microkernel_architecture/microkernel_modules/main_controller/MainController.cpp \
+    microkernel_architecture/microkernel_modules/network_manager/NetworkClient.cpp

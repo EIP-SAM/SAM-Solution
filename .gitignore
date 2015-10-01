@@ -1,5 +1,10 @@
 *.o
+*.a
+*.lib
+*.dll
+
 *~
 
 *.pro.user*
 *build*
+moc_*

@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>trunk/internal_fcts/gui/qml/main.qml</file>
-        <file>trunk/internal_fcts/gui/qml/MainForm.ui.qml</file>
-    </qresource>
-</RCC>
