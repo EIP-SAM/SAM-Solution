@@ -1,9 +1,13 @@
-#include	<stdio.h>
-#include	<iostream>
-#include	<QApplication>
-#include	<QDataStream>
-#include	<QByteArray>
-#include	"NetworkClientManager.hpp"
+#include		<stdio.h>
+#include		<iostream>
+#include		<QApplication>
+#include		<QDataStream>
+#include		<QByteArray>
+#include		"NetworkClientManager.hpp"
+
+//
+// Add signal to readReady.
+//
 
 NetworkClientManager::NetworkClientManager()
 {
@@ -14,7 +18,11 @@ NetworkClientManager::~NetworkClientManager()
 {
 }
 
-void		NetworkClientManager::startConnection(QString ip, quint16 port)
+//
+// Connection to server and send a first message
+//
+
+void			NetworkClientManager::startConnection(QString ip, quint16 port)
 {
   client.setProtocol(QSsl::TlsV1_2);
   client.addCaCertificates("server.crt");
@@ -31,7 +39,11 @@ void		NetworkClientManager::startConnection(QString ip, quint16 port)
     }
 }
 
-bool		NetworkClientManager::writeMsg(AInstructionModel *instruction)
+//
+// Send to the server through the network message
+//
+
+bool			NetworkClientManager::writeMsg(AInstructionModel *instruction)
 {
   if (client.write(*(instruction->getByteArray())) == -1)
     {
@@ -41,25 +53,19 @@ bool		NetworkClientManager::writeMsg(AInstructionModel *instruction)
   return (true);
 }
 
+//
+// Read message from the server and return AInstructionModel
+//
+
 QByteArray	*NetworkClientManager::readMsg()
 {
-  QByteArray	*byteArray = new QByteArray();
+  QByteArray		*byteArray = new QByteArray();
 
   *byteArray = client.read(1024);
   qDebug() << "buffer: " << *byteArray;
   return (byteArray);
 }
 
-void		NetworkClientManager::disconnect()
+void			NetworkClientManager::disconnect()
 {
-}
-
-int main(int argc, char **argv) {
-
-  QApplication app(argc, argv);
-
-  NetworkClientManager *ncm = new NetworkClientManager();
-
-  ncm->startConnection("127.0.0.1", 42042);
-  return app.exec();
 }

@@ -4,10 +4,10 @@
 
 TEMPLATE = app
 TARGET = common
-INCLUDEPATH += .
+INCLUDEPATH += . ../../../../common
 
 # Input
-HEADERS += INetworkClientManager.hpp NetworkClientManager.hpp AInstructionModel.hpp
-SOURCES += NetworkClientManager.cpp AInstructionModel.cpp
+HEADERS += INetworkClientManager.hpp NetworkClientManager.hpp ../../../../common/AInstructionModel.hpp
+SOURCES += NetworkClientManager.cpp ../../../../common/AInstructionModel.cpp
 QT += network
 QT += widgets

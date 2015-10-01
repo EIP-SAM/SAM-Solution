@@ -5,6 +5,10 @@ AInstructionModel::AInstructionModel()
   _init();
 }
 
+//
+// This constructor create a copy of a QByteArray: pointer and value
+//
+
 AInstructionModel::AInstructionModel(QByteArray *byteArray)
 {
   int					*intPtr;
@@ -27,11 +31,16 @@ AInstructionModel::~AInstructionModel()
   delete(_byteArray);
 }
 
+//
+// Stock in the attribut _byteArray pointer to other attributs to define number of bytes
+// Add default value to attributs
+//
+
 void					AInstructionModel::_init()
 {
   char					*ptr = NULL;
 
-  _byteArray = new QByteArray(10, '\0');
+  _byteArray = new QByteArray(CONTENT_BYTE_SIZE, '\0');
 
   ptr = _byteArray->data();
   _instructionCode = (int*)&(ptr[INDEX_BYTE_INSTRUCTIONCODE]);
@@ -41,8 +50,6 @@ void					AInstructionModel::_init()
   setInstructionCode(0);
   setReturnType(0);
   setIsSynchrone(false);
-
-
 }
 
 void					AInstructionModel::setInstructionCode(int instructionCode)
