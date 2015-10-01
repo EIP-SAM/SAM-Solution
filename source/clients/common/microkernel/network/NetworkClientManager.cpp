@@ -11,7 +11,7 @@
 
 NetworkClientManager::NetworkClientManager()
 {
-  connect(&client, SIGNAL(readyRead()), this, SLOT(readMsg()));
+  connect(&_client, SIGNAL(readyRead()), this, SLOT(readMsg()));
 }
 
 NetworkClientManager::~NetworkClientManager()
@@ -24,10 +24,10 @@ NetworkClientManager::~NetworkClientManager()
 
 void			NetworkClientManager::startConnection(QString ip, quint16 port)
 {
-  client.setProtocol(QSsl::TlsV1_2);
-  client.addCaCertificates("server.crt");
-  client.connectToHostEncrypted(ip, port);
-  if (client.waitForEncrypted(3000))
+  _client.setProtocol(QSsl::TlsV1_2);
+  _client.addCaCertificates("server.crt");
+  _client.connectToHostEncrypted(ip, port);
+  if (_client.waitForEncrypted(3000))
     {
       qDebug() << "Client connected";
       AInstructionModel *instruction = new AInstructionModel();
@@ -35,7 +35,7 @@ void			NetworkClientManager::startConnection(QString ip, quint16 port)
     }
   else
     {
-      qDebug() << "Error: " << client.errorString();
+      qDebug() << "Error: " << _client.errorString();
     }
 }
 
@@ -45,7 +45,7 @@ void			NetworkClientManager::startConnection(QString ip, quint16 port)
 
 bool			NetworkClientManager::writeMsg(AInstructionModel *instruction)
 {
-  if (client.write(*(instruction->getByteArray())) == -1)
+  if (_client.write(*(instruction->getByteArray())) == -1)
     {
       qDebug() << "Error message not send";
       return (false);
@@ -57,11 +57,11 @@ bool			NetworkClientManager::writeMsg(AInstructionModel *instruction)
 // Read message from the server and return AInstructionModel
 //
 
-QByteArray	*NetworkClientManager::readMsg()
+QByteArray		*NetworkClientManager::readMsg()
 {
   QByteArray		*byteArray = new QByteArray();
 
-  *byteArray = client.read(1024);
+  *byteArray = _client.read(1024);
   qDebug() << "buffer: " << *byteArray;
   return (byteArray);
 }

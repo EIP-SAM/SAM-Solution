@@ -20,7 +20,7 @@ public slots:
   QByteArray	*readMsg();
 
 private:
-  QSslSocket	client;
+  QSslSocket	_client;
 };
 
 #endif		/* !NETWORK_CLIENT_MANAGER_HPP_ */
