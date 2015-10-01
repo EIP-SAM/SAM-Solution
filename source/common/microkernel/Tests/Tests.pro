@@ -5,8 +5,8 @@
 QT += testlib
 TEMPLATE = app
 TARGET = Tests
-INCLUDEPATH += .
+INCLUDEPATH += . ..
 
 # Input
 HEADERS += TestAInstructionModel.hpp
-SOURCES += TestAInstructionModel.cpp
+SOURCES += TestAInstructionModel.cpp ../AInstructionModel.cpp
