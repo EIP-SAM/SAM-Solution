@@ -2,14 +2,14 @@
 # define FILE_MANAGER_UTILS_HPP_
 
 
-#include 				<vector>
+#include 					<vector>
 
-class					FileManagerUtils
+class						FileManagerUtils
 {
 public:
-    static std::vector<std::string>	parseFileKeyValue(const std::string &fileConf,
-								std::vector<std::string> keywords);
-    static std::fstream 		*createFile(const std::string);
+    static std::map<std::string, std::string>	parseFileKeyValue(const std::string &fileConf,
+								std::vector<std::string> keyWords);
+    static std::fstream 			*createFile(const std::string);
 };
 #endif  /* !FILE_MANAGER_UTILS_HPP_ */
 
