@@ -4,6 +4,7 @@
 *.dll
 
 *~
+*.autosave
 
 *.pro.user*
 *build*
