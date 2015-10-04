@@ -9,24 +9,26 @@ class NetworkClient : public QObject
 
 private:
     QSslSocket _socket;
-    qintptr _socketDescriptor;
+    qintptr _socketDescriptor = -1;
 
 public:
     explicit NetworkClient(QObject *parent = 0);
     ~NetworkClient();
 
-    bool init(QSsl::SslProtocol protocol, qintptr socketDescriptor,
-              QSslKey &encryptionKey, QSslCertificate &encryptionCertificate);
+    bool start(QSsl::SslProtocol protocol,
+               qintptr socketDescriptor,
+               const QSslKey &encryptionKey,
+               const QSslCertificate &encryptionCertificate);
+    void close();
 
 signals:
-    void stateChanged(QAbstractSocket::SocketState);
 
 public slots:
-    void read();
     void write(void *instruction);
-    void isEncrypted();
-    void newEncryptionError(QList<QSslError> errors);
-    void onStateChanged(QAbstractSocket::SocketState socketState);
+    void onReadyRead();
+    void onEncryptedState();
+    void onDisconnectedState();
+    void onEncryptionErrors(QList<QSslError> errors);
 };
 
 #endif      // NETWORKCLIENT_HPP

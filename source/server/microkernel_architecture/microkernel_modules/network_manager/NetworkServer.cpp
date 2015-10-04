@@ -10,6 +10,8 @@ NetworkServer::NetworkServer(QObject *parent)
     : QTcpServer(parent)
 {
     qDebug() << Q_FUNC_INFO;
+    if (!QMetaType::isRegistered(QMetaType::type("qintptr")))
+        qRegisterMetaType<qintptr>("qintptr");
 }
 
 NetworkServer::~NetworkServer()
@@ -87,7 +89,7 @@ bool NetworkServer::_listen(quint16 portNumber)
 
 void NetworkServer::incomingConnection(qintptr socketDescriptor)
 {
-    NetworkClient *client = new NetworkClient;
+    NetworkClient *client = new NetworkClient(this);
 
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << socketDescriptor << "New client connected";
