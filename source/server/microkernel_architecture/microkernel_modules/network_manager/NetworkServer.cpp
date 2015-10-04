@@ -10,8 +10,7 @@ NetworkServer::NetworkServer(QObject *parent)
     : QTcpServer(parent)
 {
     qDebug() << Q_FUNC_INFO;
-    if (!QMetaType::isRegistered(QMetaType::type("qintptr")))
-        qRegisterMetaType<qintptr>("qintptr");
+    qRegisterMetaType<qintptr>("qintptr");
 }
 
 NetworkServer::~NetworkServer()
