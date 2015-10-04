@@ -11,8 +11,9 @@ QT       += core \
 
 TARGET   = server
 
-CONFIG   += console
 CONFIG   -= app_bundle
+CONFIG   += console \
+            c++11
 
 TEMPLATE = app
 

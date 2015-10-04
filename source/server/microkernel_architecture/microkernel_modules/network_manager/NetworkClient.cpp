@@ -72,6 +72,11 @@ void NetworkClient::onEncryptedState()
     connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 }
 
+void NetworkClient::onDisconnectedState()
+{
+    emit disconnected(_socket.socketDescriptor());
+}
+
 void NetworkClient::onEncryptionErrors(QList<QSslError> errors)
 {
     QString errorStr = " ";

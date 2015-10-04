@@ -4,7 +4,7 @@
 # include <QTcpServer>
 # include <QSslKey>
 # include <QSslCertificate>
-# include <QList>
+# include <QMap>
 
 class NetworkClient;
 
@@ -23,7 +23,7 @@ private:
     quint16 _portNumber;
     QSslKey *_encryptionKey = NULL;
     QSslCertificate *_encryptionCertificate = NULL;
-    QList<NetworkClient *> _clientSockets;
+    QMap<qintptr, NetworkClient *> _clientSockets;
 
 public:
     bool start(quint16 portNumber);
@@ -39,6 +39,7 @@ protected:
 signals:
 
 public slots:
+    void deleteClient(qintptr socketDescriptor);
 };
 
 #endif      // NETWORKSERVER_HPP

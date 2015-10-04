@@ -22,6 +22,7 @@ public:
     void close();
 
 signals:
+    void disconnected(qintptr socketDescriptor);
 
 public slots:
     void write(void *instruction);

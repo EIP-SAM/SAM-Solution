@@ -17,10 +17,10 @@ NetworkServer::NetworkServer(QObject *parent)
 NetworkServer::~NetworkServer()
 {
     qDebug() << Q_FUNC_INFO;
-    foreach (NetworkClient *client, _clientSockets)
+    for (auto socketDescriptor : _clientSockets.keys())
     {
-        delete client;
-        _clientSockets.pop_front();
+        delete _clientSockets[socketDescriptor];
+        _clientSockets.remove(socketDescriptor);
     }
     delete _encryptionKey;
     delete _encryptionCertificate;
@@ -87,15 +87,32 @@ bool NetworkServer::_listen(quint16 portNumber)
     return (true);
 }
 
+void NetworkServer::deleteClient(qintptr socketDescriptor)
+{
+    NetworkClient *client =  _clientSockets[socketDescriptor];
+
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "" << socketDescriptor << "Client disconnected";
+    disconnect(client, SIGNAL(disconnected(qintptr)),
+               this, SLOT(deleteClient(qintptr)));
+    _clientSockets.remove(socketDescriptor);
+    delete client;
+    qDebug() << "" << socketDescriptor << "Client deleted";
+}
+
 void NetworkServer::incomingConnection(qintptr socketDescriptor)
 {
     NetworkClient *client = new NetworkClient(this);
 
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << socketDescriptor << "New client connected";
-    if (client->init(QSsl::TlsV1_2, socketDescriptor,
-                     *_encryptionKey, *_encryptionCertificate))
-        _clientSockets.push_back(client);
+    if (client->start(QSsl::TlsV1_2, socketDescriptor,
+                      *_encryptionKey, *_encryptionCertificate))
+    {
+        _clientSockets[socketDescriptor] = client;
+        connect(client, SIGNAL(disconnected(qintptr)),
+                this, SLOT(deleteClient(qintptr)), Qt::QueuedConnection);
+    }
     else
     {
         qDebug() << "" << socketDescriptor << " Error during client initialization";
