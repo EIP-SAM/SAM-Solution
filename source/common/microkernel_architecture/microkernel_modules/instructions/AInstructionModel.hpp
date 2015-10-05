@@ -13,22 +13,10 @@ class						AInstructionModel
 {
 public:
   AInstructionModel();
-  AInstructionModel(QByteArray *byteArray);
   ~AInstructionModel();
-  void						setInstructionCode(int instructionCode);
-  int						getInstructionCode() const;
-  void						setReturnType(int returnType);
-  int						getReturnType() const;
-  void						setIsSynchrone(bool isSynchrone);
-  bool						getIsSynchrone() const;
   void						setByteArray(QByteArray *byteArray);
   QByteArray					*getByteArray() const;
-private:
-  void						_init();
-private:
-  int						*_instructionCode;
-  int						*_returnType;
-  bool						*_isSynchrone;
+protected:
   QByteArray					*_byteArray;
 };
 
