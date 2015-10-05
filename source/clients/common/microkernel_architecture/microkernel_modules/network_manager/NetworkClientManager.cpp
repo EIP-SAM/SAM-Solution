@@ -9,7 +9,8 @@
 // Add signal to readReady.
 //
 
-NetworkClientManager::NetworkClientManager()
+NetworkClientManager::NetworkClientManager(QObject *parent)
+    : QObject(parent), _client(this)
 {
   connect(&_client, SIGNAL(readyRead()), this, SLOT(readMsg()));
 }

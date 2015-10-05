@@ -9,7 +9,7 @@ class		NetworkClientManager : public QObject, public INetworkClientManager
 {
   Q_OBJECT
 public:
-  NetworkClientManager();
+  explicit NetworkClientManager(QObject *parent = 0);
   ~NetworkClientManager();
 
   void		startConnection(QString ip, quint16 port);
