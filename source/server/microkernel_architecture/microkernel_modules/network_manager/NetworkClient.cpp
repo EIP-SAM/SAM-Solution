@@ -1,6 +1,8 @@
 #include "NetworkClient.hpp"
 #include <QtNetwork>
 
+//
+// Construct network client
 NetworkClient::NetworkClient(QObject *parent)
     : QObject(parent), _socket(this)
 {
@@ -13,6 +15,8 @@ NetworkClient::NetworkClient(QObject *parent)
             this, SLOT(onEncryptionErrors(QList<QSslError>)));
 }
 
+//
+// Destroy network client
 NetworkClient::~NetworkClient()
 {
     qDebug() << Q_FUNC_INFO;
@@ -20,6 +24,8 @@ NetworkClient::~NetworkClient()
     disconnect(this, 0, 0, 0);
 }
 
+//
+// Initialize and start client
 bool NetworkClient::start(QSsl::SslProtocol protocol,
                           qintptr socketDescriptor,
                           const QSslKey &encryptionKey,
@@ -44,6 +50,8 @@ bool NetworkClient::start(QSsl::SslProtocol protocol,
     return (true);
 }
 
+//
+// Read data from socket when available
 void NetworkClient::onReadyRead()
 {
     QByteArray data = _socket.read(_socket.bytesAvailable());
@@ -53,6 +61,8 @@ void NetworkClient::onReadyRead()
     write(NULL); // temporary answer
 }
 
+//
+// Write data on socket
 void NetworkClient::write(void *instruction)
 {
     QByteArray falseData("Hello foo world\n");
@@ -64,6 +74,8 @@ void NetworkClient::write(void *instruction)
     qDebug() << "" << _socketDescriptor << "Bytes written :" << size;
 }
 
+//
+// Handle encrypted state event
 void NetworkClient::onEncryptedState()
 {
     qDebug() << Q_FUNC_INFO;
@@ -72,11 +84,15 @@ void NetworkClient::onEncryptedState()
     connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 }
 
+//
+// Handle disconnected state event
 void NetworkClient::onDisconnectedState()
 {
     emit disconnected(_socket.socketDescriptor());
 }
 
+//
+// Handle encryption errors event
 void NetworkClient::onEncryptionErrors(QList<QSslError> errors)
 {
     emit encryptionErrors(_socketDescriptor, errors);
