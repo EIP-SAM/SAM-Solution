@@ -1,10 +1,10 @@
-#include		"TestAInstructionModel.hpp"
+#include		"TestANetworkInstruction.hpp"
 
-TestAInstructionModel::TestAInstructionModel()
+TestANetworkInstruction::TestANetworkInstruction()
 {
 }
 
-TestAInstructionModel::~TestAInstructionModel()
+TestANetworkInstruction::~TestANetworkInstruction()
 {
 }
 
@@ -12,9 +12,9 @@ TestAInstructionModel::~TestAInstructionModel()
 // Test function init if attributs have correct default value
 //
 
-void			TestAInstructionModel::_init()
+void			TestANetworkInstruction::_init()
 {
-  AInstructionModel	*instructionModel = new AInstructionModel();
+  ANetworkInstruction	*instructionModel = new ANetworkInstruction();
 
   QCOMPARE(instructionModel->getByteArray()->size(), CONTENT_BYTE_SIZE);
   QCOMPARE(instructionModel->getInstructionCode(), 0);
@@ -26,9 +26,9 @@ void			TestAInstructionModel::_init()
 // Test pointer and second constructor
 //
 
-void			TestAInstructionModel::ptrTest()
+void			TestANetworkInstruction::ptrTest()
 {
-  AInstructionModel     *instructionModel = new AInstructionModel();
+  ANetworkInstruction     *instructionModel = new ANetworkInstruction();
   char			*ptr = NULL;
 
   instructionModel->setInstructionCode(27);
@@ -43,7 +43,7 @@ void			TestAInstructionModel::ptrTest()
   QCOMPARE(*((int*)&(ptr[INDEX_BYTE_RETURNTYPE])), 9);
   QCOMPARE(*((bool*)&(ptr[INDEX_BYTE_ISSYNCHRONE])), true);
 
-  AInstructionModel	*instructionModel2 = new AInstructionModel(instructionModel->getByteArray());
+  ANetworkInstruction	*instructionModel2 = new ANetworkInstruction(instructionModel->getByteArray());
 
   QCOMPARE(instructionModel2->getInstructionCode(), 27);
   QCOMPARE(instructionModel2->getReturnType(), 9);
@@ -54,4 +54,4 @@ void			TestAInstructionModel::ptrTest()
   QCOMPARE(*((bool*)&(ptr[INDEX_BYTE_ISSYNCHRONE])), true);
 }
 
-QTEST_MAIN(TestAInstructionModel)
+QTEST_MAIN(TestANetworkInstruction)
