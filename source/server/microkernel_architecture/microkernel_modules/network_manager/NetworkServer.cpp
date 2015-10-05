@@ -31,6 +31,12 @@ bool NetworkServer::start(quint16 portNumber)
 {
     qDebug() << Q_FUNC_INFO;
 
+    if (!QSslSocket::supportsSsl())
+    {
+        qDebug() << " SSL is not available on this machine";
+        return (false);
+    }
+    qDebug() << QSslSocket::sslLibraryVersionString();
     if (!_initEncryptionKey(_ENCRYPTION_KEY_FILE) ||
         !_initEncryptionCertificate(_ENCRYPTION_CERTIFICATE_FILE) ||
         !_listen(portNumber))
