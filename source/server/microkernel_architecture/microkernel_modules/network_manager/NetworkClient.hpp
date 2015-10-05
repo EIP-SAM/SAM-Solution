@@ -1,5 +1,5 @@
-#ifndef     NETWORKCLIENT_HPP
-# define    NETWORKCLIENT_HPP
+#ifndef NETWORKCLIENT_HPP_
+# define NETWORKCLIENT_HPP_
 
 # include <QSslSocket>
 
@@ -33,4 +33,4 @@ public slots:
     void onEncryptionErrors(QList<QSslError> errors);
 };
 
-#endif      // NETWORKCLIENT_HPP
+#endif // NETWORKCLIENT_HPP_

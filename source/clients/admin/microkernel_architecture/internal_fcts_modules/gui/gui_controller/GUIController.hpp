@@ -1,5 +1,5 @@
-#ifndef     GUICONTROLLER_HPP
-# define    GUICONTROLLER_HPP
+#ifndef GUICONTROLLER_HPP_
+# define GUICONTROLLER_HPP_
 
 # include <QQmlApplicationEngine>
 
@@ -21,4 +21,4 @@ signals:
 public slots:
 };
 
-#endif      // GUICONTROLLER_HPP
+#endif // !GUICONTROLLER_HPP_

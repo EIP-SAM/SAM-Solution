@@ -1,4 +1,4 @@
-#include				"AInstructionModel.hpp"
+#include "AInstructionModel.hpp"
 
 AInstructionModel::AInstructionModel()
 {
@@ -11,9 +11,9 @@ AInstructionModel::AInstructionModel()
 
 AInstructionModel::AInstructionModel(QByteArray *byteArray)
 {
-  int					*intPtr;
-  bool					*boolPtr;
-  const char				*content;
+  int *intPtr;
+  bool *boolPtr;
+  const char *content;
 
   _init();
 
@@ -36,9 +36,9 @@ AInstructionModel::~AInstructionModel()
 // Add default value to attributs
 //
 
-void					AInstructionModel::_init()
+void AInstructionModel::_init()
 {
-  char					*ptr = NULL;
+  char *ptr = NULL;
 
   _byteArray = new QByteArray(CONTENT_BYTE_SIZE, '\0');
 
@@ -52,42 +52,42 @@ void					AInstructionModel::_init()
   setIsSynchrone(false);
 }
 
-void					AInstructionModel::setInstructionCode(int instructionCode)
+void AInstructionModel::setInstructionCode(int instructionCode)
 {
   *_instructionCode = instructionCode;
  }
 
-int					AInstructionModel::getInstructionCode() const
+int AInstructionModel::getInstructionCode() const
 {
   return (*_instructionCode);
 }
 
-void					AInstructionModel::setReturnType(int returnType)
+void AInstructionModel::setReturnType(int returnType)
 {
   *_returnType = returnType;
  }
 
-int					AInstructionModel::getReturnType() const
+int AInstructionModel::getReturnType() const
 {
   return (*_returnType);
 }
 
-void					AInstructionModel::setIsSynchrone(bool isSynchrone)
+void AInstructionModel::setIsSynchrone(bool isSynchrone)
 {
   *_isSynchrone = isSynchrone;
  }
 
-bool					AInstructionModel::getIsSynchrone() const
+bool AInstructionModel::getIsSynchrone() const
 {
   return (*_isSynchrone);
 }
 
-void					AInstructionModel::setByteArray(QByteArray *byteArray)
+void AInstructionModel::setByteArray(QByteArray *byteArray)
 {
   _byteArray = byteArray;
 }
 
-QByteArray				*AInstructionModel::getByteArray() const
+QByteArray *AInstructionModel::getByteArray() const
 {
   return (_byteArray);
 }

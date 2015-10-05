@@ -1,5 +1,5 @@
-#ifndef     NETWORKSERVER_HPP
-# define    NETWORKSERVER_HPP
+#ifndef NETWORKSERVER_HPP_
+# define NETWORKSERVER_HPP_
 
 # include <QTcpServer>
 # include <QSslKey>
@@ -45,4 +45,4 @@ public slots:
     void onClientEncryptionError(qintptr socketDescriptor, QList<QSslError> errors);
 };
 
-#endif      // NETWORKSERVER_HPP
+#endif // !NETWORKSERVER_HPP_

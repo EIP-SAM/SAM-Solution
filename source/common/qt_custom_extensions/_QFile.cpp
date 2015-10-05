@@ -3,6 +3,7 @@
 
 //
 // Construct custom QFile
+//
 _QFile::_QFile(QObject *parent)
     : QFile(parent)
 {
@@ -10,6 +11,7 @@ _QFile::_QFile(QObject *parent)
 
 //
 // Read a file and return its data
+//
 const QByteArray *_QFile::readFile(const QString &filename)
 {
     QByteArray *data = NULL;

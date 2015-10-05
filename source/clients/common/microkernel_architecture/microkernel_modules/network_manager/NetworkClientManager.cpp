@@ -1,5 +1,5 @@
-#include		<QByteArray>
-#include		"NetworkClientManager.hpp"
+#include <QByteArray>
+#include "NetworkClientManager.hpp"
 
 const QString NetworkClientManager::_ENCRYPTION_CERTIFICATE_FILE = "server.crt";
 const QSsl::SslProtocol NetworkClientManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
@@ -22,7 +22,7 @@ NetworkClientManager::~NetworkClientManager()
 // Connection to server and send a first message
 //
 
-void			NetworkClientManager::startConnection(const QString &ip, quint16 port)
+void NetworkClientManager::startConnection(const QString &ip, quint16 port)
 {
   _client.setProtocol(_DEFAULT_PROTOCOL);
   _client.addCaCertificates(_ENCRYPTION_CERTIFICATE_FILE);
@@ -30,7 +30,9 @@ void			NetworkClientManager::startConnection(const QString &ip, quint16 port)
   if (_client.waitForEncrypted(3000))
     {
       qDebug() << "Client connected";
-      AInstructionModel *instruction = new AInstructionModel();
+      AInstructionModel *instruction = new AInstructionModel;
+      QByteArray *a = instruction->getByteArray();
+      *a = "allo?";
       writeMsg(instruction);
     }
   else
@@ -43,7 +45,7 @@ void			NetworkClientManager::startConnection(const QString &ip, quint16 port)
 // Send to the server through the network message
 //
 
-bool			NetworkClientManager::writeMsg(AInstructionModel *instruction)
+bool NetworkClientManager::writeMsg(AInstructionModel *instruction)
 {
   if (_client.write(*(instruction->getByteArray())) == -1)
     {
@@ -57,15 +59,15 @@ bool			NetworkClientManager::writeMsg(AInstructionModel *instruction)
 // Read message from the server and return AInstructionModel
 //
 
-QByteArray		*NetworkClientManager::readMsg()
+QByteArray *NetworkClientManager::readMsg()
 {
-  QByteArray		*byteArray = new QByteArray();
+  QByteArray *byteArray = new QByteArray();
 
   *byteArray = _client.read(1024);
-  qDebug() << "buffer: " << *byteArray;
+  qDebug() << "Incoming data :" << *byteArray;
   return (byteArray);
 }
 
-void			NetworkClientManager::disconnect()
+void NetworkClientManager::disconnect()
 {
 }
