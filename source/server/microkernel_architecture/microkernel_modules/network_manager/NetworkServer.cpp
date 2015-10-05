@@ -11,6 +11,7 @@ NetworkServer::NetworkServer(QObject *parent)
 {
     qDebug() << Q_FUNC_INFO;
     qRegisterMetaType<qintptr>("qintptr");
+    qRegisterMetaType<QList<QSslError> >("QList<QSslError>");
 }
 
 NetworkServer::~NetworkServer()
@@ -86,19 +87,6 @@ bool NetworkServer::_listen(quint16 portNumber)
     return (true);
 }
 
-void NetworkServer::deleteClient(qintptr socketDescriptor)
-{
-    NetworkClient *client =  _clientSockets[socketDescriptor];
-
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "" << socketDescriptor << "Client disconnected";
-    disconnect(client, SIGNAL(disconnected(qintptr)),
-               this, SLOT(deleteClient(qintptr)));
-    _clientSockets.remove(socketDescriptor);
-    delete client;
-    qDebug() << "" << socketDescriptor << "Client deleted";
-}
-
 void NetworkServer::incomingConnection(qintptr socketDescriptor)
 {
     NetworkClient *client = new NetworkClient(this);
@@ -111,10 +99,35 @@ void NetworkServer::incomingConnection(qintptr socketDescriptor)
         _clientSockets[socketDescriptor] = client;
         connect(client, SIGNAL(disconnected(qintptr)),
                 this, SLOT(deleteClient(qintptr)), Qt::QueuedConnection);
+        connect(client, SIGNAL(encryptionErrors(qintptr, QList<QSslError>)),
+                this, SLOT(onClientEncryptionError(qintptr, QList<QSslError>)), Qt::QueuedConnection);
     }
     else
     {
         qDebug() << "" << socketDescriptor << " Error during client initialization";
         delete client;
     }
+}
+
+void NetworkServer::deleteClient(qintptr socketDescriptor)
+{
+    NetworkClient *client =  _clientSockets[socketDescriptor];
+
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "" << socketDescriptor << "Client disconnected";
+    disconnect(client, 0, 0, 0);
+    _clientSockets.remove(socketDescriptor);
+    delete client;
+    qDebug() << "" << socketDescriptor << "Client deleted";
+}
+
+void NetworkServer::onClientEncryptionError(qintptr socketDescriptor, QList<QSslError> errors)
+{
+    QString errorStr = " ";
+
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "" << socketDescriptor << "Encryption error";
+    for (auto e : errors)
+        errorStr.append(e.errorString()).append("\n");
+    qDebug() << errorStr;
 }

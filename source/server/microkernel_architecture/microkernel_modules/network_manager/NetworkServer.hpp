@@ -4,6 +4,7 @@
 # include <QTcpServer>
 # include <QSslKey>
 # include <QSslCertificate>
+# include <QSslError>
 # include <QMap>
 
 class NetworkClient;
@@ -40,6 +41,7 @@ signals:
 
 public slots:
     void deleteClient(qintptr socketDescriptor);
+    void onClientEncryptionError(qintptr socketDescriptor, QList<QSslError> errors);
 };
 
 #endif      // NETWORKSERVER_HPP

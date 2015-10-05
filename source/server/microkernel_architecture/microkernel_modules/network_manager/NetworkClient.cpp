@@ -79,13 +79,5 @@ void NetworkClient::onDisconnectedState()
 
 void NetworkClient::onEncryptionErrors(QList<QSslError> errors)
 {
-    QString errorStr = " ";
-
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << _socketDescriptor;
-    foreach (const QSslError &e, errors)
-        errorStr.append(e.errorString()).append("\n");
-
-    _socket.ignoreSslErrors(); // Be careful, not supposed to ignore them
-    qDebug() << errorStr;
+    emit encryptionErrors(_socketDescriptor, errors);
 }

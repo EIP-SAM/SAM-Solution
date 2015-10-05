@@ -23,6 +23,7 @@ public:
 
 signals:
     void disconnected(qintptr socketDescriptor);
+    void encryptionErrors(qintptr socketDescriptor, QList<QSslError> errors);
 
 public slots:
     void write(void *instruction);
