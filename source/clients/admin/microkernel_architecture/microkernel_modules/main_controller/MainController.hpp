@@ -3,7 +3,8 @@
 
 # include <QApplication>
 
-class GUIController;
+class NetworkClientManager;
+//class GUIController;
 
 class MainController : public QObject
 {
@@ -11,7 +12,8 @@ class MainController : public QObject
 
 private:
     QApplication _qtCore;
-    GUIController *_gui = NULL;
+//    GUIController *_gui = NULL;
+    NetworkClientManager *_network = NULL;
 
 public:
     MainController(int, char **);
@@ -20,7 +22,8 @@ public:
     int run();
 
 private:
-    bool _initGUI();
+//    bool _initGUI();
+    bool _initNetwork();
 };
 
 #endif      // MAINCONTROLLER_HPP

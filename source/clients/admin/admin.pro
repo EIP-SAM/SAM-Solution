@@ -26,6 +26,7 @@ RESOURCES += \
 
 INCLUDEPATH += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions \
+    $${COMMON_CLIENTS}/microkernel_architecture/microkernel_modules/network_manager \
     microkernel_architecture/microkernel_modules/main_controller \
     microkernel_architecture/internal_fcts_modules/gui/gui_controller
 
