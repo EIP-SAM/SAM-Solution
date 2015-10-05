@@ -1,5 +1,5 @@
-#ifndef				INSTRUCTIONFACTORYUTILS_HPP_
-# define			INSTRUCTIONFACTORYUTILS_HPP_
+#ifndef				INSTRUCTION_FACTORY_UTILS_HPP_
+# define			INSTRUCTION_FACTORY_UTILS_HPP_
 
 # include			"AInstructionModel.hpp"
 
@@ -14,4 +14,4 @@ public:
   
 };
 
-#endif				/* !INSTRUCTIONFACTORYUTILS_HPP_ */
+#endif				/* !INSTRUCTION_FACTORY_UTILS_HPP_ */
