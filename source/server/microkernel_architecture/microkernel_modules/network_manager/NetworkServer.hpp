@@ -20,6 +20,7 @@ public:
 private:
     static const QString _ENCRYPTION_KEY_FILE;
     static const QString _ENCRYPTION_CERTIFICATE_FILE;
+    static const QSsl::SslProtocol _DEFAULT_PROTOCOL;
 
     quint16 _portNumber;
     QSslKey *_encryptionKey = NULL;

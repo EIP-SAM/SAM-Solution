@@ -5,6 +5,7 @@
 
 const QString NetworkServer::_ENCRYPTION_KEY_FILE = "server.key";
 const QString NetworkServer::_ENCRYPTION_CERTIFICATE_FILE = "server.crt";
+const QSsl::SslProtocol NetworkServer::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 
 NetworkServer::NetworkServer(QObject *parent)
     : QTcpServer(parent)
@@ -93,7 +94,7 @@ void NetworkServer::incomingConnection(qintptr socketDescriptor)
 
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << socketDescriptor << "New client connected";
-    if (client->start(QSsl::TlsV1_2, socketDescriptor,
+    if (client->start(_DEFAULT_PROTOCOL, socketDescriptor,
                       *_encryptionKey, *_encryptionCertificate))
     {
         _clientSockets[socketDescriptor] = client;
