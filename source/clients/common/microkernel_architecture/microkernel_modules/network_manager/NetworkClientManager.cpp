@@ -1,9 +1,8 @@
-#include		<stdio.h>
-#include		<iostream>
-#include		<QApplication>
-#include		<QDataStream>
 #include		<QByteArray>
 #include		"NetworkClientManager.hpp"
+
+const QString NetworkClientManager::_ENCRYPTION_CERTIFICATE_FILE = "server.crt";
+const QSsl::SslProtocol NetworkClientManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 
 //
 // Add signal to readReady.
@@ -23,10 +22,10 @@ NetworkClientManager::~NetworkClientManager()
 // Connection to server and send a first message
 //
 
-void			NetworkClientManager::startConnection(QString ip, quint16 port)
+void			NetworkClientManager::startConnection(const QString &ip, quint16 port)
 {
-  _client.setProtocol(QSsl::TlsV1_2);
-  _client.addCaCertificates("server.crt");
+  _client.setProtocol(_DEFAULT_PROTOCOL);
+  _client.addCaCertificates(_ENCRYPTION_CERTIFICATE_FILE);
   _client.connectToHostEncrypted(ip, port);
   if (_client.waitForEncrypted(3000))
     {

@@ -2,25 +2,28 @@
 # define	NETWORK_CLIENT_MANAGER_HPP_
 
 #include	<QSslSocket>
-#include	<QObject>
 #include	"INetworkClientManager.hpp"
 
 class		NetworkClientManager : public QObject, public INetworkClientManager
 {
   Q_OBJECT
+
+private:
+    static const QString _ENCRYPTION_CERTIFICATE_FILE;
+    static const QSsl::SslProtocol _DEFAULT_PROTOCOL;
+
+    QSslSocket	_client;
+
 public:
   explicit NetworkClientManager(QObject *parent = 0);
   ~NetworkClientManager();
 
-  void		startConnection(QString ip, quint16 port);
+  void		startConnection(const QString &ip, quint16 port);
   void		disconnect();
 
 public slots:
   bool		writeMsg(AInstructionModel *instruction);
   QByteArray	*readMsg();
-
-private:
-  QSslSocket	_client;
 };
 
 #endif		/* !NETWORK_CLIENT_MANAGER_HPP_ */

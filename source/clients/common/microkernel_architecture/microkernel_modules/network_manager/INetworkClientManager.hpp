@@ -6,7 +6,7 @@
 class			INetworkClientManager
 {
 public:
-  virtual void		startConnection(QString ip, quint16 port) = 0;
+  virtual void		startConnection(const QString &ip, quint16 port) = 0;
   virtual bool		writeMsg(AInstructionModel *instruction) = 0;
   virtual QByteArray	*readMsg() = 0;
   virtual void		disconnect() = 0;
