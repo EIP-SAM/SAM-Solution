@@ -18,7 +18,7 @@ void			TestInstructionFactoryUtils::TestCreate()
   AInstructionModel	message = InstructionFactoryUtils::create(1, 15, false);
   QCOMPARE(message.getInstructionCode(), 1);
   QCOMPARE(message.getReturnType(), 15);
-  QCOMPARE(message.IsSynchrone(), false);
+  QCOMPARE(message.getIsSynchrone(), false);
 }
 
 //
@@ -37,7 +37,7 @@ void			TestInstructionFactoryUtils::TestCreateArray()
 
   QCOMPARE(messageTest.getInstructionCode(), 1);
   QCOMPARE(messageTest.getReturnType(), 15);
-  QCOMPARE(messageTest.getIsSyncrone(), false);
+  QCOMPARE(messageTest.getIsSynchrone(), false);
 }
 
 QTEST_MAIN(TestInstructionFactoryUtils)
