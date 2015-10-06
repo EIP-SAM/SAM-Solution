@@ -1,17 +1,17 @@
-#include "InstructionFactory.hpp"
+#include		"InstructionFactory.hpp"
 
 //
 // Create a message header with the instruction code
 // return type and synchrone parameters
 //
 
-AInstructionModel	InstructionFactoryUtils::create(int argInstructionCode, int argReturnType, bool argIsSynchrone)
+AInstructionModel	InstructionFactoryUtils::create(int instructionCode, int returnType, bool isSynchrone)
 {
   AInstructionModel	instructionModel;
 
-  instructionModel.setInstructionCode(argInstrucitonCode);
-  instructionModel.setReturnType(argReturnType);
-  instructionModel.setIsSynchrone(argIsSyncrhone);
+  instructionModel.setInstructionCode(instrucitonCode);
+  instructionModel.setReturnType(returnType);
+  instructionModel.setIsSynchrone(isSyncrhone);
 
   return instructionModel;
 };

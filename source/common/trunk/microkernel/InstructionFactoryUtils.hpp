@@ -1,17 +1,17 @@
-#ifndef				INSTRUCTION_FACTORY_UTILS_HPP_
-# define			INSTRUCTION_FACTORY_UTILS_HPP_
+#ifndef INSTRUCTION_FACTORY_UTILS_HPP_
+# define INSTRUCTION_FACTORY_UTILS_HPP_
 
-# include			"AInstructionModel.hpp"
+# include "AInstructionModel.hpp"
 
-class				InstructionFactoryUtils
+class InstructionFactoryUtils
 {
 public:
   InstructionFactoryUtils();
   ~InstructionFactoryUtils();
 
-  static AInstructionModel	create(int argInstructionCode, int argReturnType, bool argIsSynchrone);
-  static AInstructionModel	create(QByteArray *byteArray);
+  static AInstructionModel create(int instructionCode, int returnType, bool isSynchrone);
+  static AInstructionModel create(QByteArray *byteArray);
   
 };
 
-#endif				/* !INSTRUCTION_FACTORY_UTILS_HPP_ */
+#endif /* !INSTRUCTION_FACTORY_UTILS_HPP_ */
