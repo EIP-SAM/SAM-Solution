@@ -2,6 +2,7 @@
 #include "NetworkClient.hpp"
 #include <QByteArray>
 #include "_QFile.hpp"
+#include "AInstructionModel.hpp"
 
 //
 // NetworkServer static attributes assignation
@@ -129,6 +130,10 @@ void NetworkServer::incomingConnection(qintptr socketDescriptor)
                       *_encryptionKey, *_encryptionCertificate))
     {
         _clientSockets[socketDescriptor] = client;
+        connect(client, SIGNAL(readyRead(qintptr)),
+                this, SLOT(onClientReadyRead(qintptr)), Qt::QueuedConnection);
+        connect(client, SIGNAL(bytesWritten(qintptr, qint64)),
+                this, SLOT(onClientBytesWritten(qintptr, qint64)), Qt::QueuedConnection);
         connect(client, SIGNAL(disconnected(qintptr)),
                 this, SLOT(deleteClient(qintptr)), Qt::QueuedConnection);
         connect(client, SIGNAL(encryptionErrors(qintptr, QList<QSslError>)),
@@ -142,11 +147,52 @@ void NetworkServer::incomingConnection(qintptr socketDescriptor)
 }
 
 //
+// Supposed to fill the client input buffer
+//
+void NetworkServer::onClientReadyRead(qintptr socketDescriptor)
+{
+    NetworkClient *client = _clientSockets[socketDescriptor];
+    QByteArray data;
+    qint64 size = -1;
+
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "" << socketDescriptor
+             << "Ready to read" << client->bytesAvailable() << "bytes";
+    data.resize(client->bytesAvailable());
+    size = client->read(data.data(), data.size());
+    qDebug() << "" << socketDescriptor << "Had read" << size << "bytes. Incoming data :" << data;
+
+    data = "Hello world\n";
+    size = client->write(data.data(), data.size());
+    qDebug() << "" << socketDescriptor << "Had put" << size << "bytes. Outcoming data :" << data;
+}
+
+
+//
+// Supposed to get NetworkClient* from AInstructionModel
+// Supposed to write the AInstructionModel* data to NetworkClient*
+// Waiting for InstructionBus class
+//
+void NetworkServer::pushInstruction(AInstructionModel *instruction)
+{
+}
+
+//
+// Supposed to handle the outcoming data
+//
+void NetworkServer::onClientBytesWritten(qintptr socketDescriptor, qint64 size)
+{
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "" << socketDescriptor
+             << "Written bytes :" << size;
+}
+
+//
 // Delete a disconnected client
 //
 void NetworkServer::deleteClient(qintptr socketDescriptor)
 {
-    NetworkClient *client =  _clientSockets[socketDescriptor];
+    NetworkClient *client = _clientSockets[socketDescriptor];
 
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << socketDescriptor << "Client disconnected";

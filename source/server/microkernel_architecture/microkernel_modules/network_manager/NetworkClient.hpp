@@ -20,14 +20,20 @@ public:
                const QSslKey &encryptionKey,
                const QSslCertificate &encryptionCertificate);
     void close();
+    qint64 bytesAvailable() const;
+    qint64 bytesToWrite() const;
 
 signals:
+    void readyRead(qintptr socketDescriptor);
+    void bytesWritten(qintptr socketDescriptor, qint64 size);
     void disconnected(qintptr socketDescriptor);
     void encryptionErrors(qintptr socketDescriptor, QList<QSslError> errors);
 
 public slots:
-    void write(void *instruction);
+    qint64 write(const char *data, qint64 size);
+    qint64 read(char *data, qint64 size);
     void onReadyRead();
+    void onBytesWritten(qint64 size);
     void onEncryptedState();
     void onDisconnectedState();
     void onEncryptionErrors(QList<QSslError> errors);

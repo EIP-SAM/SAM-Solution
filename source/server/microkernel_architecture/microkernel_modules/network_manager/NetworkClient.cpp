@@ -8,6 +8,8 @@ NetworkClient::NetworkClient(QObject *parent)
     : QObject(parent), _socket(this)
 {
     qDebug() << Q_FUNC_INFO;
+    connect(&_socket, SIGNAL(bytesWritten(qint64)),
+            this, SLOT(onBytesWritten(qint64)));
     connect(&_socket, SIGNAL(encrypted()),
             this, SLOT(onEncryptedState()));
     connect(&_socket, SIGNAL(disconnected()),
@@ -54,30 +56,65 @@ bool NetworkClient::start(QSsl::SslProtocol protocol,
 }
 
 //
+//
+//
+void NetworkClient::close()
+{
+    qDebug() << Q_FUNC_INFO;
+}
+
+//
+// Bytes available for reading
+//
+qint64 NetworkClient::bytesAvailable() const
+{
+    qDebug() << Q_FUNC_INFO;
+    return (_socket.bytesAvailable());
+}
+
+//
+// Bytes waiting to be written
+//
+qint64 NetworkClient::bytesToWrite() const
+{
+    qDebug() << Q_FUNC_INFO;
+    return (_socket.bytesToWrite());
+}
+
+//
 // Read data from socket when available
 //
-void NetworkClient::onReadyRead()
+qint64 NetworkClient::read(char *data, qint64 size)
 {
-    QByteArray data = _socket.read(_socket.bytesAvailable());
-
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "" << _socketDescriptor << "Incoming data: " << data;
-    write(NULL); // temporary answer
+    return _socket.read(data, size);
 }
 
 //
 // Write data on socket
 //
-void NetworkClient::write(void *instruction)
+qint64 NetworkClient::write(const char *data, qint64 size)
 {
-    QByteArray falseData("Hello foo world\n");
-    qint64 size;
-
-    (void)instruction;
     qDebug() << Q_FUNC_INFO;
-    size = _socket.write(falseData.data(), falseData.size());
-    qDebug() << "" << _socketDescriptor
-             << "Data sent: " << falseData << "Bytes written :" << size;
+    return _socket.write(data, size);
+}
+
+//
+// Redirect QSslSocket signal to NetworkClient
+//
+void NetworkClient::onReadyRead()
+{
+    qDebug() << Q_FUNC_INFO;
+    emit readyRead(_socketDescriptor);
+}
+
+//
+// Redirect QSslSocket signal to NetworkClient
+//
+void NetworkClient::onBytesWritten(qint64 size)
+{
+    qDebug() << Q_FUNC_INFO;
+    emit bytesWritten(_socketDescriptor, size);
 }
 
 //
@@ -96,6 +133,7 @@ void NetworkClient::onEncryptedState()
 //
 void NetworkClient::onDisconnectedState()
 {
+    qDebug() << Q_FUNC_INFO;
     emit disconnected(_socket.socketDescriptor());
 }
 
@@ -104,5 +142,6 @@ void NetworkClient::onDisconnectedState()
 //
 void NetworkClient::onEncryptionErrors(QList<QSslError> errors)
 {
+    qDebug() << Q_FUNC_INFO;
     emit encryptionErrors(_socketDescriptor, errors);
 }
