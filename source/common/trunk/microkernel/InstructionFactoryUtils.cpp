@@ -18,7 +18,7 @@ AInstructionModel	InstructionFactoryUtils::create(int instructionCode, int retur
 
 //
 // Return a message instruction (AInstructionModel)
-// based on a QByteArray to fill it's attributes values 
+// based on a QByteArray to fill its attributes values 
 //
 AInstructionModel	InstructionFactoryUtils::create(QByteArray *byteArray)
 {
