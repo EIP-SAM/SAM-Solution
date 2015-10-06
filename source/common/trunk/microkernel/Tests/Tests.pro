@@ -10,10 +10,10 @@ INCLUDEPATH += . ../instructions
 
 # Input
 HEADERS += ../instructions/AInstructionModel.hpp \
-           ../instructions/InstructionFactoryUtils.hpp \
+           ../instructions/InstructionFactory.hpp \
            TestAInstructionModel.hpp \
-           TestInstructionFactoryUtils.hpp
+           TestInstructionFactory.hpp
 SOURCES += ../instructions/AInstructionModel.cpp \
-           ../instructions/InstructionFactoryUtils.cpp \
+           ../instructions/InstructionFactory.cpp \
            TestAInstructionModel.cpp \
-           TestInstructionFactoryUtils.cpp
+           TestInstructionFactory.cpp
