@@ -14,4 +14,4 @@ public:
   
 };
 
-#endif /* !INSTRUCTION_FACTORY_UTILS_HPP_ */
+#endif // !INSTRUCTION_FACTORY_UTILS_HPP_

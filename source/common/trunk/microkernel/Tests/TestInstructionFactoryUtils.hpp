@@ -17,4 +17,4 @@ private slots:
   void _TestCreateArray();
 };
 
-#endif /* !TEST_INSTRUCTION_FACTORY_UTILS_HPP_ */
+#endif // !TEST_INSTRUCTION_FACTORY_UTILS_HPP_
