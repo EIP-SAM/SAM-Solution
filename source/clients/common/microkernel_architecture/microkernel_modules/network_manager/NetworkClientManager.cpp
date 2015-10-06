@@ -43,6 +43,15 @@ void NetworkClientManager::startConnection(const QString &ip, quint16 port)
 }
 
 //
+// Disconnect socket from host
+//
+
+void NetworkClientManager::disconnect()
+{
+    _client.close();
+}
+
+//
 // Send to the server through the network message
 //
 
