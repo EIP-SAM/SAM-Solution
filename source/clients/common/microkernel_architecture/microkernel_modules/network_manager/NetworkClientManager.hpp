@@ -19,11 +19,11 @@ public:
     ~NetworkClientManager();
 
     void startConnection(const QString &ip, quint16 port);
-    void disconnect();
 
 public slots:
     bool writeMsg(AInstructionModel *instruction);
     QByteArray *readMsg();
+    void onDisconnected();
 };
 
 #endif // !NETWORK_CLIENT_MANAGER_HPP_

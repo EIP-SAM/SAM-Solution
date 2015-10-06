@@ -12,6 +12,7 @@ NetworkClientManager::NetworkClientManager(QObject *parent)
     : QObject(parent), _client(this)
 {
     connect(&_client, SIGNAL(readyRead()), this, SLOT(readMsg()));
+    connect(&_client, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
 }
 
 NetworkClientManager::~NetworkClientManager()
@@ -68,6 +69,11 @@ QByteArray *NetworkClientManager::readMsg()
     return (byteArray);
 }
 
-void NetworkClientManager::disconnect()
+//
+// Handle disconnected QSslSocket signal
+//
+
+void NetworkClientManager::onDisconnected()
 {
+    qDebug() << "Disconnected from host";
 }
