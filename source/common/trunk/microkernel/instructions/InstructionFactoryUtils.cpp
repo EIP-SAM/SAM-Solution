@@ -1,4 +1,4 @@
-#include		"InstructionFactory.hpp"
+#include		"InstructionFactoryUtils.hpp"
 
 //
 // Create a message header with the instruction code
@@ -9,9 +9,9 @@ AInstructionModel	InstructionFactoryUtils::create(int instructionCode, int retur
 {
   AInstructionModel	instructionModel;
 
-  instructionModel.setInstructionCode(instrucitonCode);
+  instructionModel.setInstructionCode(instructionCode);
   instructionModel.setReturnType(returnType);
-  instructionModel.setIsSynchrone(isSyncrhone);
+  instructionModel.setIsSynchrone(isSynchrone);
 
   return instructionModel;
 };

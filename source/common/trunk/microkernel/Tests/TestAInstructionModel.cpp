@@ -54,4 +54,6 @@ void			TestAInstructionModel::ptrTest()
   QCOMPARE(*((bool*)&(ptr[INDEX_BYTE_ISSYNCHRONE])), true);
 }
 
-QTEST_MAIN(TestAInstructionModel)
+//
+// QTEST_MAIN(TestAInstructionModel)
+//
