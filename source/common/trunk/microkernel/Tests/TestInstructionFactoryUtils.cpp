@@ -1,4 +1,4 @@
-#include		"TestInstructionFactoryUtils.hpp"
+#include "TestInstructionFactoryUtils.hpp"
 
 TestInstructionFactoryUtils::TestInstructionFactoryUtils()
 {
@@ -13,9 +13,9 @@ TestInstructionFactoryUtils::~TestInstructionFactoryUtils()
 // AInstructionModel with correct attribute values
 //
 
-void			TestInstructionFactoryUtils::TestCreate()
+void TestInstructionFactoryUtils::_TestCreate()
 {
-  AInstructionModel	message = InstructionFactoryUtils::create(1, 15, false);
+  AInstructionModel message = InstructionFactoryUtils::create(1, 15, false);
   QCOMPARE(message.getInstructionCode(), 1);
   QCOMPARE(message.getReturnType(), 15);
   QCOMPARE(message.getIsSynchrone(), false);
@@ -26,14 +26,14 @@ void			TestInstructionFactoryUtils::TestCreate()
 // AInstructionModel with correct attribute values
 //
 
-void			TestInstructionFactoryUtils::TestCreateArray()
+void TestInstructionFactoryUtils::_TestCreateArray()
 {
-  AInstructionModel	message = InstructionFactoryUtils::create(1, 15, false);
-  QByteArray		*messageArray = NULL;
+  AInstructionModel message = InstructionFactoryUtils::create(1, 15, false);
+  QByteArray *messageArray = NULL;
 
   messageArray = message.getByteArray();
 
-  AInstructionModel	messageTest = InstructionFactoryUtils::create(messageArray);
+  AInstructionModel messageTest = InstructionFactoryUtils::create(messageArray);
 
   QCOMPARE(messageTest.getInstructionCode(), 1);
   QCOMPARE(messageTest.getReturnType(), 15);

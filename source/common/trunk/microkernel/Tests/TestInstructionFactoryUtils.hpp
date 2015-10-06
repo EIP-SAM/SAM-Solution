@@ -1,10 +1,10 @@
-#ifndef		TEST_INSTRUCTION_FACTORY_UTILS_HPP_
-# define	TEST_INSTRUCTION_FACTORY_UTILS_HPP_
+#ifndef TEST_INSTRUCTION_FACTORY_UTILS_HPP_
+# define TEST_INSTRUCTION_FACTORY_UTILS_HPP_
 
-# include	<QtTest/QtTest>
-# include	"InstructionFactoryUtils.hpp"
+# include <QtTest/QtTest>
+# include "InstructionFactoryUtils.hpp"
 
-class		TestInstructionFactoryUtils : public QObject
+class TestInstructionFactoryUtils : public QObject
 {
   Q_OBJECT
 
@@ -13,8 +13,8 @@ public:
   virtual ~TestInstructionFactoryUtils();
 
 private slots:
-  void		TestCreate();
-  void		TestCreateArray();
+  void _TestCreate();
+  void _TestCreateArray();
 };
 
-#endif		/* !TEST_INSTRUCTION_FACTORY_UTILS_HPP_ */
+#endif /* !TEST_INSTRUCTION_FACTORY_UTILS_HPP_ */
