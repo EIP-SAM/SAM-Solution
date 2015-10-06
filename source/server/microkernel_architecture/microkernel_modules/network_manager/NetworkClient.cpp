@@ -47,7 +47,8 @@ bool NetworkClient::start(QSsl::SslProtocol protocol,
         _socket.startServerEncryption();
     else
     {
-        // Get details on error
+        qDebug() << "" << socketDescriptor
+                 << "Error :" << _socket.errorString();
         return (false);
     }
     qDebug() << "" << socketDescriptor
