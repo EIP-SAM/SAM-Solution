@@ -28,6 +28,7 @@ INCLUDEPATH += \
 HEADERS += \
     $${COMMON_ALL}/qt_custom_extensions/_QFile.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionModel.hpp \
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/ANetworkInstruction.hpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkServer.hpp \
     microkernel_architecture/microkernel_modules/main_controller/MainController.hpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkClient.hpp
@@ -35,7 +36,9 @@ HEADERS += \
 SOURCES += \
     $${COMMON_ALL}/qt_custom_extensions/_QFile.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionModel.cpp \
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/ANetworkInstruction.cpp \
     microkernel_architecture/main.cpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkServer.cpp \
     microkernel_architecture/microkernel_modules/main_controller/MainController.cpp \
-    microkernel_architecture/microkernel_modules/network_manager/NetworkClient.cpp
+    microkernel_architecture/microkernel_modules/network_manager/NetworkClient.cpp \
+    ../common/microkernel_architecture/microkernel_modules/instructions/ANetworkInstruction.cpp

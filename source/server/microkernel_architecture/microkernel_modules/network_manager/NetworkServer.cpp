@@ -2,7 +2,7 @@
 #include "NetworkClient.hpp"
 #include <QByteArray>
 #include "_QFile.hpp"
-#include "AInstructionModel.hpp"
+#include "ANetworkInstruction.hpp"
 
 //
 // NetworkServer static attributes assignation
@@ -175,6 +175,7 @@ void NetworkServer::onClientReadyRead(qintptr socketDescriptor)
 //
 void NetworkServer::pushInstruction(AInstructionModel *instruction)
 {
+    (void)instruction;
 }
 
 //
