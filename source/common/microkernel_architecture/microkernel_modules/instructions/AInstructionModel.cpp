@@ -1,4 +1,4 @@
-#include				"AInstructionModel.hpp"
+#include "AInstructionModel.hpp"
 
 AInstructionModel::AInstructionModel()
 {
@@ -10,12 +10,12 @@ AInstructionModel::~AInstructionModel()
   delete(_byteArray);
 }
 
-void					AInstructionModel::setByteArray(QByteArray *byteArray)
+void AInstructionModel::setByteArray(QByteArray *byteArray)
 {
   _byteArray = byteArray;
 }
 
-QByteArray				*AInstructionModel::getByteArray() const
+QByteArray *AInstructionModel::getByteArray() const
 {
-  return (_byteArray);
+  return _byteArray;
 }

@@ -1,4 +1,4 @@
-#include			"ANetworkInstruction.hpp"
+#include "ANetworkInstruction.hpp"
 
 ANetworkInstruction::ANetworkInstruction()
 {
@@ -11,9 +11,9 @@ ANetworkInstruction::ANetworkInstruction()
 
 ANetworkInstruction::ANetworkInstruction(QByteArray *byteArray)
 {
-  int					*intPtr;
-  bool					*boolPtr;
-  const char				*content;
+  int *intPtr;
+  bool *boolPtr;
+  const char *content;
 
   _init();
 
@@ -31,9 +31,9 @@ ANetworkInstruction::ANetworkInstruction(QByteArray *byteArray)
 // Add default value to attributs
 //
 
-void					ANetworkInstruction::_init()
+void ANetworkInstruction::_init()
 {
-  char					*ptr = NULL;
+  char *ptr = NULL;
 
   _byteArray = new QByteArray(CONTENT_BYTE_SIZE, '\0');
 
@@ -47,32 +47,32 @@ void					ANetworkInstruction::_init()
   setIsSynchrone(false);
 }
 
-void					ANetworkInstruction::setInstructionCode(int instructionCode)
+void ANetworkInstruction::setInstructionCode(int instructionCode)
 {
   *_instructionCode = instructionCode;
- }
-
-int					ANetworkInstruction::getInstructionCode() const
-{
-  return (*_instructionCode);
 }
 
-void					ANetworkInstruction::setReturnType(int returnType)
+int ANetworkInstruction::getInstructionCode() const
+{
+  return *_instructionCode;
+}
+
+void ANetworkInstruction::setReturnType(int returnType)
 {
   *_returnType = returnType;
- }
-
-int					ANetworkInstruction::getReturnType() const
-{
-  return (*_returnType);
 }
 
-void					ANetworkInstruction::setIsSynchrone(bool isSynchrone)
+int ANetworkInstruction::getReturnType() const
+{
+  return *_returnType;
+}
+
+void ANetworkInstruction::setIsSynchrone(bool isSynchrone)
 {
   *_isSynchrone = isSynchrone;
- }
+}
 
-bool					ANetworkInstruction::getIsSynchrone() const
+bool ANetworkInstruction::getIsSynchrone() const
 {
-  return (*_isSynchrone);
+  return *_isSynchrone;
 }
