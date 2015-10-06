@@ -1,10 +1,9 @@
-#ifndef MAINCONTROLLER_HPP_
-# define MAINCONTROLLER_HPP_
+#ifndef MAIN_CONTROLLER_HPP_
+# define MAIN_CONTROLLER_HPP_
 
 # include <QApplication>
 
 class NetworkClientManager;
-//class GUIController;
 
 class MainController : public QObject
 {
@@ -12,7 +11,6 @@ class MainController : public QObject
 
 private:
     QApplication _qtCore;
-//    GUIController *_gui = NULL;
     NetworkClientManager *_network = NULL;
 
 public:
@@ -22,8 +20,7 @@ public:
     int run();
 
 private:
-//    bool _initGUI();
     bool _initNetwork();
 };
 
-#endif // !MAINCONTROLLER_HPP_
+#endif // !MAIN_CONTROLLER_HPP_

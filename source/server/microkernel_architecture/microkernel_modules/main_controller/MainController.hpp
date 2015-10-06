@@ -1,5 +1,5 @@
-#ifndef MAINCONTROLLER_HPP_
-# define MAINCONTROLLER_HPP_
+#ifndef MAIN_CONTROLLER_HPP_
+# define MAIN_CONTROLLER_HPP_
 
 # include <QCoreApplication>
 
@@ -23,4 +23,4 @@ private:
     bool _initNetwork();
 };
 
-#endif // !MAINCONTROLLER_HPP_
+#endif // !MAIN_CONTROLLER_HPP_
