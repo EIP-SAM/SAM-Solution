@@ -1,9 +1,11 @@
 *.o
 *.a
 *.lib
+*.so
 *.dll
 
 *~
+*.autosave
 
 *.pro.user*
 *build*

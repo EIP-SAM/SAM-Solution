@@ -1,11 +1,17 @@
 #include "_QFile.hpp"
 #include <QDebug>
 
+//
+// Construct custom QFile
+//
 _QFile::_QFile(QObject *parent)
     : QFile(parent)
 {
 }
 
+//
+// Read a file and return its data
+//
 const QByteArray *_QFile::readFile(const QString &filename)
 {
     QByteArray *data = NULL;

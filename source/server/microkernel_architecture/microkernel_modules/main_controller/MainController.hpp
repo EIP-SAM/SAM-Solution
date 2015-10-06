@@ -1,12 +1,14 @@
-#ifndef     MAINCONTROLLER_H
-# define    MAINCONTROLLER_H
+#ifndef MAIN_CONTROLLER_HPP_
+# define MAIN_CONTROLLER_HPP_
 
 # include <QCoreApplication>
 
 class NetworkServer;
 
-class MainController
+class MainController : QObject
 {
+    Q_OBJECT
+
 private:
     QCoreApplication _qtCore;
     NetworkServer *_network = NULL;
@@ -21,4 +23,4 @@ private:
     bool _initNetwork();
 };
 
-#endif      // MAINCONTROLLER_H
+#endif // !MAIN_CONTROLLER_HPP_

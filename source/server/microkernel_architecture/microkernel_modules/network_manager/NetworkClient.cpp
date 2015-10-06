@@ -1,29 +1,40 @@
 #include "NetworkClient.hpp"
 #include <QtNetwork>
 
+//
+// Construct network client
+//
 NetworkClient::NetworkClient(QObject *parent)
-    : QObject(parent)
+    : QObject(parent), _socket(this)
 {
     qDebug() << Q_FUNC_INFO;
+    connect(&_socket, SIGNAL(bytesWritten(qint64)),
+            this, SLOT(onBytesWritten(qint64)));
+    connect(&_socket, SIGNAL(encrypted()),
+            this, SLOT(onEncryptedState()));
+    connect(&_socket, SIGNAL(disconnected()),
+            this, SLOT(onDisconnectedState()));
     connect(&_socket, SIGNAL(sslErrors(QList<QSslError>)),
-            this, SLOT(newEncryptionError(QList<QSslError>)));
-    connect(&_socket, SIGNAL(encrypted()),
-            this, SLOT(isEncrypted()));
-    connect(&_socket, SIGNAL(encrypted()),
-            this, SLOT(read()));
-    connect(&_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
-            this, SLOT(onStateChanged(QAbstractSocket::SocketState)));
+            this, SLOT(onEncryptionErrors(QList<QSslError>)));
 }
 
+//
+// Destroy network client
+//
 NetworkClient::~NetworkClient()
 {
     qDebug() << Q_FUNC_INFO;
-    _socket.disconnectFromHost();
-    _socket.waitForDisconnected();
+    disconnect(&_socket, 0, 0, 0);
+    disconnect(this, 0, 0, 0);
 }
 
-bool NetworkClient::init(QSsl::SslProtocol protocol, qintptr socketDescriptor,
-                         QSslKey &encryptionKey, QSslCertificate &encryptionCertificate)
+//
+// Initialize and start client
+//
+bool NetworkClient::start(QSsl::SslProtocol protocol,
+                          qintptr socketDescriptor,
+                          const QSslKey &encryptionKey,
+                          const QSslCertificate &encryptionCertificate)
 {
     qDebug() << Q_FUNC_INFO;
     _socketDescriptor = socketDescriptor;
@@ -36,7 +47,8 @@ bool NetworkClient::init(QSsl::SslProtocol protocol, qintptr socketDescriptor,
         _socket.startServerEncryption();
     else
     {
-        // Get details on error
+        qDebug() << "" << socketDescriptor
+                 << "Error :" << _socket.errorString();
         return (false);
     }
     qDebug() << "" << socketDescriptor
@@ -44,49 +56,93 @@ bool NetworkClient::init(QSsl::SslProtocol protocol, qintptr socketDescriptor,
     return (true);
 }
 
-void NetworkClient::read()
+//
+//
+//
+void NetworkClient::close()
 {
-    QByteArray data = _socket.read(_socket.bytesAvailable());
-
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "" << _socketDescriptor << "Incoming data: " << data;
-    write(NULL); // temporary answer
 }
 
-void NetworkClient::write(void *instruction)
+//
+// Bytes available for reading
+//
+qint64 NetworkClient::bytesAvailable() const
 {
-    QByteArray falseData("Hello foo world\n");
-    qint64 size;
-
-    (void)instruction;
     qDebug() << Q_FUNC_INFO;
-    size = _socket.write(falseData.data(), falseData.size());
-    qDebug() << "" << _socketDescriptor << "Bytes written :" << size;
+    return (_socket.bytesAvailable());
 }
 
-void NetworkClient::isEncrypted()
+//
+// Bytes waiting to be written
+//
+qint64 NetworkClient::bytesToWrite() const
+{
+    qDebug() << Q_FUNC_INFO;
+    return (_socket.bytesToWrite());
+}
+
+//
+// Read data from socket when available
+//
+qint64 NetworkClient::read(char *data, qint64 size)
+{
+    qDebug() << Q_FUNC_INFO;
+    return _socket.read(data, size);
+}
+
+//
+// Write data on socket
+//
+qint64 NetworkClient::write(const char *data, qint64 size)
+{
+    qDebug() << Q_FUNC_INFO;
+    return _socket.write(data, size);
+}
+
+//
+// Redirect QSslSocket signal to NetworkClient
+//
+void NetworkClient::onReadyRead()
+{
+    qDebug() << Q_FUNC_INFO;
+    emit readyRead(_socketDescriptor);
+}
+
+//
+// Redirect QSslSocket signal to NetworkClient
+//
+void NetworkClient::onBytesWritten(qint64 size)
+{
+    qDebug() << Q_FUNC_INFO;
+    emit bytesWritten(_socketDescriptor, size);
+}
+
+//
+// Handle encrypted state event
+//
+void NetworkClient::onEncryptedState()
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << _socketDescriptor
              << "QSsl::TlsV1_2 connexion successfuly established";
-    connect(&_socket, SIGNAL(readyRead()), this, SLOT(read()));
+    connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 }
 
-void NetworkClient::newEncryptionError(QList<QSslError> errors)
+//
+// Handle disconnected state event
+//
+void NetworkClient::onDisconnectedState()
 {
-    QString errorStr = " ";
-
     qDebug() << Q_FUNC_INFO;
-    qDebug() << _socketDescriptor;
-    foreach (const QSslError &e, errors)
-        errorStr.append(e.errorString()).append("\n");
-
-    _socket.ignoreSslErrors(); // Be careful, not supposed to ignore them
-    qDebug() << errorStr;
+    emit disconnected(_socket.socketDescriptor());
 }
 
-void NetworkClient::onStateChanged(QAbstractSocket::SocketState socketState)
+//
+// Handle encryption errors event
+//
+void NetworkClient::onEncryptionErrors(QList<QSslError> errors)
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "" << _socketDescriptor << socketState;
+    emit encryptionErrors(_socketDescriptor, errors);
 }

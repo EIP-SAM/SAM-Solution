@@ -1,12 +1,14 @@
-#ifndef     NETWORKSERVER_HPP
-# define    NETWORKSERVER_HPP
+#ifndef NETWORK_SERVER_HPP_
+# define NETWORK_SERVER_HPP_
 
 # include <QTcpServer>
 # include <QSslKey>
 # include <QSslCertificate>
-# include <QList>
+# include <QSslError>
+# include <QMap>
 
 class NetworkClient;
+class AInstructionModel;
 
 class NetworkServer : public QTcpServer
 {
@@ -19,11 +21,12 @@ public:
 private:
     static const QString _ENCRYPTION_KEY_FILE;
     static const QString _ENCRYPTION_CERTIFICATE_FILE;
+    static const QSsl::SslProtocol _DEFAULT_PROTOCOL;
 
     quint16 _portNumber;
     QSslKey *_encryptionKey = NULL;
     QSslCertificate *_encryptionCertificate = NULL;
-    QList<NetworkClient *> _clientSockets;
+    QMap<qintptr, NetworkClient *> _clientSockets;
 
 public:
     bool start(quint16 portNumber);
@@ -39,6 +42,11 @@ protected:
 signals:
 
 public slots:
+    void onClientReadyRead(qintptr socketDescriptor);
+    void pushInstruction(AInstructionModel *instruction);
+    void onClientBytesWritten(qintptr socketDescriptor, qint64 size);
+    void deleteClient(qintptr socketDescriptor);
+    void onClientEncryptionError(qintptr socketDescriptor, QList<QSslError> errors);
 };
 
-#endif      // NETWORKSERVER_HPP
+#endif // !NETWORK_SERVER_HPP_

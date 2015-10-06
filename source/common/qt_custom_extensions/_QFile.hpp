@@ -1,7 +1,7 @@
-#ifndef     _QFILE_H
-# define    _QFILE_H
+#ifndef _QFILE_HPP_
+# define _QFILE_HPP_
 
-# include   <QFile>
+# include <QFile>
 
 // `_QFile` is an extension of the original Qt class `QFile`
 
@@ -17,4 +17,4 @@ signals:
 public slots:
 };
 
-#endif      // _QFILE_H
+#endif // !_QFILE_HPP_

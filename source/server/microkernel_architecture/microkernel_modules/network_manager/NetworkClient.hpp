@@ -1,5 +1,5 @@
-#ifndef     NETWORKCLIENT_HPP
-# define    NETWORKCLIENT_HPP
+#ifndef NETWORK_CLIENT_HPP_
+# define NETWORK_CLIENT_HPP_
 
 # include <QSslSocket>
 
@@ -9,24 +9,34 @@ class NetworkClient : public QObject
 
 private:
     QSslSocket _socket;
-    qintptr _socketDescriptor;
+    qintptr _socketDescriptor = -1;
 
 public:
     explicit NetworkClient(QObject *parent = 0);
     ~NetworkClient();
 
-    bool init(QSsl::SslProtocol protocol, qintptr socketDescriptor,
-              QSslKey &encryptionKey, QSslCertificate &encryptionCertificate);
+    bool start(QSsl::SslProtocol protocol,
+               qintptr socketDescriptor,
+               const QSslKey &encryptionKey,
+               const QSslCertificate &encryptionCertificate);
+    void close();
+    qint64 bytesAvailable() const;
+    qint64 bytesToWrite() const;
 
 signals:
-    void stateChanged(QAbstractSocket::SocketState);
+    void readyRead(qintptr socketDescriptor);
+    void bytesWritten(qintptr socketDescriptor, qint64 size);
+    void disconnected(qintptr socketDescriptor);
+    void encryptionErrors(qintptr socketDescriptor, QList<QSslError> errors);
 
 public slots:
-    void read();
-    void write(void *instruction);
-    void isEncrypted();
-    void newEncryptionError(QList<QSslError> errors);
-    void onStateChanged(QAbstractSocket::SocketState socketState);
+    qint64 write(const char *data, qint64 size);
+    qint64 read(char *data, qint64 size);
+    void onReadyRead();
+    void onBytesWritten(qint64 size);
+    void onEncryptedState();
+    void onDisconnectedState();
+    void onEncryptionErrors(QList<QSslError> errors);
 };
 
-#endif      // NETWORKCLIENT_HPP
+#endif // NETWORK_CLIENT_HPP_

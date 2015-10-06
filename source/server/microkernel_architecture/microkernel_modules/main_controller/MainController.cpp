@@ -21,7 +21,7 @@ int MainController::run()
 
 bool MainController::_initNetwork()
 {
-    if (!(_network = new NetworkServer()))
+    if (!(_network = new NetworkServer(this)))
         return (false);
 
     _network->start(42042);
