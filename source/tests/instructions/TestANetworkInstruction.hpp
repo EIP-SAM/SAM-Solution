@@ -7,6 +7,7 @@
 class TestANetworkInstruction : public QObject
 {
   Q_OBJECT
+
 public:
   TestANetworkInstruction();
   virtual ~TestANetworkInstruction();

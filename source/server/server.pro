@@ -40,5 +40,4 @@ SOURCES += \
     microkernel_architecture/main.cpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkServer.cpp \
     microkernel_architecture/microkernel_modules/main_controller/MainController.cpp \
-    microkernel_architecture/microkernel_modules/network_manager/NetworkClient.cpp \
-    ../common/microkernel_architecture/microkernel_modules/instructions/ANetworkInstruction.cpp
+    microkernel_architecture/microkernel_modules/network_manager/NetworkClient.cpp

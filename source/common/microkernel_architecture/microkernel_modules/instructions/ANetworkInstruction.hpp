@@ -9,6 +9,7 @@ public:
   ANetworkInstruction();
   ANetworkInstruction(QByteArray *byteArray);
   ~ANetworkInstruction();
+
   void _init();
   void setInstructionCode(int instructionCode);
   int getInstructionCode() const;
@@ -16,10 +17,6 @@ public:
   int getReturnType() const;
   void setIsSynchrone(bool isSynchrone);
   bool getIsSynchrone() const;
-private:
-  int *_instructionCode;
-  int *_returnType;
-  bool *_isSynchrone;
 };
 
 #endif // !ANETWORK_INSTRUCTION_HPP_

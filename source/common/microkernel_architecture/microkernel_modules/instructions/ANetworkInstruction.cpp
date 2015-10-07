@@ -26,6 +26,10 @@ ANetworkInstruction::ANetworkInstruction(QByteArray *byteArray)
   setIsSynchrone(*boolPtr);
 }
 
+ANetworkInstruction::~ANetworkInstruction()
+{
+}
+
 //
 // Stock in the attribut _byteArray pointer to other attributs to define number of bytes
 // Add default value to attributs
