@@ -1,7 +1,7 @@
 #ifndef INSTRUCTION_FACTORY_HPP_
 # define INSTRUCTION_FACTORY_HPP_
 
-# include "AInstructionModel.hpp"
+# include "ANetworkInstruction.hpp"
 
 class InstructionFactory
 {
@@ -9,9 +9,9 @@ public:
   InstructionFactory();
   ~InstructionFactory();
 
-  static AInstructionModel create(int instructionCode, int returnType, bool isSynchrone);
-  static AInstructionModel create(QByteArray *byteArray);
-  
+  static ANetworkInstruction create(int instructionCode, int returnType, bool isSynchrone);
+  static ANetworkInstruction create(QByteArray *byteArray);
+
 };
 
 #endif // !INSTRUCTION_FACTORY_HPP_

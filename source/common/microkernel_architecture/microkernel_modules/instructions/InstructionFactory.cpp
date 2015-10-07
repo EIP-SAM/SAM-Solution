@@ -13,9 +13,9 @@ InstructionFactory::~InstructionFactory()
 {
 };
 
-AInstructionModel InstructionFactory::create(int instructionCode, int returnType, bool isSynchrone)
+ANetworkInstruction InstructionFactory::create(int instructionCode, int returnType, bool isSynchrone)
 {
-  AInstructionModel instructionModel;
+  ANetworkInstruction instructionModel;
 
   instructionModel.setInstructionCode(instructionCode);
   instructionModel.setReturnType(returnType);
@@ -26,11 +26,11 @@ AInstructionModel InstructionFactory::create(int instructionCode, int returnType
 
 //
 // Return a message instruction (AInstructionModel)
-// based on a QByteArray to fill its attributes values 
+// based on a QByteArray to fill its attributes values
 //
-AInstructionModel InstructionFactory::create(QByteArray *byteArray)
+ANetworkInstruction InstructionFactory::create(QByteArray *byteArray)
 {
-  AInstructionModel instructionModel(byteArray);
+  ANetworkInstruction instructionModel(byteArray);
 
   return instructionModel;
 };

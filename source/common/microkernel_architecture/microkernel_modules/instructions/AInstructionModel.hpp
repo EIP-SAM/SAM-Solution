@@ -23,9 +23,11 @@ public:
   bool						getIsSynchrone() const;
   void						setByteArray(QByteArray *byteArray);
   QByteArray					*getByteArray() const;
+
 private:
   void						_init();
-private:
+
+protected:
   int						*_instructionCode;
   int						*_returnType;
   bool						*_isSynchrone;
