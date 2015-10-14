@@ -16,11 +16,14 @@ AFunctionality::~AFunctionality()
 }
 
 //
-// Start a new thread
+// Start a new thread and send a signal to FunctionalitiesManager
+// class with this AFunctionality object to keep a trace of what
+// functionalities are running right now
 //
 void AFunctionality::start(bool threaded)
 {
   if (threaded && _thread != null) {
+    connect(this);
     _thread.start();
   }
 }
@@ -31,12 +34,4 @@ void AFunctionality::start(bool threaded)
 void AFunctionality::stop()
 {
   _thread.exit();
-}
-
-//
-// Connect to another class SLOT
-//
-void AFunctionality::signal_starded()
-{
-  
 }

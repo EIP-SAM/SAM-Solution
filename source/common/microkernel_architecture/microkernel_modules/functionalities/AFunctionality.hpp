@@ -4,13 +4,10 @@
 
 # include <QThread>
 
-class AFunctionality : public QObject
+class AFunctionality : public QThread
 {  
   Q_OBJECT
 
-private:
-  QThread *_thread;
-  
 public:
   AFunctionality();
   ~AFunctionality();
