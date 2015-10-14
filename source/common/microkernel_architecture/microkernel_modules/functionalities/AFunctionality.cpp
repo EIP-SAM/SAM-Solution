@@ -1,18 +1,19 @@
 #include "AFunctionality.hpp"
+#include "FunctionalitiesManager.hpp"
 
 //
 // Constructor and Destructor
 //
 AFunctionality::AFunctionality()
 {
-  _thread = new QThread();
+
 }
 
 AFunctionality::~AFunctionality()
 {
   stop();
-  _thread->quit();
-  _thread->wait();
+  quit();
+  wait();
 }
 
 //
@@ -20,11 +21,11 @@ AFunctionality::~AFunctionality()
 // class with this AFunctionality object to keep a trace of what
 // functionalities are running right now
 //
-void AFunctionality::start(bool threaded)
+void AFunctionality::start(bool threaded, FunctionalitiesManager &manager)
 {
-  if (threaded && _thread != null) {
-    connect(this);
-    _thread.start();
+  if (threaded != null) {
+    connect(this, SIGNAL(started(this)), manager, SLOT());
+    start();
   }
 }
 
@@ -33,5 +34,5 @@ void AFunctionality::start(bool threaded)
 //
 void AFunctionality::stop()
 {
-  _thread.exit();
+  quit();
 }

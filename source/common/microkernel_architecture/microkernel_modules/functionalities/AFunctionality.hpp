@@ -4,6 +4,8 @@
 
 # include <QThread>
 
+class FunctionalitiesManager;
+
 class AFunctionality : public QThread
 {  
   Q_OBJECT
@@ -12,11 +14,11 @@ public:
   AFunctionality();
   ~AFunctionality();
   
-  void start(bool threaded = true);
+  void start(bool threaded = true, FunctionalitiesManager &manager);
   void stop();
 
 signals:
-  void starded();
+  void starded(AFunctionalities *);
 
 };
 
