@@ -15,23 +15,28 @@ private:
   QList<AFunctionality *> _internalFcts;
   QList<AFunctionality *> _externalFcts;
   QList<AFunctionality *> _runningFcts;
+  bool _shuttingDown;
 
 public:
   FunctionalitiesManager();
   ~FunctionalitiesManager();
 
-  void init();
+  bool init();
   void shutdown();
   AFunctionality *loadLibrary(const QString &name);
 
 private:
-  void _initMicrokernelFcts();
-  void _initInternalFcts();
-  void _initExternalFcts();
+  bool _initMicrokernelFcts();
+  bool _initInternalFcts();
+  bool _initExternalFcts();
 
 private slots:
   void _functionalityStarted();
   void _functionalityStopped();
+
+signals:
+  void quit();
+  void readyToDelete();
 };
 
 #endif // !FUNCTIONALITIES_MANAGER_HPP_

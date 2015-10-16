@@ -47,13 +47,17 @@ OBJECTS_DIR   = ./
 
 SOURCES       = AFunctionality.cpp \
 		FunctionalitiesManager.cpp \
-		main.cpp moc_AFunctionality.cpp \
-		moc_FunctionalitiesManager.cpp
+		main.cpp \
+		MainController.cpp moc_AFunctionality.cpp \
+		moc_FunctionalitiesManager.cpp \
+		moc_MainController.cpp
 OBJECTS       = AFunctionality.o \
 		FunctionalitiesManager.o \
 		main.o \
+		MainController.o \
 		moc_AFunctionality.o \
-		moc_FunctionalitiesManager.o
+		moc_FunctionalitiesManager.o \
+		moc_MainController.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -273,7 +277,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/functionalities1.0.0 || mkdir -p .tmp/functionalities1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/functionalities1.0.0/ && $(COPY_FILE) --parents AFunctionality.hpp FunctionalitiesManager.hpp .tmp/functionalities1.0.0/ && $(COPY_FILE) --parents AFunctionality.cpp FunctionalitiesManager.cpp main.cpp .tmp/functionalities1.0.0/ && (cd `dirname .tmp/functionalities1.0.0` && $(TAR) functionalities1.0.0.tar functionalities1.0.0 && $(COMPRESS) functionalities1.0.0.tar) && $(MOVE) `dirname .tmp/functionalities1.0.0`/functionalities1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/functionalities1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/functionalities1.0.0/ && $(COPY_FILE) --parents AFunctionality.hpp FunctionalitiesManager.hpp MainController.hpp .tmp/functionalities1.0.0/ && $(COPY_FILE) --parents AFunctionality.cpp FunctionalitiesManager.cpp main.cpp MainController.cpp .tmp/functionalities1.0.0/ && (cd `dirname .tmp/functionalities1.0.0` && $(TAR) functionalities1.0.0.tar functionalities1.0.0 && $(COMPRESS) functionalities1.0.0.tar) && $(MOVE) `dirname .tmp/functionalities1.0.0`/functionalities1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/functionalities1.0.0
 
 
 clean:compiler_clean 
@@ -296,9 +300,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_AFunctionality.cpp moc_FunctionalitiesManager.cpp
+compiler_moc_header_make_all: moc_AFunctionality.cpp moc_FunctionalitiesManager.cpp moc_MainController.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_AFunctionality.cpp moc_FunctionalitiesManager.cpp
+	-$(DEL_FILE) moc_AFunctionality.cpp moc_FunctionalitiesManager.cpp moc_MainController.cpp
 moc_AFunctionality.cpp: /usr/include/qt5/QtCore/QThread \
 		/usr/include/qt5/QtCore/qthread.h \
 		/usr/include/qt5/QtCore/qobject.h \
@@ -423,6 +427,74 @@ moc_FunctionalitiesManager.cpp: /usr/include/qt5/QtCore/QList \
 		/usr/include/qt5/QtCore/qobject_impl.h \
 		FunctionalitiesManager.hpp
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include FunctionalitiesManager.hpp -o moc_FunctionalitiesManager.cpp
+
+moc_MainController.cpp: /usr/include/qt5/QtCore/QCoreApplication \
+		/usr/include/qt5/QtCore/qcoreapplication.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qeventloop.h \
+		FunctionalitiesManager.hpp \
+		/usr/include/qt5/QtCore/QList \
+		/usr/include/qt5/QtCore/QString \
+		AFunctionality.hpp \
+		/usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h \
+		MainController.hpp
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include MainController.hpp -o moc_MainController.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -561,10 +633,9 @@ FunctionalitiesManager.o: FunctionalitiesManager.cpp FunctionalitiesManager.hpp 
 		/usr/include/qt5/QtCore/qobject_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o FunctionalitiesManager.o FunctionalitiesManager.cpp
 
-main.o: main.cpp FunctionalitiesManager.hpp \
-		/usr/include/qt5/QtCore/QList \
-		/usr/include/qt5/QtCore/qlist.h \
-		/usr/include/qt5/QtCore/qalgorithms.h \
+main.o: main.cpp MainController.hpp \
+		/usr/include/qt5/QtCore/QCoreApplication \
+		/usr/include/qt5/QtCore/qcoreapplication.h \
 		/usr/include/qt5/QtCore/qglobal.h \
 		/usr/include/qt5/QtCore/qconfig.h \
 		/usr/include/qt5/QtCore/qfeatures.h \
@@ -601,35 +672,111 @@ main.o: main.cpp FunctionalitiesManager.hpp \
 		/usr/include/qt5/QtCore/qtypeinfo.h \
 		/usr/include/qt5/QtCore/qtypetraits.h \
 		/usr/include/qt5/QtCore/qsysinfo.h \
-		/usr/include/qt5/QtCore/qiterator.h \
-		/usr/include/qt5/QtCore/qrefcount.h \
-		/usr/include/qt5/QtCore/QString \
 		/usr/include/qt5/QtCore/qstring.h \
 		/usr/include/qt5/QtCore/qchar.h \
 		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
 		/usr/include/qt5/QtCore/qnamespace.h \
 		/usr/include/qt5/QtCore/qarraydata.h \
 		/usr/include/qt5/QtCore/qstringbuilder.h \
-		AFunctionality.hpp \
-		/usr/include/qt5/QtCore/QThread \
-		/usr/include/qt5/QtCore/qthread.h \
 		/usr/include/qt5/QtCore/qobject.h \
 		/usr/include/qt5/QtCore/qobjectdefs.h \
 		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
 		/usr/include/qt5/QtCore/qcoreevent.h \
 		/usr/include/qt5/QtCore/qscopedpointer.h \
 		/usr/include/qt5/QtCore/qmetatype.h \
 		/usr/include/qt5/QtCore/qvarlengtharray.h \
 		/usr/include/qt5/QtCore/qcontainerfwd.h \
 		/usr/include/qt5/QtCore/qisenum.h \
-		/usr/include/qt5/QtCore/qobject_impl.h
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qeventloop.h \
+		FunctionalitiesManager.hpp \
+		/usr/include/qt5/QtCore/QList \
+		/usr/include/qt5/QtCore/QString \
+		AFunctionality.hpp \
+		/usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+MainController.o: MainController.cpp MainController.hpp \
+		/usr/include/qt5/QtCore/QCoreApplication \
+		/usr/include/qt5/QtCore/qcoreapplication.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qeventloop.h \
+		FunctionalitiesManager.hpp \
+		/usr/include/qt5/QtCore/QList \
+		/usr/include/qt5/QtCore/QString \
+		AFunctionality.hpp \
+		/usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MainController.o MainController.cpp
 
 moc_AFunctionality.o: moc_AFunctionality.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_AFunctionality.o moc_AFunctionality.cpp
 
 moc_FunctionalitiesManager.o: moc_FunctionalitiesManager.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_FunctionalitiesManager.o moc_FunctionalitiesManager.cpp
+
+moc_MainController.o: moc_MainController.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_MainController.o moc_MainController.cpp
 
 ####### Install
 

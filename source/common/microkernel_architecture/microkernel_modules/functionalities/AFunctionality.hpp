@@ -15,8 +15,9 @@ public:
   AFunctionality();
   virtual ~AFunctionality();
   
-  void start(bool threaded = true);
+  bool start(bool threaded = true);
   void stop();
+  bool isRunning() const;
 
 private slots:
   void _fctStarted();

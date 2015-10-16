@@ -1,15 +1,8 @@
-#include <unistd.h>
-#include <iostream>
-#include <QThread>
-#include "FunctionalitiesManager.hpp"
+#include "MainController.hpp"
 
-int main()
+int main(int ac, char **av)
 {
-  FunctionalitiesManager *manager;
+    MainController main(ac, av);
 
-  manager = new FunctionalitiesManager();
-
-  manager->init();
-  delete manager;
-  return (0);
+    return (main.run());
 }

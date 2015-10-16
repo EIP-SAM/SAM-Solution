@@ -21,25 +21,26 @@ AFunctionality::~AFunctionality()
 // and send a signal to FunctionalitiesManager class
 // to keep a trace of what functionalities are running right now
 //
-void AFunctionality::start(bool threaded)
+bool AFunctionality::start(bool threaded)
 {
   if (_running)
-    return ;
+    return false;
   if (threaded)
     {
       std::cout << this << " starting its thread" << std::endl;
       _thread = new QThread();
       this->moveToThread(_thread);
-      connect(_thread, SIGNAL(started()), this, SLOT(_fctStarted()));
-      connect(_thread, SIGNAL(finished()), this, SLOT(_fctFinished()));
+      if (!connect(_thread, SIGNAL(started()), this, SLOT(_fctStarted())) ||
+	  !connect(_thread, SIGNAL(finished()), this, SLOT(_fctFinished())))
+	return false;
       _thread->start();
-      std::cout << this << " is now in a thread" << std::endl;
     }
   else
     {
       std::cout << this << " starting not threaded" << std::endl;
       _fctStarted();
     }
+  return true;
 }
 
 //
@@ -61,6 +62,14 @@ void AFunctionality::stop()
 }
 
 //
+// Getter on running to attribute
+//
+bool AFunctionality::isRunning() const
+{
+  return _running;
+}
+
+//
 // Slot : tells FunctionalitiesManager that the functionality just started
 // called either manually or by the thread
 //
@@ -69,12 +78,6 @@ void AFunctionality::_fctStarted()
   std::cout << this << " emiting starting signal" << std::endl;
   _running = true;
   emit started();
-
-  for(int i = 0; i < 5; ++i)
-    {
-      std::cout << "---------- " << this << " [" << i << "]" << std::endl;
-      _thread->sleep(5);
-    }
 }
 
 //

@@ -5,7 +5,7 @@
 //
 // Constructor and Destructor
 //
-FunctionalitiesManager::FunctionalitiesManager()
+FunctionalitiesManager::FunctionalitiesManager() : _shuttingDown(false)
 {
 }
 
@@ -25,7 +25,7 @@ FunctionalitiesManager::~FunctionalitiesManager()
 //
 // Initialize microkernel functionalities in a Qlist
 //
-void FunctionalitiesManager::_initMicrokernelFcts()
+bool FunctionalitiesManager::_initMicrokernelFcts()
 {
   std::cout << "--MICROKERNEL--" << std::endl;
 
@@ -34,17 +34,22 @@ void FunctionalitiesManager::_initMicrokernelFcts()
 
   foreach(AFunctionality *fct, _microkernelFcts)
     {
-      connect(fct, SIGNAL(started()), this, SLOT(_functionalityStarted()));
-      connect(fct, SIGNAL(stopped()), this, SLOT(_functionalityStopped()));
-      fct->start();
+      if (!connect(fct, SIGNAL(started()),
+		   this, SLOT(_functionalityStarted())) ||
+	  !connect(fct, SIGNAL(stopped()),
+		   this, SLOT(_functionalityStopped())))
+	return false;
+      if (!fct->start())
+	return false;
     }
+  return true;
 }
 
 
 //
 // Initialize internal functionalities in a Qlist
 //
-void FunctionalitiesManager::_initInternalFcts()
+bool FunctionalitiesManager::_initInternalFcts()
 {
   std::cout << "--INTERNAL--" << std::endl;
 
@@ -53,16 +58,21 @@ void FunctionalitiesManager::_initInternalFcts()
 
   foreach(AFunctionality *fct, _internalFcts)
     {
-      connect(fct, SIGNAL(started()), this, SLOT(_functionalityStarted()));
-      connect(fct, SIGNAL(stopped()), this, SLOT(_functionalityStopped()));
-      fct->start();
+      if (!connect(fct, SIGNAL(started()),
+		   this, SLOT(_functionalityStarted())) ||
+	  !connect(fct, SIGNAL(stopped()),
+		   this, SLOT(_functionalityStopped())))
+	return false;
+      if (!fct->start())
+	return false;
     }
+  return true;
 }
 
 //
 // Initialize external functionalities in a Qlist
 //
-void FunctionalitiesManager::_initExternalFcts()
+bool FunctionalitiesManager::_initExternalFcts()
 {
   std::cout << "--EXTERNAL--" << std::endl;
 
@@ -71,20 +81,27 @@ void FunctionalitiesManager::_initExternalFcts()
 
   foreach(AFunctionality *fct, _externalFcts)
     {
-      connect(fct, SIGNAL(started()), this, SLOT(_functionalityStarted()));
-      connect(fct, SIGNAL(stopped()), this, SLOT(_functionalityStopped()));
-      fct->start();
+      if (!connect(fct, SIGNAL(started()),
+		   this, SLOT(_functionalityStarted())) ||
+	  !connect(fct, SIGNAL(stopped()),
+		   this, SLOT(_functionalityStopped())))
+	return false;
+      if (!fct->start())
+	return false;
     }
+  return false;
 }
 
 //
 // Initialize all client's functionalities 
 //
-void FunctionalitiesManager::init()
+bool FunctionalitiesManager::init()
 {
-  _initMicrokernelFcts();
-  _initInternalFcts();
-  _initExternalFcts();
+  if (!_initMicrokernelFcts() ||
+      !_initInternalFcts() ||
+      !_initExternalFcts())
+    return false;
+  return true;
 }
 
 //
@@ -92,6 +109,7 @@ void FunctionalitiesManager::init()
 //
 void FunctionalitiesManager::shutdown()
 {
+  _shuttingDown = true;
   foreach(AFunctionality *fct, _runningFcts)
     fct->stop();
 }
@@ -106,13 +124,16 @@ AFunctionality *FunctionalitiesManager::loadLibrary(const QString &name)
 }
 
 //
-// Slot : Activated when a functionality is stats
+// Slot : Activated when a functionality started
 // Store a pointer ont this functionality in a list
 //
 void FunctionalitiesManager::_functionalityStarted()
 {
   _runningFcts << static_cast<AFunctionality *>(QObject::sender());
   std::cout << "Manager : " << QObject::sender() << " started" << std::endl;
+  std::cout << "Manager : " << _runningFcts.count() << " currently running" << std::endl;
+  if (_runningFcts.count() == 6)
+    emit quit();
 }
 
 //
@@ -122,5 +143,7 @@ void FunctionalitiesManager::_functionalityStarted()
 void FunctionalitiesManager::_functionalityStopped()
 {
   _runningFcts.removeAll(static_cast<AFunctionality *>(QObject::sender()));
+  if (_shuttingDown == true && _runningFcts.count() == 0)
+    emit(readyToDelete());
   std::cout << "Manager : " << QObject::sender() << " stopped" << std::endl;
 }
