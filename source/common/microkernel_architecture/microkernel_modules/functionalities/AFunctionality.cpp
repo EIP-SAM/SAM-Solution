@@ -7,13 +7,11 @@
 //
 AFunctionality::AFunctionality() : _thread(NULL), _running(false)
 {  
-  std::cout << this << " instanciated" << std::endl;
 }
 
 AFunctionality::~AFunctionality()
 {
   stop();
-  std::cout << this << " destructed" << std::endl;
 }
 
 //
@@ -27,7 +25,6 @@ bool AFunctionality::start(bool threaded)
     return false;
   if (threaded)
     {
-      std::cout << this << " starting its thread" << std::endl;
       _thread = new QThread();
       this->moveToThread(_thread);
       if (!connect(_thread, SIGNAL(started()), this, SLOT(_fctStarted())) ||
@@ -36,10 +33,7 @@ bool AFunctionality::start(bool threaded)
       _thread->start();
     }
   else
-    {
-      std::cout << this << " starting not threaded" << std::endl;
-      _fctStarted();
-    }
+    _fctStarted();
   return true;
 }
 
@@ -75,7 +69,6 @@ bool AFunctionality::isRunning() const
 //
 void AFunctionality::_fctStarted()
 {
-  std::cout << this << " emiting starting signal" << std::endl;
   _running = true;
   emit started();
 }
@@ -86,7 +79,6 @@ void AFunctionality::_fctStarted()
 //
 void AFunctionality::_fctFinished()
 {
-  std::cout << this << " emiting ending signal" << std::endl;
   _running = false;
   emit stopped();
 }

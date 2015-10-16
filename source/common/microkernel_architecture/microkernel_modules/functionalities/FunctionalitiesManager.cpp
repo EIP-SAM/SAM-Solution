@@ -27,8 +27,6 @@ FunctionalitiesManager::~FunctionalitiesManager()
 //
 bool FunctionalitiesManager::_initMicrokernelFcts()
 {
-  std::cout << "--MICROKERNEL--" << std::endl;
-
   _microkernelFcts << new AFunctionality();
   _microkernelFcts << new AFunctionality();
 
@@ -51,8 +49,6 @@ bool FunctionalitiesManager::_initMicrokernelFcts()
 //
 bool FunctionalitiesManager::_initInternalFcts()
 {
-  std::cout << "--INTERNAL--" << std::endl;
-
   _internalFcts << new AFunctionality();
   _internalFcts << new AFunctionality();
 
@@ -74,8 +70,6 @@ bool FunctionalitiesManager::_initInternalFcts()
 //
 bool FunctionalitiesManager::_initExternalFcts()
 {
-  std::cout << "--EXTERNAL--" << std::endl;
-
   _externalFcts << new AFunctionality();
   _externalFcts << new AFunctionality();
 
@@ -110,8 +104,11 @@ bool FunctionalitiesManager::init()
 void FunctionalitiesManager::shutdown()
 {
   _shuttingDown = true;
-  foreach(AFunctionality *fct, _runningFcts)
-    fct->stop();
+  if (_runningFcts.count() == 0)
+    emit readyToDelete();
+  else
+    foreach(AFunctionality *fct, _runningFcts)
+      fct->stop();
 }
 
 //
@@ -130,10 +127,6 @@ AFunctionality *FunctionalitiesManager::loadLibrary(const QString &name)
 void FunctionalitiesManager::_functionalityStarted()
 {
   _runningFcts << static_cast<AFunctionality *>(QObject::sender());
-  std::cout << "Manager : " << QObject::sender() << " started" << std::endl;
-  std::cout << "Manager : " << _runningFcts.count() << " currently running" << std::endl;
-  if (_runningFcts.count() == 6)
-    emit quit();
 }
 
 //
@@ -144,6 +137,5 @@ void FunctionalitiesManager::_functionalityStopped()
 {
   _runningFcts.removeAll(static_cast<AFunctionality *>(QObject::sender()));
   if (_shuttingDown == true && _runningFcts.count() == 0)
-    emit(readyToDelete());
-  std::cout << "Manager : " << QObject::sender() << " stopped" << std::endl;
+    emit readyToDelete();
 }
