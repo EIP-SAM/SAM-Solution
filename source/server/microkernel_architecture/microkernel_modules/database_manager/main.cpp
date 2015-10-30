@@ -16,6 +16,6 @@ int main(int argc, char **argv)
     {
       qDebug() << "FAIL";
     }
-  
+
   return app.exec();
 }
