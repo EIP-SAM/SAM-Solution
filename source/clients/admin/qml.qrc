@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>MainForm.ui.qml</file>
+        <file>microkernel_architecture/internal_fcts_modules/gui/qml/main.qml</file>
+        <file>microkernel_architecture/internal_fcts_modules/gui/qml/MainForm.ui.qml</file>
     </qresource>
 </RCC>
