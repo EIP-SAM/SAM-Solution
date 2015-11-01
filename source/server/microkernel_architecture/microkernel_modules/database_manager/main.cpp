@@ -1,21 +1,31 @@
 #include <QApplication>
-#include "Entity.hpp"
+#include "UsersEntity.hpp"
 #include <QDebug>
 
 int main(int argc, char **argv)
 {
   QApplication app(argc, argv);
 
-  Entity entity;
+  UsersEntity user;
 
-  if (entity.Connect())
+  if (user.connect())
     {
-      qDebug() << "SUCCESS";
+      qDebug() << "CONNECTION SUCCESS";
+
+      user.setLogin("bernar_w");
+      user.setPassword("test");
+
+      qDebug() << "Table : " << user.getTable().c_str();
+
+      if (user.save())
+	qDebug() << "SAVE SUCCESS";
+      else
+	qDebug() << "SAVE FAIL";
     }
   else
     {
-      qDebug() << "FAIL";
+      qDebug() << "CONNECTION FAIL";
     }
 
-  return app.exec();
+  return 0;
 }

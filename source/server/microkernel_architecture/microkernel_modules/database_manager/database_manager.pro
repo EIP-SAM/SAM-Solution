@@ -8,7 +8,7 @@ INCLUDEPATH += .
 INCLUDEPATH += /usr/include/mysql
 
 # Input
-HEADERS += Entity.hpp
-SOURCES += Entity.cpp main.cpp
-QT += sql
-QT+=widgets
+HEADERS += Entity.hpp UsersEntity.hpp
+SOURCES += Entity.cpp UsersEntity.cpp main.cpp
+QT += sql core
+QT +=widgets

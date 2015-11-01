@@ -1,19 +1,29 @@
 #ifndef ENTITY_HPP_
 # define ENTITY_HPP_
 
-#include <QSqlDatabase>
+#include	<QSqlDatabase>
+#include	<QMetaObject>
+#include	<string>
 
-class Entity
+class Entity : public QMetaObject
 {
+
 public:
   Entity();
   ~Entity();
 
 private:
-  QSqlDatabase *db;
+  QSqlDatabase	*db;
+
+protected:
+  std::string	table;
 
 public:
-  bool Connect();
+  bool		connect();
+  bool		save();
+  std::string	getTable() const;
+  void		setTable(std::string newTable);
+
 };
 
 

@@ -1,6 +1,4 @@
 #include "Entity.hpp"
-#include <QDebug>
-#include <QLibraryInfo>
 
 Entity::Entity()
 {
@@ -9,10 +7,12 @@ Entity::Entity()
 
 Entity::~Entity()
 {
+  if (db->isOpen())
+    db->close();
   delete db;
 }
 
-bool Entity::Connect()
+bool		Entity::connect()
 {
   *db = QSqlDatabase::addDatabase("QMYSQL");
   db->setHostName("127.0.0.1");
@@ -20,4 +20,25 @@ bool Entity::Connect()
   db->setUserName("root");
   db->setPassword("root");
   return db->open();
+}
+
+std::string	Entity::getTable() const
+{
+  return this->table;
+}
+
+void		Entity::setTable(std::string newTable)
+{
+  this->table = newTable;
+}
+
+bool		Entity::save()
+{
+  // const QMetaObject* metaObject = obj->metaObject();
+
+  // QStringList properties;
+  // for(int i = metaObject->propertyOffset(); i < metaObject->propertyCount(); ++i)
+  //   properties << QString::fromLatin1(metaObject->property(i).name());
+
+  return (true);
 }
