@@ -5,21 +5,19 @@
 #include "FileManagerUtils.hpp"
 
 //
-// This function parses a file to get keywords' values.
+// This function parses a file to get keywords' values
 //
-
-std::map<std::string, std::string>	FileManagerUtils::parseFileKeyValue(const std::string &fileConf,
-									std::vector<std::string> keyWords)
+std::map<std::string, std::string> FileManagerUtils::parseFileKeyValue(const std::string &fileConf,
+								       std::vector<std::string> keyWords)
 {
-    std::string 			buffer;
-    std::ifstream 			file(fileConf.c_str());
-    bool 				findWord;
-
-    std::map<std::string, std::string> 	valueMap;
+    std::string	buffer;
+    std::ifstream file(fileConf.c_str());
+    bool findWord;
+    std::map<std::string, std::string> valueMap;
 
     if (!file) {
-        std::cerr << "Error can not open file " << fileConf << std::endl;
-        return valueMap;
+	std::cerr << "Error can not open file " << fileConf << std::endl;
+	return valueMap;
     }
     file.seekg(0, std::ios::beg);
     while (getline(file, buffer, ':')) {
@@ -41,15 +39,14 @@ std::map<std::string, std::string>	FileManagerUtils::parseFileKeyValue(const std
 }
 
 //
-// This function create a file with write and read access;
+// This function create a file with write and read access
 //
-
-std::fstream 				*FileManagerUtils::createFile(const std::string filePath)
+std::fstream *FileManagerUtils::createFile(const std::string filePath)
 {
-    std::fstream *file = new std::fstream(filePath.c_str(),
-				std::ios_base::in | std::ios_base::out | std::ios_base::trunc);
+    std::fstream *file = new std::fstream(filePath.c_str(), std::ios_base::in |
+    					  std::ios_base::out | std::ios_base::trunc);
 
-    if (!file)
+    if (!file->is_open())
         std::cerr << "Error cannot create file" << std::endl;
     return file;
 }
