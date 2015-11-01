@@ -1,4 +1,6 @@
 #include "Entity.hpp"
+#include <QDebug>
+#include <iostream>
 
 Entity::Entity()
 {
@@ -22,23 +24,31 @@ bool		Entity::connect()
   return db->open();
 }
 
-std::string	Entity::getTable() const
+QString		Entity::getTable() const
 {
   return this->table;
 }
 
-void		Entity::setTable(std::string newTable)
+void		Entity::setTable(QString newTable)
 {
   this->table = newTable;
 }
 
 bool		Entity::save()
 {
-  // const QMetaObject* metaObject = obj->metaObject();
+  const QMetaObject *metaobject = this->metaObject();
+  int count = metaobject->propertyCount();
+  int offset =  metaobject->propertyOffset();
 
-  // QStringList properties;
-  // for(int i = metaObject->propertyOffset(); i < metaObject->propertyCount(); ++i)
-  //   properties << QString::fromLatin1(metaObject->property(i).name());
+
+  for (int i = offset; i < count; ++i) {
+    QMetaProperty metaproperty = metaobject->property(i);
+
+    const char *name = metaproperty.name();
+
+    QVariant value = this->property(name);
+    QString valueString = value.toString();
+  }
 
   return (true);
 }

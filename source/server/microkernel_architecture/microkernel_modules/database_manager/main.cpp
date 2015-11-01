@@ -12,10 +12,9 @@ int main(int argc, char **argv)
     {
       qDebug() << "CONNECTION SUCCESS";
 
+      user.setId(42);
       user.setLogin("bernar_w");
       user.setPassword("test");
-
-      qDebug() << "Table : " << user.getTable().c_str();
 
       if (user.save())
 	qDebug() << "SAVE SUCCESS";

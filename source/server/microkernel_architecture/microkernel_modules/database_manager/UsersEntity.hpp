@@ -6,22 +6,28 @@
 class UsersEntity : public Entity
 {
 
+  Q_OBJECT
+
+  Q_PROPERTY(int id READ getId WRITE setId)
+  Q_PROPERTY(QString login READ getLogin WRITE setLogin)
+  Q_PROPERTY(QString password READ getPassword WRITE setPassword)
+
 public:
   UsersEntity();
-  ~UsersEntity();
+  virtual ~UsersEntity();
 
 protected:
   int		id;
-  std::string	login;
-  std::string	password;
+  QString	login;
+  QString	password;
 
 public:
   int		getId() const;
   void		setId(int newId);
-  std::string	getLogin() const;
-  void		setLogin(std::string newLogin);
-  std::string	getPassword() const;
-  void		setPassword(std::string newPassword);
+  QString	getLogin() const;
+  void		setLogin(QString newLogin);
+  QString	getPassword() const;
+  void		setPassword(QString newPassword);
 
 };
 

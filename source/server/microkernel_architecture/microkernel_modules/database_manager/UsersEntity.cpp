@@ -19,22 +19,22 @@ void		UsersEntity::setId(int newId)
   this->id = newId;
 }
 
-std::string	UsersEntity::getLogin() const
+QString	UsersEntity::getLogin() const
 {
   return this->login;
 }
 
-void		UsersEntity::setLogin(std::string newLogin)
+void		UsersEntity::setLogin(QString newLogin)
 {
   this->login = newLogin;
 }
 
-std::string	UsersEntity::getPassword() const
+QString	UsersEntity::getPassword() const
 {
   return this->password;
 }
 
-void		UsersEntity::setPassword(std::string newPassword)
+void		UsersEntity::setPassword(QString newPassword)
 {
   this->password = newPassword;
 }

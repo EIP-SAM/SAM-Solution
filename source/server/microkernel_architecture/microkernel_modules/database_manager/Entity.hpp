@@ -2,27 +2,32 @@
 # define ENTITY_HPP_
 
 #include	<QSqlDatabase>
+#include	<QObject>
 #include	<QMetaObject>
-#include	<string>
+#include	<QMetaProperty>
+#include	<QStringList>
+#include	<QVariant>
+#include	<QString>
 
-class Entity : public QMetaObject
+class Entity : public QObject
 {
+  Q_OBJECT
 
 public:
   Entity();
-  ~Entity();
+  virtual ~Entity();
 
 private:
   QSqlDatabase	*db;
 
 protected:
-  std::string	table;
+  QString	table;
 
 public:
   bool		connect();
   bool		save();
-  std::string	getTable() const;
-  void		setTable(std::string newTable);
+  QString	getTable() const;
+  void		setTable(QString newTable);
 
 };
 
