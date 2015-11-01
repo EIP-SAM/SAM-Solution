@@ -2,8 +2,7 @@
 # define MAIN_CONTROLLER_HPP_
 
 # include <QCoreApplication>
-
-class NetworkServer;
+# include "FunctionalitiesManager.hpp"
 
 class MainController : QObject
 {
@@ -11,16 +10,18 @@ class MainController : QObject
 
 private:
     QCoreApplication _qtCore;
-    NetworkServer *_network = NULL;
+    FunctionalitiesManager *_fctsManager;
 
+    bool _initFctsManager();
+    
 public:
     MainController(int, char **);
     ~MainController();
-
+    
     int run();
-
-private:
-    bool _initNetwork();
+	   
+private slots:
+    void _deleteFctsManager();
 };
 
 #endif // !MAIN_CONTROLLER_HPP_

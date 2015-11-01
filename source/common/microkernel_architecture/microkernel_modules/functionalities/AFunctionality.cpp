@@ -11,7 +11,7 @@ AFunctionality::AFunctionality() : _thread(NULL), _running(false)
 
 AFunctionality::~AFunctionality()
 {
-  stop();
+    stop();
 }
 
 //
@@ -21,20 +21,20 @@ AFunctionality::~AFunctionality()
 //
 bool AFunctionality::start(bool threaded)
 {
-  if (_running)
-    return false;
-  if (threaded)
-    {
-      _thread = new QThread();
-      this->moveToThread(_thread);
-      if (!connect(_thread, SIGNAL(started()), this, SLOT(_fctStarted())) ||
-	  !connect(_thread, SIGNAL(finished()), this, SLOT(_fctFinished())))
+    if (_running)
 	return false;
-      _thread->start();
-    }
-  else
-    _fctStarted();
-  return true;
+    if (threaded)
+	{
+	    _thread = new QThread();
+	    this->moveToThread(_thread);
+	    if (!connect(_thread, SIGNAL(started()), this, SLOT(_fctStarted())) ||
+		!connect(_thread, SIGNAL(finished()), this, SLOT(_fctFinished())))
+		return false;
+	    _thread->start();
+	}
+    else
+	_fctStarted();
+    return true;
 }
 
 //
@@ -42,17 +42,17 @@ bool AFunctionality::start(bool threaded)
 //
 void AFunctionality::stop()
 {
-  if (!_running)
-    return ;
-  if (_thread)
-    {
-      _thread->quit();
-      _thread->wait();
-      delete _thread;
-      _thread = NULL;
-    }
-  else
-    emit stopped();
+    if (!_running)
+	return ;
+    if (_thread)
+	{
+	    _thread->quit();
+	    _thread->wait();
+	    delete _thread;
+	    _thread = NULL;
+	}
+    else
+	emit stopped();
 }
 
 //
@@ -60,7 +60,7 @@ void AFunctionality::stop()
 //
 bool AFunctionality::isRunning() const
 {
-  return _running;
+    return _running;
 }
 
 //
@@ -69,8 +69,8 @@ bool AFunctionality::isRunning() const
 //
 void AFunctionality::_fctStarted()
 {
-  _running = true;
-  emit started();
+    _running = true;
+    emit started();
 }
 
 //
@@ -79,6 +79,6 @@ void AFunctionality::_fctStarted()
 //
 void AFunctionality::_fctFinished()
 {
-  _running = false;
-  emit stopped();
+    _running = false;
+    emit stopped();
 }

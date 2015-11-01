@@ -6,14 +6,13 @@
 # include <QSslCertificate>
 # include <QSslError>
 # include <QMap>
+# include "AFunctionality.hpp"
 
 class NetworkClient;
 class AInstructionModel;
 
-class NetworkServer : public QTcpServer
+class NetworkServer : public AFunctionality, public QTcpServer
 {
-    Q_OBJECT
-
 public:
     explicit NetworkServer(QObject *parent = 0);
     ~NetworkServer();

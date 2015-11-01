@@ -1,5 +1,4 @@
 #include "MainController.hpp"
-#include "NetworkServer.hpp"
 
 MainController::MainController(int ac, char **av)
     : _qtCore(ac, av)
@@ -8,23 +7,28 @@ MainController::MainController(int ac, char **av)
 
 MainController::~MainController()
 {
-    delete _network;
 }
 
 int MainController::run()
 {
-    if (!_initNetwork())
+    if (!_initFctsManager())
         return (-1);
-
     return (_qtCore.exec());
 }
 
-bool MainController::_initNetwork()
+bool MainController::_initFctsManager()
 {
-    if (!(_network = new NetworkServer(this)))
-        return (false);
+    if (!(_fctsManager = new (std::nothrow) FunctionalitiesManager()))
+	return false;
+    if (!_fctsManager->init())
+	return false;
+    if (!connect(_fctsManager, SIGNAL(readyToDelete),
+		 this, SLOT(_deleteFctsManager)))
+	return false;
+}
 
-    _network->start(42042);
-
-    return (true);
+void MainController::_deleteFctsManager()
+{
+    if (_fctsManager)
+	delete _fctsManager;
 }
