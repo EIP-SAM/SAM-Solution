@@ -8,24 +8,14 @@ int main(int argc, char **argv)
 
   UsersEntity user;
 
-  if (user.connect())
-    {
-      qDebug() << "CONNECTION SUCCESS";
+  user.setLogin("bernar_w");
+  user.setPassword("test");
 
-      user.setId(42);
-      user.setLogin("bernar_w");
-      user.setPassword("test");
-
-      if (user.save())
-	qDebug() << "SAVE SUCCESS";
-      else
-	qDebug() << "SAVE FAIL";
-      user.where("login", "=", "claire");
-    }
+  if (user.save())
+      qDebug() << "SAVE SUCCESS";
   else
-    {
-      qDebug() << "CONNECTION FAIL";
-    }
+      qDebug() << "SAVE FAIL";
+  user.where("login", "=", "claire");
 
   return 0;
 }

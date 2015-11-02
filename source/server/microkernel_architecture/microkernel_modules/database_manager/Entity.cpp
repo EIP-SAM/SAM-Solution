@@ -7,12 +7,20 @@
 Entity::Entity()
 {
     _db = new QSqlDatabase();
+    _propertiesName = NULL;
+    _propertiesValue = NULL;
 }
 
 Entity::~Entity()
 {
     if (_db->isOpen())
 	_db->close();
+
+    if (_propertiesName)
+	delete _propertiesName;
+    if (_propertiesValue)
+	delete _propertiesValue;
+
     delete _db;
 }
 
@@ -38,17 +46,12 @@ void Entity::setTable(QString newTable)
 
 bool Entity::save()
 {
-    const QMetaObject *metaobject = this->metaObject();
-    int count = metaobject->propertyCount();
-    int offset =  metaobject->propertyOffset();
 
-    for (int i = offset; i < count; ++i) {
-	QMetaProperty metaproperty = metaobject->property(i);
+    this->startConnection();
 
-	const char *name = metaproperty.name();
-
-	QVariant value = this->property(name);
-	QString valueString = value.toString();
+    for (unsigned int i = 0; i < this->_propertiesName->size(); ++i)
+    {
+	qDebug() << this->_propertiesName->at(i) << " ==> " << this->_propertiesValue->at(i);
     }
 
     return (true);
@@ -59,7 +62,6 @@ std::vector<Entity *> Entity::where(QString field, QString comparator, QString v
     QSqlQuery query;
     std::vector<Entity *> result;
 
-    (void) comparator;
     query.prepare("SELECT * FROM " + _table + " WHERE " + field + comparator + " :value");
     query.bindValue(":value", value);
     query.exec();
@@ -70,4 +72,35 @@ std::vector<Entity *> Entity::where(QString field, QString comparator, QString v
 	std::cout << query.value(2).toString().toStdString() << std::endl;
     }
     return (result);
+}
+
+bool Entity::startConnection()
+{
+    if (!_db->isOpen())
+    {
+	if (!this->connect())
+	    return false;
+	qDebug() << "CONNECTION SUCCESS";
+    }
+    this->getAllProperties();
+    return true;
+}
+
+void Entity::getAllProperties()
+{
+    this->_propertiesName = new std::vector<QString>;
+    this->_propertiesValue = new std::vector<QString>;
+
+    const QMetaObject *metaObject = this->metaObject();
+    int count = metaObject->propertyCount();
+    int offset =  metaObject->propertyOffset();
+
+    for (int i = offset; i < count; ++i) {
+	QMetaProperty metaProperty = metaObject->property(i);
+	const char *propertyName = metaProperty.name();
+	this->_propertiesName->push_back(propertyName);
+
+	QVariant value = this->property(propertyName);
+	this->_propertiesValue->push_back(value.toString());
+    }
 }

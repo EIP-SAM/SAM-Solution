@@ -19,15 +19,21 @@ public:
 
 private:
     QSqlDatabase *_db;
+    std::vector<QString> *_propertiesName;
+    std::vector<QString> *_propertiesValue;
 
 protected:
     QString _table;
 
-public:
+private:
     bool connect();
-    bool save();
+    bool startConnection();
+    void getAllProperties();
     QString getTable() const;
     void setTable(QString newTable);
+
+public:
+    bool save();
     std::vector<Entity *> where(QString field, QString comparator, QString value);
     // std::vector<Entity *> where(QString field, QString comparator, std::vector<QString> values);
     // std::vector<Entity *> where(std::vector<QString>, std::vector<QString> comparator,

@@ -1,8 +1,9 @@
 #include	"UsersEntity.hpp"
 
-UsersEntity::UsersEntity()
+UsersEntity::UsersEntity() : Entity()
 {
   this->_table = "Users";
+  this->id = -1;
 }
 
 UsersEntity::~UsersEntity()
