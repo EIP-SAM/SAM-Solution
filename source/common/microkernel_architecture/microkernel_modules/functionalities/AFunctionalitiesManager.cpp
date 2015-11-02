@@ -5,7 +5,8 @@
 //
 // Constructor and Destructor
 //
-AFunctionalitiesManager::AFunctionalitiesManager() : _shuttingDown(false)
+AFunctionalitiesManager::AFunctionalitiesManager(QObject *parent) : QObject(parent),
+								    _shuttingDown(false)
 {
 }
 

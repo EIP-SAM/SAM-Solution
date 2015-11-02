@@ -12,7 +12,7 @@ private:
     bool _running;
 
 public:
-    AFunctionality();
+    AFunctionality(QObject *parent = 0);
     virtual ~AFunctionality();
     
     bool start(bool threaded = true);

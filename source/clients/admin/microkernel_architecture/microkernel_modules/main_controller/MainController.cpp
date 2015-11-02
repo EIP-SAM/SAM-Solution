@@ -1,38 +1,40 @@
 #include "MainController.hpp"
-#include "GUIController.hpp"
-#include "NetworkClientManager.hpp"
-
 #include <QDebug>
 
 MainController::MainController(int ac, char **av)
-    : _qtCore(ac, av)
+    : _qtCore(ac, av), _fctsManager(NULL)
 {
 }
 
 MainController::~MainController()
 {
-    delete _network;
+    if (_fctsManager)
+	delete _fctsManager;
 }
 
 int MainController::run()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if (!_initNetwork())
-    {
+    if (!_initFctsManager())
         return (-1);
-    }
     return (_qtCore.exec());
 }
 
-bool MainController::_initNetwork()
+bool MainController::_initFctsManager()
 {
-    qDebug() << Q_FUNC_INFO;
+    if (!(_fctsManager = new (std::nothrow) FunctionalitiesManager()))
+	return false;
+    if (!_fctsManager->init())
+	return false;
+    if (!connect(_fctsManager, SIGNAL(readyToDelete),
+		 this, SLOT(_deleteFctsManager)))
+	return false;
+}
 
-    if (!(_network = new NetworkClientManager(this)))
-    {
-        return (false);
-    }
-    _network->startConnection("localhost", 42042);
-    return (true);
+void MainController::_deleteFctsManager()
+{
+    if (_fctsManager)
+	delete _fctsManager;
+    _fctsManager = NULL;
 }

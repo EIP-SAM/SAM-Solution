@@ -3,10 +3,10 @@
 
 # include "AFunctionalitiesManager.hpp"
 
-class FunctionalitiesManager : private AFunctionalitiesManager
+class FunctionalitiesManager : public AFunctionalitiesManager
 {
 public:
-    FunctionalitiesManager();
+    FunctionalitiesManager(QObject *parent = 0);
     virtual ~FunctionalitiesManager();
 
 private:

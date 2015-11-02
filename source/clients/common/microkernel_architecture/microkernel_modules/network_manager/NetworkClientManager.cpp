@@ -9,7 +9,7 @@ const QSsl::SslProtocol NetworkClientManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 //
 
 NetworkClientManager::NetworkClientManager(QObject *parent)
-    : QObject(parent), _client(this)
+    : AFunctionality(parent), _client(this)
 {
     connect(&_client, SIGNAL(readyRead()), this, SLOT(readMsg()));
     connect(&_client, SIGNAL(disconnected()), this, SLOT(onDisconnected()));

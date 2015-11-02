@@ -1,9 +1,11 @@
 #include "FunctionalitiesManager.hpp"
+#include "GUIController.hpp"
+#include "NetworkClientManager.hpp"
 
 //
 // Constructor : does nothing
 //
-FunctionalitiesManager::FunctionalitiesManager()
+FunctionalitiesManager::FunctionalitiesManager(QObject *parent) : AFunctionalitiesManager(parent)
 {
 }
 
@@ -19,4 +21,6 @@ FunctionalitiesManager::~FunctionalitiesManager()
 //
 void FunctionalitiesManager::_setFcts()
 {
+    _microkernelFcts << new NetworkClientManager();
+    _internalFcts << new GUIController();
 }

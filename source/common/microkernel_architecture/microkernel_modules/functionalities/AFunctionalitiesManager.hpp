@@ -10,25 +10,27 @@ class AFunctionalitiesManager : public QObject
 {
     Q_OBJECT
 
-private:
+protected:
     QList<AFunctionality *> _microkernelFcts;
     QList<AFunctionality *> _internalFcts;
     QList<AFunctionality *> _externalFcts;
     QList<AFunctionality *> _runningFcts;
     bool _shuttingDown;
     
+
+public:
+    AFunctionalitiesManager(QObject *parent = 0);
+    virtual ~AFunctionalitiesManager();
+
+    bool init();
+    void shutdown();
+    AFunctionality *loadLibrary(const QString &name);
+
+private:
     virtual void _setFcts() = 0;
     bool _initMicrokernelFcts();
     bool _initInternalFcts();
     bool _initExternalFcts();
-    
-public:
-    AFunctionalitiesManager();
-    virtual ~AFunctionalitiesManager();
-    
-    bool init();
-    void shutdown();
-    AFunctionality *loadLibrary(const QString &name);
 						  
 private slots:
     void _functionalityStarted();

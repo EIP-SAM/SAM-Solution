@@ -5,7 +5,9 @@
 //
 // Constructor and Destructor
 //
-AFunctionality::AFunctionality() : _thread(NULL), _running(false)
+AFunctionality::AFunctionality(QObject *parent) : QObject(parent),
+						  _thread(NULL),
+						  _running(false)
 {  
 }
 
