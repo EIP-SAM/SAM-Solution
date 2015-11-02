@@ -1,35 +1,37 @@
 #ifndef ENTITY_HPP_
 # define ENTITY_HPP_
 
-#include	<QSqlDatabase>
-#include	<QObject>
-#include	<QMetaObject>
-#include	<QMetaProperty>
-#include	<QStringList>
-#include	<QVariant>
-#include	<QString>
+# include <QSqlDatabase>
+# include <QObject>
+# include <QMetaObject>
+# include <QMetaProperty>
+# include <QStringList>
+# include <QVariant>
+# include <QString>
 
 class Entity : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  Entity();
-  virtual ~Entity();
+    Entity();
+    virtual ~Entity();
 
 private:
-  QSqlDatabase	*db;
+    QSqlDatabase *_db;
 
 protected:
-  QString	table;
+    QString _table;
 
 public:
-  bool		connect();
-  bool		save();
-  QString	getTable() const;
-  void		setTable(QString newTable);
-
+    bool connect();
+    bool save();
+    QString getTable() const;
+    void setTable(QString newTable);
+    std::vector<Entity *> where(QString field, QString comparator, QString value);
+    // std::vector<Entity *> where(QString field, QString comparator, std::vector<QString> values);
+    // std::vector<Entity *> where(std::vector<QString>, std::vector<QString> comparator,
+    // 				std::vector<std::vector<QString> >);
 };
-
 
 #endif // !ENTITY_HPP_

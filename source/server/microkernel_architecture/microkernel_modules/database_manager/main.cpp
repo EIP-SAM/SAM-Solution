@@ -20,6 +20,7 @@ int main(int argc, char **argv)
 	qDebug() << "SAVE SUCCESS";
       else
 	qDebug() << "SAVE FAIL";
+      user.where("login", "=", "claire");
     }
   else
     {

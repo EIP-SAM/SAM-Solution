@@ -2,7 +2,7 @@
 
 UsersEntity::UsersEntity()
 {
-  this->table = "Users";
+  this->_table = "Users";
 }
 
 UsersEntity::~UsersEntity()
