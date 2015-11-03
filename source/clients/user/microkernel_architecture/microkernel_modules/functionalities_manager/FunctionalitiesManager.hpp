@@ -3,14 +3,17 @@
 
 # include "AFunctionalitiesManager.hpp"
 
-class FunctionalitiesManager : private AFunctionalitiesManager
+class FunctionalitiesManager : public AFunctionalitiesManager
 {
 public:
-    FunctionalitiesManager();
+    FunctionalitiesManager(QObject *parent = 0);
     virtual ~FunctionalitiesManager();
 
 private:
     virtual void _setFcts();
+    void _setMicrokernelFcts();
+    void _setInternalFcts();
+    void _setExternalFcts();
 };
 
 #endif // !FUNCTIONALITIES_MANAGER_HPP_

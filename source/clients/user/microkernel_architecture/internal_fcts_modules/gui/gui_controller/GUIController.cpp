@@ -1,12 +1,17 @@
 #include "GUIController.hpp"
 
 GUIController::GUIController(QObject *parent)
-    : QObject(parent), _qmlEngine(parent)
+    : AFunctionality(parent), _qmlEngine(this)
 {
 }
 
 GUIController::~GUIController()
 {
+}
+
+void GUIController::run()
+{
+    init();
 }
 
 void GUIController::init()
