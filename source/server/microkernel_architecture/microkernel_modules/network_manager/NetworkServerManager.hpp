@@ -1,5 +1,5 @@
-#ifndef NETWORK_SERVER_HPP_
-# define NETWORK_SERVER_HPP_
+#ifndef NETWORK_SERVER_MANAGER_HPP_
+# define NETWORK_SERVER_MANAGER_HPP_
 
 # include <QSslKey>
 # include <QSslCertificate>
@@ -11,13 +11,13 @@
 class NetworkClient;
 class AInstructionModel;
 
-class NetworkServer : public AFunctionality
+class NetworkServerManager : public AFunctionality
 {
     Q_OBJECT
 
 public:
-    explicit NetworkServer(QObject *parent = 0);
-    ~NetworkServer();
+    explicit NetworkServerManager(QObject *parent = 0);
+    ~NetworkServerManager();
 
 private:
     static const QString _ENCRYPTION_KEY_FILE;
@@ -50,4 +50,4 @@ protected slots:
     virtual void run();
 };
 
-#endif // !NETWORK_SERVER_HPP_
+#endif // !NETWORK_SERVER_MANAGER_HPP_

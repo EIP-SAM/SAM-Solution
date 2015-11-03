@@ -35,7 +35,7 @@ HEADERS += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionalitiesManager.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionality.hpp \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.hpp \
-    microkernel_architecture/microkernel_modules/network_manager/NetworkServer.hpp \
+    microkernel_architecture/microkernel_modules/network_manager/NetworkServerManager.hpp \
     microkernel_architecture/microkernel_modules/main_controller/MainController.hpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkClient.hpp
 
@@ -47,7 +47,7 @@ SOURCES += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionalitiesManager.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionality.cpp \
     microkernel_architecture/main.cpp \
-    microkernel_architecture/microkernel_modules/network_manager/NetworkServer.cpp \
+    microkernel_architecture/microkernel_modules/network_manager/NetworkServerManager.cpp \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.cpp \
     microkernel_architecture/microkernel_modules/main_controller/MainController.cpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkClient.cpp

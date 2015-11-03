@@ -1,5 +1,5 @@
 #include "FunctionalitiesManager.hpp"
-#include "NetworkServer.hpp"
+#include "NetworkServerManager.hpp"
 
 //
 // Constructor : does nothing
@@ -30,7 +30,7 @@ void FunctionalitiesManager::_setMicrokernelFcts()
 {
     AFunctionality *fct = NULL;
 
-    fct = new NetworkServer();
+    fct = new NetworkServerManager();
     fct->setThreaded(false);
     _microkernelFcts << fct;
 }
