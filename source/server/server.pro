@@ -29,6 +29,7 @@ INCLUDEPATH += \
 
 HEADERS += \
     $${COMMON_ALL}/qt_custom_extensions/_QFile.hpp \
+    $${COMMON_ALL}/qt_custom_extensions/_QTcpServer.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionModel.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/ANetworkInstruction.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionalitiesManager.hpp \
@@ -40,6 +41,7 @@ HEADERS += \
 
 SOURCES += \
     $${COMMON_ALL}/qt_custom_extensions/_QFile.cpp \
+    $${COMMON_ALL}/qt_custom_extensions/_QTcpServer.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionModel.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/ANetworkInstruction.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionalitiesManager.cpp \

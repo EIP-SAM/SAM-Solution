@@ -1,11 +1,11 @@
 #include "FunctionalitiesManager.hpp"
 #include "NetworkServer.hpp"
-#include "NetworkClient.hpp"
 
 //
 // Constructor : does nothing
 //
-FunctionalitiesManager::FunctionalitiesManager()
+FunctionalitiesManager::FunctionalitiesManager(QObject *parent)
+    : AFunctionalitiesManager(parent)
 {
 }
 
@@ -17,13 +17,28 @@ FunctionalitiesManager::~FunctionalitiesManager()
 }
 
 //
-// instanciates the various functionalities
-// in the three QLists
-// don't forget to include the header of
-// the functionality
+// Instanciate the various functionalities
 //
 void FunctionalitiesManager::_setFcts()
 {
-    _microkernelFcts << new NetworkServer();
-    _microkernelFcts << new NetworkClient();
+    _setMicrokernelFcts();
+    _setInternalFcts();
+    _setExternalFcts();
+}
+
+void FunctionalitiesManager::_setMicrokernelFcts()
+{
+    AFunctionality *fct = NULL;
+
+    fct = new NetworkServer();
+    fct->setThreaded(false);
+    _microkernelFcts << fct;
+}
+
+void FunctionalitiesManager::_setInternalFcts()
+{
+}
+
+void FunctionalitiesManager::_setExternalFcts()
+{
 }

@@ -15,10 +15,9 @@ const QSsl::SslProtocol NetworkServer::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 // Construct network server
 //
 NetworkServer::NetworkServer(QObject *parent)
-    : QTcpServer(parent)
+    : AFunctionality(parent), _server(this)
 {
     qDebug() << Q_FUNC_INFO;
-    qRegisterMetaType<qintptr>("qintptr");
     qRegisterMetaType<QList<QSslError> >("QList<QSslError>");
 }
 
@@ -37,6 +36,15 @@ NetworkServer::~NetworkServer()
     delete _encryptionCertificate;
 }
 
+//
+// Entry point
+//
+void NetworkServer::run()
+{
+    connect(&_server, SIGNAL(hasIncomingConnection(qintptr)),
+            (NetworkServer *)this, SLOT(incomingConnection(qintptr)));
+    start(42042);
+}
 
 //
 // Initialize and start server
@@ -108,7 +116,7 @@ bool NetworkServer::_initEncryptionCertificate(const QString &file)
 bool NetworkServer::_listen(quint16 portNumber)
 {
     _portNumber = portNumber;
-    if (!listen(QHostAddress::Any, portNumber))
+    if (!_server.listen(QHostAddress::Any, portNumber))
     {
         qDebug() << " Could not start server";
         return (false);
@@ -197,7 +205,7 @@ void NetworkServer::deleteClient(qintptr socketDescriptor)
 
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << socketDescriptor << "Client disconnected";
-    disconnect(client, 0, 0, 0);
+    _server.disconnect(client, 0, 0, 0);
     _clientSockets.remove(socketDescriptor);
     delete client;
     qDebug() << "" << socketDescriptor << "Client deleted";
