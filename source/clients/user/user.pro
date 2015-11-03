@@ -37,7 +37,6 @@ HEADERS += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionModel.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionality.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionalitiesManager.hpp \
-    $${COMMON_CLIENTS}/microkernel_architecture/microkernel_modules/network_manager/INetworkClientManager.hpp \
     $${COMMON_CLIENTS}/microkernel_architecture/microkernel_modules/network_manager/NetworkClientManager.hpp \
     microkernel_architecture/microkernel_modules/main_controller/MainController.hpp \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.hpp \

@@ -2,7 +2,7 @@
 # define NETWORK_CLIENT_MANAGER_HPP_
 
 # include <QSslSocket>
-# include "INetworkClientManager.hpp" // to delete
+# include "AInstructionModel.hpp"
 # include "AFunctionality.hpp"
 
 class NetworkClientManager : public AFunctionality
