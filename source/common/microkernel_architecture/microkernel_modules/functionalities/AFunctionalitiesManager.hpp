@@ -16,7 +16,6 @@ protected:
     QList<AFunctionality *> _externalFcts;
     QList<AFunctionality *> _runningFcts;
     bool _shuttingDown;
-    
 
 public:
     AFunctionalitiesManager(QObject *parent = 0);
@@ -26,13 +25,13 @@ public:
     void shutdown();
     AFunctionality *loadLibrary(const QString &name);
 
-private:
+protected:
     virtual void _setFcts() = 0;
     bool _initMicrokernelFcts();
     bool _initInternalFcts();
     bool _initExternalFcts();
-						  
-private slots:
+
+protected slots:
     void _functionalityStarted();
     void _functionalityStopped();
 

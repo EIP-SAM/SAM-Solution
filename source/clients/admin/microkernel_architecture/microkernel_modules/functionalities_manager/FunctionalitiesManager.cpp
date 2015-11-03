@@ -5,7 +5,8 @@
 //
 // Constructor : does nothing
 //
-FunctionalitiesManager::FunctionalitiesManager(QObject *parent) : AFunctionalitiesManager(parent)
+FunctionalitiesManager::FunctionalitiesManager(QObject *parent)
+    : AFunctionalitiesManager(parent)
 {
 }
 
@@ -17,10 +18,29 @@ FunctionalitiesManager::~FunctionalitiesManager()
 }
 
 //
-// instanciate the various functionalities
+// Instanciate the various functionalities
 //
 void FunctionalitiesManager::_setFcts()
 {
+    _setMicrokernelFcts();
+    _setInternalFcts();
+    _setExternalFcts();
+}
+
+void FunctionalitiesManager::_setMicrokernelFcts()
+{
     _microkernelFcts << new NetworkClientManager();
-    _internalFcts << new GUIController();
+}
+
+void FunctionalitiesManager::_setInternalFcts()
+{
+    AFunctionality *fct = NULL;
+
+    fct = new GUIController();
+    fct->setThreaded(false);
+    _internalFcts << fct;
+}
+
+void FunctionalitiesManager::_setExternalFcts()
+{
 }

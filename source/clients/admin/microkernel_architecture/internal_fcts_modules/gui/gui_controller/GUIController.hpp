@@ -18,6 +18,7 @@ public:
 signals:
 
 public slots:
+    virtual void run();
 };
 
 #endif // !GUI_CONTROLLER_HPP_

@@ -11,6 +11,9 @@ public:
 
 private:
     virtual void _setFcts();
+    void _setMicrokernelFcts();
+    void _setInternalFcts();
+    void _setExternalFcts();
 };
 
 #endif // !FUNCTIONALITIES_MANAGER_HPP_

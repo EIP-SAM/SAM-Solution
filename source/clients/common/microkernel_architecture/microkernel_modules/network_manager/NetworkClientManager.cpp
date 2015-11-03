@@ -1,6 +1,8 @@
 #include <QByteArray>
 #include "NetworkClientManager.hpp"
 
+#include <QDebug>
+
 const QString NetworkClientManager::_ENCRYPTION_CERTIFICATE_FILE = "server.crt";
 const QSsl::SslProtocol NetworkClientManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 
@@ -17,6 +19,16 @@ NetworkClientManager::NetworkClientManager(QObject *parent)
 
 NetworkClientManager::~NetworkClientManager()
 {
+}
+
+//
+// Entry point
+// Start network client
+//
+void NetworkClientManager::run()
+{
+    qDebug() << Q_FUNC_INFO;
+    startConnection("localhost", 42042);
 }
 
 //

@@ -1,14 +1,11 @@
-#include <unistd.h>
-#include <iostream>
 #include "AFunctionality.hpp"
 
 //
 // Constructor and Destructor
 //
-AFunctionality::AFunctionality(QObject *parent) : QObject(parent),
-						  _thread(NULL),
-						  _running(false)
-{  
+AFunctionality::AFunctionality(QObject *parent)
+    : QObject(parent), _thread(NULL), _running(false), _threaded(true)
+{
 }
 
 AFunctionality::~AFunctionality()
@@ -21,21 +18,25 @@ AFunctionality::~AFunctionality()
 // and send a signal to FunctionalitiesManager class
 // to keep a trace of what functionalities are running right now
 //
-bool AFunctionality::start(bool threaded)
+bool AFunctionality::start()
 {
     if (_running)
-	return false;
-    if (threaded)
+        return false;
+    if (_threaded)
 	{
-	    _thread = new QThread();
-	    this->moveToThread(_thread);
-	    if (!connect(_thread, SIGNAL(started()), this, SLOT(_fctStarted())) ||
-		!connect(_thread, SIGNAL(finished()), this, SLOT(_fctFinished())))
-		return false;
+        _thread = new QThread();
+        this->moveToThread(_thread);
+        if (!connect(_thread, SIGNAL(started()), this, SLOT(_fctStarted())) ||
+            !connect(_thread, SIGNAL(started()), this, SLOT(run())) ||
+            !connect(_thread, SIGNAL(finished()), this, SLOT(_fctFinished())))
+            return false;
 	    _thread->start();
 	}
     else
-	_fctStarted();
+    {
+        _fctStarted();
+        run();
+    }
     return true;
 }
 
@@ -45,7 +46,7 @@ bool AFunctionality::start(bool threaded)
 void AFunctionality::stop()
 {
     if (!_running)
-	return ;
+        return ;
     if (_thread)
 	{
 	    _thread->quit();
@@ -54,7 +55,23 @@ void AFunctionality::stop()
 	    _thread = NULL;
 	}
     else
-	emit stopped();
+        emit stopped();
+}
+
+//
+// `_threaded` attribute setter
+//
+void AFunctionality::setThreaded(bool threaded)
+{
+    _threaded = threaded;
+}
+
+//
+// `_threaded` attribute getter
+//
+bool AFunctionality::isThreaded() const
+{
+    return _threaded;
 }
 
 //

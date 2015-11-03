@@ -1,12 +1,11 @@
 #include <unistd.h>
-#include <iostream>
 #include "AFunctionalitiesManager.hpp"
 
 //
 // Constructor and Destructor
 //
 AFunctionalitiesManager::AFunctionalitiesManager(QObject *parent) : QObject(parent),
-								    _shuttingDown(false)
+                                    _shuttingDown(false)
 {
 }
 
@@ -19,8 +18,8 @@ AFunctionalitiesManager::~AFunctionalitiesManager()
     _internalFcts.clear();
     qDeleteAll(_microkernelFcts);
     _microkernelFcts.clear();
-    qDeleteAll(_runningFcts);
-    _runningFcts.clear();
+//    qDeleteAll(_runningFcts);
+//    _runningFcts.clear();
 }
 
 //
@@ -30,12 +29,9 @@ bool AFunctionalitiesManager::_initMicrokernelFcts()
 {
     foreach(AFunctionality *fct, _microkernelFcts)
 	{
-	    if (!connect(fct, SIGNAL(started()),
-			 this, SLOT(_functionalityStarted())) ||
-		!connect(fct, SIGNAL(stopped()),
-			 this, SLOT(_functionalityStopped())))
-		return false;
-	    if (!fct->start())
+        if (!connect(fct, SIGNAL(started()), this, SLOT(_functionalityStarted())) ||
+            !connect(fct, SIGNAL(stopped()), this, SLOT(_functionalityStopped())) ||
+            !fct->start())
 		return false;
 	}
     return true;
@@ -49,13 +45,10 @@ bool AFunctionalitiesManager::_initInternalFcts()
 {
     foreach(AFunctionality *fct, _internalFcts)
 	{
-	    if (!connect(fct, SIGNAL(started()),
-			 this, SLOT(_functionalityStarted())) ||
-		!connect(fct, SIGNAL(stopped()),
-			 this, SLOT(_functionalityStopped())))
-		return false;
-	    if (!fct->start())
-		return false;
+        if (!connect(fct, SIGNAL(started()), this, SLOT(_functionalityStarted())) ||
+            !connect(fct, SIGNAL(stopped()), this, SLOT(_functionalityStopped())) ||
+            !fct->start())
+            return false;
 	}
     return true;
 }
@@ -67,27 +60,24 @@ bool AFunctionalitiesManager::_initExternalFcts()
 {
     foreach(AFunctionality *fct, _externalFcts)
 	{
-	    if (!connect(fct, SIGNAL(started()),
-			 this, SLOT(_functionalityStarted())) ||
-		!connect(fct, SIGNAL(stopped()),
-			 this, SLOT(_functionalityStopped())))
-		return false;
-	    if (!fct->start())
-		return false;
+        if (!connect(fct, SIGNAL(started()), this, SLOT(_functionalityStarted())) ||
+            !connect(fct, SIGNAL(stopped()), this, SLOT(_functionalityStopped())) ||
+            !fct->start())
+            return false;
 	}
-    return false;
+    return true;
 }
 
 //
-// Initialize all client's functionalities 
+// Initialize all client's functionalities
 //
 bool AFunctionalitiesManager::init()
 {
     _setFcts();
     if (!_initMicrokernelFcts() ||
-	!_initInternalFcts() ||
-	!_initExternalFcts())
-	return false;
+        !_initInternalFcts() ||
+        !_initExternalFcts())
+        return false;
     return true;
 }
 
@@ -98,19 +88,20 @@ void AFunctionalitiesManager::shutdown()
 {
     _shuttingDown = true;
     if (_runningFcts.count() == 0)
-	emit readyToDelete();
+        emit readyToDelete();
     else
-	foreach(AFunctionality *fct, _runningFcts)
-	    fct->stop();
+        foreach(AFunctionality *fct, _runningFcts)
+            fct->stop();
 }
 
 //
 // Load library with the name given in parameter
+// Does nothing for now
 //
 AFunctionality *AFunctionalitiesManager::loadLibrary(const QString &name)
 {
     (void)name;
-    return new AFunctionality();
+    return (AFunctionality *)NULL;
 }
 
 //
@@ -130,5 +121,5 @@ void AFunctionalitiesManager::_functionalityStopped()
 {
     _runningFcts.removeAll(static_cast<AFunctionality *>(QObject::sender()));
     if (_shuttingDown == true && _runningFcts.count() == 0)
-	emit readyToDelete();
+        emit readyToDelete();
 }
