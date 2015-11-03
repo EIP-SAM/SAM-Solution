@@ -1,5 +1,5 @@
-#ifndef _QTCP_SERVER_H
-# define _QTCP_SERVER_H
+#ifndef _QTCP_SERVER_HPP_
+# define _QTCP_SERVER_HPP_
 
 # include <QTcpServer>
 
@@ -18,4 +18,4 @@ signals:
     void hasIncomingConnection(qintptr socketDescriptor);
 };
 
-#endif // _QTCPSERVER_H
+#endif // !_QTCP_SERVER_HPP_
