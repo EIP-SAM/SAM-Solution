@@ -46,15 +46,68 @@ void Entity::setTable(QString newTable)
 
 bool Entity::save()
 {
+    QSqlQuery query;
 
     this->startConnection();
 
-    for (unsigned int i = 0; i < this->_propertiesName->size(); ++i)
+    if (this->_propertiesValue->at(0).compare("-1") == 0)
+	query = this->prepareInsert();
+    else
+	query = this->prepareUpdate();
+
+    return (query.exec());
+}
+
+QSqlQuery Entity::prepareInsert() const
+{
+    QSqlQuery queryObj;
+    QString query = "INSERT INTO " + this->_table;
+    QString fields;
+    QString values;
+
+    for (unsigned int i = 1; i < this->_propertiesName->size(); ++i)
     {
-	qDebug() << this->_propertiesName->at(i) << " ==> " << this->_propertiesValue->at(i);
+	fields += this->_propertiesName->at(i);
+	if (i < this->_propertiesName->size() - 1)
+	    fields += ", ";
+
+	values += ":" + this->_propertiesName->at(i);
+	if (i < this->_propertiesValue->size() - 1)
+	    values += ", ";
     }
 
-    return (true);
+    queryObj.prepare(query + " (" + fields + ") VALUES (" + values + ");");
+
+    for (unsigned int i = 1; i < this->_propertiesValue->size(); ++i)
+    {
+	queryObj.bindValue(":" + this->_propertiesName->at(i), this->_propertiesValue->at(i));
+    }
+
+    return queryObj;
+}
+
+QSqlQuery Entity::prepareUpdate() const
+{
+    QSqlQuery queryObj;
+    QString query = "UPDATE " + this->_table;
+    QString fields;
+    QString where = "WHERE id = '" + this->_propertiesValue->at(0)  + "'";
+
+    for (unsigned int i = 0; i < this->_propertiesName->size(); ++i)
+    {
+	fields += this->_propertiesName->at(i) + " = :" + this->_propertiesName->at(i);
+	if (i < this->_propertiesName->size() - 1)
+	    fields += ", ";
+    }
+
+    queryObj.prepare(query + " SET " + fields + " " + where + ";");
+
+    for (unsigned int i = 0; i < this->_propertiesValue->size(); ++i)
+    {
+	queryObj.bindValue(":" + this->_propertiesName->at(i), this->_propertiesValue->at(i));
+    }
+
+    return queryObj;
 }
 
 std::vector<Entity *> Entity::where(QString field, QString comparator, QString value)

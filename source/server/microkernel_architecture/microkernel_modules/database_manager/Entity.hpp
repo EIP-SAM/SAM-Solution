@@ -29,6 +29,8 @@ private:
     bool connect();
     bool startConnection();
     void getAllProperties();
+    QSqlQuery prepareInsert() const;
+    QSqlQuery prepareUpdate() const;
     QString getTable() const;
     void setTable(QString newTable);
 

@@ -8,8 +8,9 @@ int main(int argc, char **argv)
 
   UsersEntity user;
 
+  user.setId(2);
   user.setLogin("bernar_w");
-  user.setPassword("test");
+  user.setPassword("NewPasswordQuiRox");
 
   if (user.save())
       qDebug() << "SAVE SUCCESS";
