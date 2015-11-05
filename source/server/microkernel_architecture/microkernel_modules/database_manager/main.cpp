@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
   UsersEntity user;
 
-  user.setLogin("bernar_w");
+  user.setLogin("bernar_w2");
   user.setPassword("PasswordQuiRox");
 
   if (user.save())
@@ -36,6 +36,13 @@ int main(int argc, char **argv)
       ->bindValue(":id", 6)
       ;
   user.deleteQuery(builder2);
+
+  UsersEntity *found_user = user.find<UsersEntity>(1);
+  
+  if (found_user)
+    std::cout << "Utilisateur trouvé : " << found_user->getLogin().toStdString() << std::endl;
+  else
+    std::cout << "Utilisateur non trouvé." << std::endl;
 
   return 0;
 }

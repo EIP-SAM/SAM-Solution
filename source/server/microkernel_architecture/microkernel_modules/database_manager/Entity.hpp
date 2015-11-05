@@ -38,6 +38,30 @@ public:
     bool deleteQuery(QueryBuilder *builder);
     QueryBuilder *getQueryBuilder();
 
+
+    //
+    // find and return the entity by its id
+    //
+    template<class T>
+    T *find(int id)
+    {
+      if (!startConnection())
+	return NULL;
+
+      QueryBuilder *builder = this->getQueryBuilder();
+      builder->select("*")
+	->where("id = :id")
+	->bindValue(":id", id)
+	;
+
+      std::vector<T *> result = this->request<T>(builder);
+
+      if (result.size() == 0)
+	return NULL;
+
+      return result.at(0);
+    }
+
     //
     // Send a query request and return the result
     // Function in .hpp because of templating

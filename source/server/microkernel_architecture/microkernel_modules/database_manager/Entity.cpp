@@ -22,6 +22,10 @@ Entity::~Entity()
     delete _db;
 }
 
+//
+// Establish a new connection to the database
+// using a specific driver
+//
 bool Entity::connect()
 {
     *_db = QSqlDatabase::addDatabase("QMYSQL");
