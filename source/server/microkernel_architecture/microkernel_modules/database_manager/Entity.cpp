@@ -36,21 +36,32 @@ bool Entity::connect()
     return _db->open();
 }
 
+//
+// Get the table attribute
+//
 QString Entity::getTable() const
 {
     return _table;
 }
 
+//
+// Set the table attribute
+//
 void Entity::setTable(QString newTable)
 {
     _table = newTable;
 }
 
+//
+// Perform the save, by updating the row
+// or by inserting the new data
+//
 bool Entity::save()
 {
     QSqlQuery query;
 
-    this->startConnection();
+    if(!this->startConnection())
+	return false;
 
     if (this->_propertiesValue->at(0).compare("-1") == 0)
 	query = this->prepareInsert();
@@ -60,6 +71,9 @@ bool Entity::save()
     return (query.exec());
 }
 
+//
+// Prepare the query for perform an Insert
+//
 QSqlQuery Entity::prepareInsert() const
 {
     QSqlQuery queryObj;
@@ -88,6 +102,9 @@ QSqlQuery Entity::prepareInsert() const
     return queryObj;
 }
 
+//
+// Prepare the query for perform an Update
+//
 QSqlQuery Entity::prepareUpdate() const
 {
     QSqlQuery queryObj;
@@ -112,6 +129,10 @@ QSqlQuery Entity::prepareUpdate() const
     return queryObj;
 }
 
+//
+// Start a connection with the database
+// ONLY if there is no current connection
+//
 bool Entity::startConnection()
 {
     if (!_db->isOpen())
@@ -124,6 +145,10 @@ bool Entity::startConnection()
     return true;
 }
 
+//
+// Init the two member vectors with all
+// attribute's names and values
+//
 void Entity::getAllProperties()
 {
     this->_propertiesName = new std::vector<QString>;
@@ -150,10 +175,15 @@ bool Entity::deleteQuery(QueryBuilder *builder)
 {
     QSqlRecord recQuery;
 
-    startConnection();
+    if(!this->startConnection())
+	return false;
     return (builder->build()->exec());
 }
 
+//
+// Get a new fresh instance of the
+// QueryBuilder, set with Entity data
+//
 QueryBuilder *Entity::getQueryBuilder()
 {
     return (new QueryBuilder(this->_table, this->_db));

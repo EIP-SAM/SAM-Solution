@@ -73,7 +73,8 @@ public:
 	    QSqlRecord recQuery;
 	    QSqlQuery *query;
 
-	    startConnection();
+	    if (!startConnection())
+		return (result);
 	    query = builder->build();
 	    query->exec();
 	    while (query->next())

@@ -102,6 +102,12 @@ QueryBuilder *QueryBuilder::bindValue(QString key, int value)
     return (this);
 }
 
+//
+// "Build" the QSqlQuery :
+// - Prepare the query
+// - Bind every saved value
+// - Return the builded QSqlQuery
+//
 QSqlQuery *QueryBuilder::build()
 {
     std::map<QString, QString>::const_iterator it;
