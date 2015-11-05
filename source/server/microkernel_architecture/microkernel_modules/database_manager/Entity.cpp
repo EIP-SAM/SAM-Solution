@@ -1,7 +1,5 @@
 #include <QDebug>
 #include <iostream>
-#include <QSqlQuery>
-#include <QSqlError>
 #include "Entity.hpp"
 
 Entity::Entity()
@@ -110,23 +108,6 @@ QSqlQuery Entity::prepareUpdate() const
     return queryObj;
 }
 
-std::vector<Entity *> Entity::where(QString field, QString comparator, QString value)
-{
-    QSqlQuery query;
-    std::vector<Entity *> result;
-
-    query.prepare("SELECT * FROM " + _table + " WHERE " + field + comparator + " :value");
-    query.bindValue(":value", value);
-    query.exec();
-    std::cout << query.lastError().databaseText().toStdString() << std::endl;
-    while (query.next())
-    {
-	std::cout << query.value(1).toString().toStdString() << std::endl;
-	std::cout << query.value(2).toString().toStdString() << std::endl;
-    }
-    return (result);
-}
-
 bool Entity::startConnection()
 {
     if (!_db->isOpen())
@@ -156,4 +137,15 @@ void Entity::getAllProperties()
 	QVariant value = this->property(propertyName);
 	this->_propertiesValue->push_back(value.toString());
     }
+}
+
+//
+// Send a query request to delete data
+//
+bool Entity::deleteQuery(QSqlQuery *query)
+{
+    QSqlRecord recQuery;
+
+    startConnection();
+    return (query->exec());
 }

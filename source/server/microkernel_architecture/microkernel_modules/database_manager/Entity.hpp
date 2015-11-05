@@ -8,38 +8,61 @@
 # include <QStringList>
 # include <QVariant>
 # include <QString>
+# include <QSqlRecord>
+# include <QSqlQuery>
 
 class Entity : public QObject
 {
     Q_OBJECT
 
-public:
-    Entity();
-    virtual ~Entity();
-
 private:
-    QSqlDatabase *_db;
     std::vector<QString> *_propertiesName;
     std::vector<QString> *_propertiesValue;
-
-protected:
-    QString _table;
-
-private:
     bool connect();
     bool startConnection();
     void getAllProperties();
     QSqlQuery prepareInsert() const;
     QSqlQuery prepareUpdate() const;
+
+protected:
+    QString _table;
     QString getTable() const;
     void setTable(QString newTable);
 
 public:
+    QSqlDatabase *_db;
+    Entity();
+    virtual ~Entity();
     bool save();
-    std::vector<Entity *> where(QString field, QString comparator, QString value);
-    // std::vector<Entity *> where(QString field, QString comparator, std::vector<QString> values);
-    // std::vector<Entity *> where(std::vector<QString>, std::vector<QString> comparator,
-    // 				std::vector<std::vector<QString> >);
+    bool deleteQuery(QSqlQuery *query);
+
+    //
+    // Send a query request and return the result
+    // Function in .hpp because of templating
+    //
+    template<class T>
+    std::vector<T *> request(QSqlQuery *query)
+	{
+	    std::vector<T *> result;
+	    QSqlRecord recQuery;
+
+	    startConnection();
+	    query->exec();
+	    recQuery = query->record();
+	    while (query->next())
+	    {
+		T *entity = new T();
+		for (std::vector<QString>::iterator it = _propertiesName->begin();
+		     it != _propertiesName->end(); ++it)
+		{
+		    int index = recQuery.indexOf(*it);
+		    qDebug() << entity->setProperty((*it).toLocal8Bit().constData(), query->value(index));
+		    qDebug() << (*it).toLocal8Bit().constData() << " ==> " << query->value(index);
+		}
+		result.push_back(entity);
+	    }
+	    return (result);
+	}
 };
 
 #endif // !ENTITY_HPP_
