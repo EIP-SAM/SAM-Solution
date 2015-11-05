@@ -1,4 +1,4 @@
-#include "NetworkServer.hpp"
+#include "NetworkServerManager.hpp"
 #include "NetworkClient.hpp"
 #include <QByteArray>
 #include "_QFile.hpp"
@@ -7,25 +7,24 @@
 //
 // NetworkServer static attributes assignation
 //
-const QString NetworkServer::_ENCRYPTION_KEY_FILE = "server.key";
-const QString NetworkServer::_ENCRYPTION_CERTIFICATE_FILE = "server.crt";
-const QSsl::SslProtocol NetworkServer::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
+const QString NetworkServerManager::_ENCRYPTION_KEY_FILE = "server.key";
+const QString NetworkServerManager::_ENCRYPTION_CERTIFICATE_FILE = "server.crt";
+const QSsl::SslProtocol NetworkServerManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 
 //
 // Construct network server
 //
-NetworkServer::NetworkServer(QObject *parent)
-    : QTcpServer(parent)
+NetworkServerManager::NetworkServerManager(QObject *parent)
+    : AFunctionality(parent), _server(this)
 {
     qDebug() << Q_FUNC_INFO;
-    qRegisterMetaType<qintptr>("qintptr");
     qRegisterMetaType<QList<QSslError> >("QList<QSslError>");
 }
 
 //
 // Destroy network server
 //
-NetworkServer::~NetworkServer()
+NetworkServerManager::~NetworkServerManager()
 {
     qDebug() << Q_FUNC_INFO;
     for (auto socketDescriptor : _clientSockets.keys())
@@ -37,11 +36,20 @@ NetworkServer::~NetworkServer()
     delete _encryptionCertificate;
 }
 
+//
+// Entry point
+//
+void NetworkServerManager::run()
+{
+    connect(&_server, SIGNAL(hasIncomingConnection(qintptr)),
+            this, SLOT(incomingConnection(qintptr)));
+    start(42042);
+}
 
 //
 // Initialize and start server
 //
-bool NetworkServer::start(quint16 portNumber)
+bool NetworkServerManager::start(quint16 portNumber)
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -61,7 +69,7 @@ bool NetworkServer::start(quint16 portNumber)
 //
 // Initialize encryption key
 //
-bool NetworkServer::_initEncryptionKey(const QString &file)
+bool NetworkServerManager::_initEncryptionKey(const QString &file)
 {
     const QByteArray *keyData = NULL;
 
@@ -83,7 +91,7 @@ bool NetworkServer::_initEncryptionKey(const QString &file)
 //
 // Initialize encryption certificate
 //
-bool NetworkServer::_initEncryptionCertificate(const QString &file)
+bool NetworkServerManager::_initEncryptionCertificate(const QString &file)
 {
     const QByteArray *certificateData = NULL;
 
@@ -105,10 +113,10 @@ bool NetworkServer::_initEncryptionCertificate(const QString &file)
 //
 // Make server listening on choosen port
 //
-bool NetworkServer::_listen(quint16 portNumber)
+bool NetworkServerManager::_listen(quint16 portNumber)
 {
     _portNumber = portNumber;
-    if (!listen(QHostAddress::Any, portNumber))
+    if (!_server.listen(QHostAddress::Any, portNumber))
     {
         qDebug() << " Could not start server";
         return (false);
@@ -120,7 +128,7 @@ bool NetworkServer::_listen(quint16 portNumber)
 //
 // Create and initialize a new client
 //
-void NetworkServer::incomingConnection(qintptr socketDescriptor)
+void NetworkServerManager::incomingConnection(qintptr socketDescriptor)
 {
     NetworkClient *client = new NetworkClient(this);
 
@@ -149,7 +157,7 @@ void NetworkServer::incomingConnection(qintptr socketDescriptor)
 //
 // Supposed to fill the client input buffer
 //
-void NetworkServer::onClientReadyRead(qintptr socketDescriptor)
+void NetworkServerManager::onClientReadyRead(qintptr socketDescriptor)
 {
     NetworkClient *client = _clientSockets[socketDescriptor];
     QByteArray data;
@@ -173,7 +181,7 @@ void NetworkServer::onClientReadyRead(qintptr socketDescriptor)
 // Supposed to write the AInstructionModel* data to NetworkClient*
 // Waiting for InstructionBus class
 //
-void NetworkServer::pushInstruction(AInstructionModel *instruction)
+void NetworkServerManager::pushInstruction(AInstructionModel *instruction)
 {
     (void)instruction;
 }
@@ -181,7 +189,7 @@ void NetworkServer::pushInstruction(AInstructionModel *instruction)
 //
 // Supposed to handle the outcoming data
 //
-void NetworkServer::onClientBytesWritten(qintptr socketDescriptor, qint64 size)
+void NetworkServerManager::onClientBytesWritten(qintptr socketDescriptor, qint64 size)
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << socketDescriptor
@@ -191,13 +199,13 @@ void NetworkServer::onClientBytesWritten(qintptr socketDescriptor, qint64 size)
 //
 // Delete a disconnected client
 //
-void NetworkServer::deleteClient(qintptr socketDescriptor)
+void NetworkServerManager::deleteClient(qintptr socketDescriptor)
 {
     NetworkClient *client = _clientSockets[socketDescriptor];
 
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << socketDescriptor << "Client disconnected";
-    disconnect(client, 0, 0, 0);
+    _server.disconnect(client, 0, 0, 0);
     _clientSockets.remove(socketDescriptor);
     delete client;
     qDebug() << "" << socketDescriptor << "Client deleted";
@@ -206,7 +214,7 @@ void NetworkServer::deleteClient(qintptr socketDescriptor)
 //
 // Print client encryption errors
 //
-void NetworkServer::onClientEncryptionError(qintptr socketDescriptor, QList<QSslError> errors)
+void NetworkServerManager::onClientEncryptionError(qintptr socketDescriptor, QList<QSslError> errors)
 {
     QString errorStr = " ";
 

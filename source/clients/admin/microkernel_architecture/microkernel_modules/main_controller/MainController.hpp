@@ -1,26 +1,22 @@
 #ifndef MAIN_CONTROLLER_HPP_
 # define MAIN_CONTROLLER_HPP_
 
-# include <QApplication>
+# include <QGuiApplication>
+# include "FunctionalitiesManager.hpp"
 
-class NetworkClientManager;
-
-class MainController : public QObject
+class MainController : QObject
 {
     Q_OBJECT
 
 private:
-    QApplication _qtCore;
-    NetworkClientManager *_network = NULL;
+    QGuiApplication _qtCore;
+    FunctionalitiesManager _fctsManager;
 
 public:
-    MainController(int, char **);
+    MainController(int &, char **);
     ~MainController();
 
     int run();
-
-private:
-    bool _initNetwork();
 };
 
 #endif // !MAIN_CONTROLLER_HPP_

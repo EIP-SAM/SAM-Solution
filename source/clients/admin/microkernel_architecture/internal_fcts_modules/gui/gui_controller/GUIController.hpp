@@ -2,23 +2,23 @@
 # define GUI_CONTROLLER_HPP_
 
 # include <QQmlApplicationEngine>
+# include "AFunctionality.hpp"
 
-class GUIController : public QObject
+class GUIController : public AFunctionality
 {
-    Q_OBJECT
-
 private:
     QQmlApplicationEngine _qmlEngine;
 
 public:
     explicit GUIController(QObject *parent = 0);
-    ~GUIController();
+    virtual ~GUIController();
 
     void init();
 
 signals:
 
 public slots:
+    virtual void run();
 };
 
 #endif // !GUI_CONTROLLER_HPP_
