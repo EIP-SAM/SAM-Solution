@@ -1,54 +1,53 @@
 #include "AInstructionBusClient.hpp"
+#include "AInstruction.hpp"
 
-AInstructionBusClient::AInstructionBusClient(AInstructionBusClient::eClientId clientId, QQueue<AInstruction *> instructions)
-    : _clientId(clientId), _instructions(instructions)
+AInstructionBusClient::AInstructionBusClient()
+    : _clientId(INVALID)
 {
 }
 
 AInstructionBusClient::~AInstructionBusClient()
 {
-}
+    AInstruction *instruction = NULL;
+    QMutexLocker locker(&_mutex);
 
-void AInstructionBusClient::setClientId(AInstructionBusClient::eClientId clientId)
-{
-    _clientId = clientId;
-}
-
-void AInstructionBusClient::setInstructions(QQueue<AInstruction *> instructions)
-{
-    _instructions = instructions;
+    while (!_instructions.empty())
+    {
+        instruction = _instructions.dequeue();
+        delete instruction;
+    }
 }
 
 //
-// (appel execute depuis un autre thread -> protection via QMutex) push une AInstruction dans la queue
+// Theoreticaly called from the `InstructionBus`
+// Push an instruction in the client queue `_instructions`
 //
 void AInstructionBusClient::pushInstruction(AInstruction *instruction)
 {
+    QMutexLocker locker(&_mutex);
+
     _instructions.enqueue(instruction);
 }
 
 //
-// pop et retourne un AInstruction
+// Getter: Return the client id
 //
-AInstruction *AInstructionBusClient::_popInstruction()
-{
-    return _instructions.dequeue();
-}
-
 AInstructionBusClient::eClientId AInstructionBusClient::getClientId() const
 {
     return _clientId;
 }
 
-QQueue<AInstruction *> AInstructionBusClient::getInstructions() const
+//
+// Pop and return the next instruction in the queue `_instructions`
+// Return NULL if there is no instruction
+//
+AInstruction *AInstructionBusClient::_popInstruction()
 {
-    return _instructions;
-}
+    AInstruction *instruction = NULL;
 
-//
-// true si il y a au moins une AInstruction dans la queue
-//
-bool AInstructionBusClient::_hasInstructions()
-{
-    return !_instructions.isEmpty();
+    _mutex.lock();
+    if (!_instructions.empty())
+        instruction = _instructions.dequeue();
+    _mutex.unlock();
+    return instruction;
 }

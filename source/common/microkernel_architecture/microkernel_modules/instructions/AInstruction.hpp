@@ -5,13 +5,14 @@
 
 class AInstruction
 {
-private:
+protected:
     AInstructionBusClient *_transmitter;
     AInstructionBusClient::eClientId _receiver;
     int _instructionId;
 
 public:
     AInstruction(AInstructionBusClient *, AInstructionBusClient::eClientId, int);
+    AInstruction(const AInstruction &);
     virtual ~AInstruction();
 
     void setTransmitter(AInstructionBusClient *);

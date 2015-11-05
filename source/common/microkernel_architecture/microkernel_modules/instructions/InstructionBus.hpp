@@ -2,36 +2,34 @@
 # define INSTRUCTION_BUS_HPP_
 
 # include <QThread>
-# include <QMap>
+# include <QMutex>
 # include <QQueue>
+# include <QMap>
 # include "AInstructionBusClient.hpp"
-# include "AInstruction.hpp"
 
-class InstructionBus
+class InstructionBus : public QObject
 {
-protected:
+    Q_OBJECT
+
+private:
     QThread *_thread;
-    QMap<AInstructionBusClient::eClientId, AInstructionBusClient *> _clientRegister;
-    QMap<AInstructionBusClient *, QQueue<AInstruction *> *> _clientsInstructions;
+    QMutex *_mutex;
+    QMap<AInstructionBusClient::eClientId, AInstructionBusClient *> _clientsRegister;
+    QMap<AInstructionBusClient *, QQueue<AInstruction *> *> _transmitterClientsInstructions;
 
 public:
-    InstructionBus(QThread *, QMap<AInstructionBusClient::eClientId, AInstructionBusClient *>,
-                   QMap<AInstructionBusClient *, QQueue<AInstruction *> *>);
-    virtual ~InstructionBus();
+    InstructionBus();
+    ~InstructionBus();
 
-    void init();
-    void run();
-    void _register(AInstructionBusClient::eClientId, AInstructionBusClient *);
-    void pushInstruction(AInstruction *);
+    bool init();
+    bool registerClient(AInstructionBusClient::eClientId, AInstructionBusClient *);
+    bool pushInstruction(AInstruction *);
+
+private slots:
+    void _run();
+
+private:
     void _dispatchInstruction(AInstruction *);
-
-    void setThread(QThread *);
-    void setClientRegister(QMap<AInstructionBusClient::eClientId, AInstructionBusClient *>);
-    void setClientsInstructions(QMap<AInstructionBusClient *, QQueue<AInstruction *> *>);
-
-    QThread *getThread() const;
-    QMap<AInstructionBusClient::eClientId, AInstructionBusClient *> getClientRegister() const;
-    QMap<AInstructionBusClient *, QQueue<AInstruction *> *> getClientsInstructions() const;
 };
 
 #endif // !INSTRUCTION_BUS_HPP_

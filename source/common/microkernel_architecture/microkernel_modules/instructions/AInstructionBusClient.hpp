@@ -1,6 +1,7 @@
 #ifndef AINSTRUCTION_BUS_CLIENT_HPP_
 # define AINSTRUCTION_BUS_CLIENT_HPP_
 
+# include <QMutex>
 # include <QQueue>
 
 class AInstruction;
@@ -14,21 +15,21 @@ public:
     };
 
 private:
-    eClientId _clientId;
+    QMutex _mutex;
     QQueue<AInstruction *> _instructions;
 
+protected:
+    eClientId _clientId;
+
 public:
-    AInstructionBusClient(eClientId, QQueue<AInstruction *>);
+    AInstructionBusClient();
     virtual ~AInstructionBusClient();
 
-    void setClientId(eClientId);
-    void setInstructions(QQueue<AInstruction *>);
     void pushInstruction(AInstruction *);
-    AInstruction *_popInstruction();
-
     eClientId getClientId() const;
-    QQueue<AInstruction *> getInstructions() const;
-    bool _hasInstructions();
+
+protected:
+    AInstruction *_popInstruction();
 };
 
 #endif // !AINSTRUCTION_BUS_CLIENT_HPP_

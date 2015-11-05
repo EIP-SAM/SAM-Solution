@@ -6,6 +6,11 @@ AInstruction::AInstruction(AInstructionBusClient *transmitter,
 {
 }
 
+AInstruction::AInstruction(const AInstruction &o)
+    : _transmitter(o._transmitter), _receiver(o._receiver), _instructionId(o._instructionId)
+{
+}
+
 AInstruction::~AInstruction()
 {
 }
