@@ -10,12 +10,14 @@
 # include <QString>
 # include <QSqlRecord>
 # include <QSqlQuery>
+# include "QueryBuilder.hpp"
 
 class Entity : public QObject
 {
     Q_OBJECT
 
 private:
+    QSqlDatabase *_db;
     std::vector<QString> *_propertiesName;
     std::vector<QString> *_propertiesValue;
     bool connect();
@@ -30,34 +32,38 @@ protected:
     void setTable(QString newTable);
 
 public:
-    QSqlDatabase *_db;
     Entity();
     virtual ~Entity();
     bool save();
-    bool deleteQuery(QSqlQuery *query);
+    bool deleteQuery(QueryBuilder *builder);
+    QueryBuilder *getQueryBuilder();
 
     //
     // Send a query request and return the result
     // Function in .hpp because of templating
     //
     template<class T>
-    std::vector<T *> request(QSqlQuery *query)
+    std::vector<T *> request(QueryBuilder *builder)
 	{
 	    std::vector<T *> result;
 	    QSqlRecord recQuery;
+	    QSqlQuery *query;
 
 	    startConnection();
+	    query = builder->build();
 	    query->exec();
-	    recQuery = query->record();
 	    while (query->next())
 	    {
+		recQuery = query->record();
 		T *entity = new T();
 		for (std::vector<QString>::iterator it = _propertiesName->begin();
 		     it != _propertiesName->end(); ++it)
 		{
 		    int index = recQuery.indexOf(*it);
-		    qDebug() << entity->setProperty((*it).toLocal8Bit().constData(), query->value(index));
-		    qDebug() << (*it).toLocal8Bit().constData() << " ==> " << query->value(index);
+		    if (index < 0)
+			continue;
+		    entity->setProperty((*it).toLocal8Bit().constData(),
+					query->value(index));
 		}
 		result.push_back(entity);
 	    }

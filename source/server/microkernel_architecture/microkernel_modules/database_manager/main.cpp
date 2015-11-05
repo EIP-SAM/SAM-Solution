@@ -1,10 +1,11 @@
 #include <QApplication>
-#include "UsersEntity.hpp"
 #include <QDebug>
 #include <QSqlQuery>
 #include <vector>
-#include "Entity.hpp"
 #include <iostream>
+
+#include "QueryBuilder.hpp"
+#include "UsersEntity.hpp"
 
 int main(int argc, char **argv)
 {
@@ -12,7 +13,6 @@ int main(int argc, char **argv)
 
   UsersEntity user;
 
-  user.setId(2);
   user.setLogin("bernar_w");
   user.setPassword("PasswordQuiRox");
 
@@ -21,21 +21,21 @@ int main(int argc, char **argv)
   else
       qDebug() << "SAVE FAIL";
 
-  QSqlQuery *query = new QSqlQuery(*user._db);
-  query->prepare("SELECT * FROM Users WHERE login LIKE :value");
-  query->bindValue(":value", "bernar_w");
-  std::vector<UsersEntity *> result = user.request<UsersEntity>(query);
+  QueryBuilder *builder = user.getQueryBuilder();
+  builder->select("id, login, password")
+      ;
+
+  std::vector<UsersEntity *> result = user.request<UsersEntity>(builder);
 
   for (std::vector<UsersEntity *>::iterator it = result.begin(); it != result.end(); ++it)
-      qDebug() << (*it)->getLogin();
+      std::cout << "Login : "<< (*it)->getLogin().toStdString() << std::endl;
 
-  QSqlQuery *query2 = new QSqlQuery(*user._db);
-  query2->prepare("DELETE FROM Users WHERE login LIKE :value");
-  query2->bindValue(":value", "bernar_w");
-  qDebug() << user.deleteQuery(query2);
+  QueryBuilder *builder2 = user.getQueryBuilder();
+  builder2->deleteRow()
+      ->where("id = :id")
+      ->bindValue(":id", 6)
+      ;
+  user.deleteQuery(builder2);
 
-  std::vector<UsersEntity *> result2 = user.request<UsersEntity>(query);
-  for (std::vector<UsersEntity *>::iterator it = result2.begin(); it != result2.end(); ++it)
-      qDebug() << (*it)->getLogin();
   return 0;
 }

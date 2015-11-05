@@ -142,10 +142,15 @@ void Entity::getAllProperties()
 //
 // Send a query request to delete data
 //
-bool Entity::deleteQuery(QSqlQuery *query)
+bool Entity::deleteQuery(QueryBuilder *builder)
 {
     QSqlRecord recQuery;
 
     startConnection();
-    return (query->exec());
+    return (builder->build()->exec());
+}
+
+QueryBuilder *Entity::getQueryBuilder()
+{
+    return (new QueryBuilder(this->_table, this->_db));
 }
