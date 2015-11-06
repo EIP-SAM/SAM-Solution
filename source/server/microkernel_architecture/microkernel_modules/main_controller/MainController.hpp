@@ -3,6 +3,7 @@
 
 # include <QGuiApplication>
 # include "FunctionalitiesManager.hpp"
+# include "InstructionBus.hpp"
 
 class MainController : QObject
 {
@@ -11,6 +12,7 @@ class MainController : QObject
 private:
     QGuiApplication _qtCore;
     FunctionalitiesManager _fctsManager;
+    InstructionBus _instructionBus;
 
 public:
     MainController(int &, char **);

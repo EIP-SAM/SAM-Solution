@@ -41,10 +41,10 @@ private:
 private slots:
     void incomingConnection(qintptr socketDescriptor);
     void onClientReadyRead(qintptr socketDescriptor);
-    void pushInstruction(AInstructionModel *instruction);
     void onClientBytesWritten(qintptr socketDescriptor, qint64 size);
     void deleteClient(qintptr socketDescriptor);
     void onClientEncryptionError(qintptr socketDescriptor, QList<QSslError> errors);
+    virtual void onInstructionPushed();
 
 protected slots:
     virtual void run();

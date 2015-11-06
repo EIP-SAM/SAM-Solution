@@ -2,13 +2,14 @@
 # define AFUNCTIONALITY_HPP_
 
 # include <QThread>
+# include "AInstructionBusClient.hpp"
 
 //
 // Note: Overload the run() method in child classes
 // Then implement what the functionality is supposed to do
 //
 
-class AFunctionality : public QObject
+class AFunctionality : public AInstructionBusClient
 {
     Q_OBJECT
 

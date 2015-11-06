@@ -56,7 +56,7 @@ bool InstructionBus::init()
 }
 
 //
-// Register an instruction bus client in the _clientsRegister map
+// Register an instruction bus client in the _localClientsRegister map
 // Does nothing if any parameter is invalid
 //
 bool InstructionBus::registerClient(AInstructionBusClient::eClientId clientId, AInstructionBusClient *client)
@@ -74,7 +74,7 @@ bool InstructionBus::registerClient(AInstructionBusClient::eClientId clientId, A
         qDebug() << "Error: Invalid client or client id";
         return false;
     }
-    if (!_clientsRegister.contains(clientId))
+    if (!_localClientsRegister.contains(clientId))
     {
         QQueue<AInstruction *> *instructionsQueue = NULL;
 
@@ -83,7 +83,7 @@ bool InstructionBus::registerClient(AInstructionBusClient::eClientId clientId, A
             qDebug() << "Error:" << Q_FUNC_INFO << ": Memory allocation failure";
             return false;
         }
-        _clientsRegister.insert(clientId, client);
+        _localClientsRegister.insert(clientId, client);
         _transmitterClientsInstructions.insert(client, instructionsQueue);
         return true;
     }
@@ -112,8 +112,8 @@ bool InstructionBus::pushInstruction(AInstruction *instruction)
         qDebug() << "Error: Invalid instruction";
         return false;
     }
-    transmiterClient = instruction->getTransmitter();
-    if (!transmiterClient || !(_transmitterClientsInstructions.contains(transmiterClient)))
+    transmiterClient = (AInstructionBusClient *)instruction->getLocalTransmitter();
+    if (!transmiterClient || !_transmitterClientsInstructions.contains(transmiterClient))
     {
         qDebug() << "Error: Unknown transmitter client";
         return false;
@@ -137,23 +137,22 @@ bool InstructionBus::pushInstruction(AInstruction *instruction)
 //
 void InstructionBus::_run()
 {
+    QMap<AInstructionBusClient*, QQueue<AInstruction*>*>::iterator it;
     QQueue<AInstruction *> *instructionsQueue = NULL;
 
     qDebug() << Q_FUNC_INFO;
     while (42)
     {
         _mutex->lock();
-
-        auto it = _transmitterClientsInstructions.begin();
-
+        it = _transmitterClientsInstructions.begin();
         while (it != _transmitterClientsInstructions.end())
         {
             instructionsQueue = *it;
             while (!instructionsQueue->empty())
                 _dispatchInstruction(instructionsQueue->dequeue());
         }
-
         _mutex->unlock();
+        QThread::msleep(30);
     }
 }
 
@@ -167,8 +166,19 @@ inline void InstructionBus::_dispatchInstruction(AInstruction *instruction)
 
     if (!instruction)
         return ;
-    if (!_clientsRegister.contains(instruction->getReceiver()))
-        return ;
-    receiverClient = _clientsRegister[instruction->getReceiver()];
+    if (!_localClientsRegister.contains(instruction->getFinalReceiver()))
+    {
+        if (!_remoteClientsRegister.contains(instruction->getFinalReceiver()) ||
+            !_localClientsRegister.contains(AInstructionBusClient::eClientId::NETWORK_MANAGER))
+        {
+            qDebug() << "Error:" << Q_FUNC_INFO << ": Unknown receiver, instruction deleted";
+            delete instruction;
+            return ;
+        }
+        receiverClient = _localClientsRegister[AInstructionBusClient::eClientId::NETWORK_MANAGER];
+    }
+    else
+        receiverClient = _localClientsRegister[instruction->getFinalReceiver()];
     receiverClient->pushInstruction(instruction);
+    emit receiverClient->instructionPushed();
 }

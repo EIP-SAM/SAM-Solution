@@ -175,17 +175,6 @@ void NetworkServerManager::onClientReadyRead(qintptr socketDescriptor)
     qDebug() << "" << socketDescriptor << "Had put" << size << "bytes. Outcoming data :" << data;
 }
 
-
-//
-// Supposed to get NetworkClient* from AInstructionModel
-// Supposed to write the AInstructionModel* data to NetworkClient*
-// Waiting for InstructionBus class
-//
-void NetworkServerManager::pushInstruction(AInstructionModel *instruction)
-{
-    (void)instruction;
-}
-
 //
 // Supposed to handle the outcoming data
 //
@@ -223,4 +212,19 @@ void NetworkServerManager::onClientEncryptionError(qintptr socketDescriptor, QLi
     for (auto e : errors)
         errorStr.append(e.errorString()).append("\n");
     qDebug() << errorStr;
+}
+
+//
+// Slot activated in the case of a non threaded functionality
+// This functionality runs on the main thread in the Qt event loop
+// Handle what to do when a new instruction (from the instruction
+// bus) is received
+//
+void NetworkServerManager::onInstructionPushed()
+{
+    AInstruction *instruction = NULL;
+
+    qDebug() << Q_FUNC_INFO;
+    instruction = _popInstruction();
+    (void)instruction;
 }

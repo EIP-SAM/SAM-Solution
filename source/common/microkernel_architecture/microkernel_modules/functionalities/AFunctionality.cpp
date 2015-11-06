@@ -4,7 +4,8 @@
 // Constructor and Destructor
 //
 AFunctionality::AFunctionality(QObject *parent)
-    : QObject(parent), _thread(NULL), _running(false), _threaded(true)
+    : AInstructionBusClient(parent),
+      _thread(NULL), _running(false), _threaded(true)
 {
 }
 
@@ -60,10 +61,14 @@ void AFunctionality::stop()
 
 //
 // `_threaded` attribute setter
+// Plus repercussion on the parent class when using a
+// non-threaded functionality
 //
 void AFunctionality::setThreaded(bool threaded)
 {
     _threaded = threaded;
+    if (!_threaded)
+        connect(this, SIGNAL(instructionPushed()), this, SLOT(onInstructionPushed()));
 }
 
 //

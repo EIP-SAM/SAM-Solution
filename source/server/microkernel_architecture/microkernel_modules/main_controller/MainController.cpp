@@ -11,7 +11,7 @@ MainController::~MainController()
 
 int MainController::run()
 {
-    if (!_fctsManager.init())
+    if (!_instructionBus.init() || !_fctsManager.init())
         return (-1);
     return (_qtCore.exec());
 }
