@@ -30,6 +30,9 @@ int main(int argc, char **argv)
   ////////////////////////////////////
   QueryBuilder *builder = user.getQueryBuilder();
   builder->select("id, login, password")
+          ->where("id > :id")
+          ->orderBy("id")
+          ->bindValue(":id", 15)
       ;
 
   std::vector<UsersEntity *> result = user.request<UsersEntity>(builder);
