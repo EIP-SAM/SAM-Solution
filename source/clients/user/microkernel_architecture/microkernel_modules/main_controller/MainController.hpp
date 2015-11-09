@@ -19,6 +19,13 @@ public:
     ~MainController();
 
     int run();
+    InstructionBus &getInstructionBus();
 };
+
+# ifndef __MAIN_CONTROLLER_NO_GLOBAL_DECL
+
+extern MainController *mainController;
+
+# endif // !__MAIN_CONTROLLER_NO_GLOBAL_DECL
 
 #endif // !MAIN_CONTROLLER_HPP_

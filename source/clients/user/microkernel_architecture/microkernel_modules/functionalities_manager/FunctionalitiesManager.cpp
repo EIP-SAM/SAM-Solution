@@ -1,6 +1,8 @@
 #include "FunctionalitiesManager.hpp"
-#include "NetworkClientManager.hpp"
 #include "GUIController.hpp"
+#include "NetworkClientManager.hpp"
+
+#include "HelloWorldFunctionality.hpp"
 
 //
 // Constructor : does nothing
@@ -27,12 +29,16 @@ void FunctionalitiesManager::_setFcts()
     _setExternalFcts();
 }
 
-inline void FunctionalitiesManager::_setMicrokernelFcts()
+void FunctionalitiesManager::_setMicrokernelFcts()
 {
-    _microkernelFcts << new NetworkClientManager();
+    AFunctionality *fct = NULL;
+
+    fct = new NetworkClientManager();
+    fct->setThreaded(false);
+    _microkernelFcts << fct;
 }
 
-inline void FunctionalitiesManager::_setInternalFcts()
+void FunctionalitiesManager::_setInternalFcts()
 {
     AFunctionality *fct = NULL;
 
@@ -41,6 +47,7 @@ inline void FunctionalitiesManager::_setInternalFcts()
     _internalFcts << fct;
 }
 
-inline void FunctionalitiesManager::_setExternalFcts()
+void FunctionalitiesManager::_setExternalFcts()
 {
+    _externalFcts << new HelloWorldFunctionality(); // temporary
 }
