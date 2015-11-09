@@ -6,6 +6,8 @@
 
 class GUIController : public AFunctionality
 {
+    Q_OBJECT
+
 private:
     QQmlApplicationEngine _qmlEngine;
 
@@ -14,8 +16,6 @@ public:
     virtual ~GUIController();
 
     void init();
-
-signals:
 
 public slots:
     virtual void run();
