@@ -4,8 +4,8 @@
 //
 // Construct network client
 //
-NetworkClient::NetworkClient(QObject *parent)
-    : QObject(parent), _socket(this)
+NetworkClient::NetworkClient(quint64 clientId, QObject *parent)
+    : QObject(parent), _socket(this), _clientId(clientId)
 {
     qDebug() << Q_FUNC_INFO;
     connect(&_socket, SIGNAL(bytesWritten(qint64)),
@@ -83,21 +83,69 @@ qint64 NetworkClient::bytesToWrite() const
 }
 
 //
+// Getter: return client socket descriptor
+//
+qintptr NetworkClient::getSocketDescriptor() const
+{
+    return _socketDescriptor;
+}
+
+//
+// Getter: return client id
+//
+quint64 NetworkClient::getClientId() const
+{
+    return _clientId;
+}
+
+//
+// Getter: return input buffer
+//
+ANetworkInstruction *NetworkClient::getInputBuffer() const
+{
+    return _inputBuffer;
+}
+
+//
+// Getter: return output buffer
+//
+ANetworkInstruction *NetworkClient::getOutputBuffer() const
+{
+    return _outputBuffer;
+}
+
+//
+// Setter: set input buffer
+//
+void NetworkClient::setInputBuffer(ANetworkInstruction *inputBuffer)
+{
+    _inputBuffer = inputBuffer;
+}
+
+//
+// Setter: set output buffer
+//
+void NetworkClient::setOutputBuffer(ANetworkInstruction *outputBuffer)
+{
+    _outputBuffer = outputBuffer;
+}
+
+//
 // Read data from socket when available
 //
-qint64 NetworkClient::read(char *data, qint64 size)
+qint64 NetworkClient::read(QByteArray &data, qint64 size)
 {
     qDebug() << Q_FUNC_INFO;
-    return _socket.read(data, size);
+    return _socket.read(data.data(), size);
 }
 
 //
 // Write data on socket
 //
-qint64 NetworkClient::write(const char *data, qint64 size)
+qint64 NetworkClient::write(const QByteArray &data, qint64 size)
 {
     qDebug() << Q_FUNC_INFO;
-    return _socket.write(data, size);
+    return _socket.write(data.constData(), size);
 }
 
 //

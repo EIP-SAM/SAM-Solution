@@ -1,8 +1,9 @@
 #include "NetworkServerManager.hpp"
 #include "NetworkClient.hpp"
-#include <QByteArray>
-#include "_QFile.hpp"
 #include "ANetworkInstruction.hpp"
+#include "MainController.hpp"
+#include "_QFile.hpp"
+#include <QByteArray>
 
 //
 // NetworkServer static attributes assignation
@@ -14,10 +15,9 @@ const QSsl::SslProtocol NetworkServerManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 //
 // Construct network server
 //
-NetworkServerManager::NetworkServerManager(QObject *parent)
-    : AFunctionality(parent), _server(this)
+NetworkServerManager::NetworkServerManager()
+    : AFunctionality(NETWORK_MANAGER), _server(this)
 {
-    qDebug() << Q_FUNC_INFO;
     qRegisterMetaType<QList<QSslError> >("QList<QSslError>");
 }
 
@@ -26,7 +26,6 @@ NetworkServerManager::NetworkServerManager(QObject *parent)
 //
 NetworkServerManager::~NetworkServerManager()
 {
-    qDebug() << Q_FUNC_INFO;
     for (auto socketDescriptor : _clientSockets.keys())
     {
         delete _clientSockets[socketDescriptor];
@@ -42,7 +41,7 @@ NetworkServerManager::~NetworkServerManager()
 void NetworkServerManager::run()
 {
     connect(&_server, SIGNAL(hasIncomingConnection(qintptr)),
-            this, SLOT(incomingConnection(qintptr)));
+            this, SLOT(_incomingConnection(qintptr)));
     start(42042);
 }
 
@@ -73,7 +72,6 @@ bool NetworkServerManager::_initEncryptionKey(const QString &file)
 {
     const QByteArray *keyData = NULL;
 
-    qDebug() << Q_FUNC_INFO;
     if (_encryptionKey)
         return (true);
     if (!(keyData = _QFile::readFile(file)))
@@ -95,7 +93,6 @@ bool NetworkServerManager::_initEncryptionCertificate(const QString &file)
 {
     const QByteArray *certificateData = NULL;
 
-    qDebug() << Q_FUNC_INFO;
     if (_encryptionCertificate)
         return (true);
     if (!(certificateData = _QFile::readFile(file)))
@@ -127,10 +124,13 @@ bool NetworkServerManager::_listen(quint16 portNumber)
 
 //
 // Create and initialize a new client
+// Note: The `static quint64 clientId` is a bit ugly, FIX THIS AS SOON AS
+// the USER MODULE is achieved
 //
-void NetworkServerManager::incomingConnection(qintptr socketDescriptor)
+void NetworkServerManager::_incomingConnection(qintptr socketDescriptor)
 {
-    NetworkClient *client = new NetworkClient(this);
+    static quint64 clientId = 1;
+    NetworkClient *client = new NetworkClient(clientId++, this);
 
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << socketDescriptor << "New client connected";
@@ -138,14 +138,15 @@ void NetworkServerManager::incomingConnection(qintptr socketDescriptor)
                       *_encryptionKey, *_encryptionCertificate))
     {
         _clientSockets[socketDescriptor] = client;
+        _clientIds[client->getClientId()] = client;
         connect(client, SIGNAL(readyRead(qintptr)),
-                this, SLOT(onClientReadyRead(qintptr)), Qt::QueuedConnection);
+                this, SLOT(_onClientReadyRead(qintptr)), Qt::QueuedConnection);
         connect(client, SIGNAL(bytesWritten(qintptr, qint64)),
-                this, SLOT(onClientBytesWritten(qintptr, qint64)), Qt::QueuedConnection);
+                this, SLOT(_onClientBytesWritten(qintptr, qint64)), Qt::QueuedConnection);
         connect(client, SIGNAL(disconnected(qintptr)),
-                this, SLOT(deleteClient(qintptr)), Qt::QueuedConnection);
+                this, SLOT(_deleteClient(qintptr)), Qt::QueuedConnection);
         connect(client, SIGNAL(encryptionErrors(qintptr, QList<QSslError>)),
-                this, SLOT(onClientEncryptionError(qintptr, QList<QSslError>)), Qt::QueuedConnection);
+                this, SLOT(_onClientEncryptionError(qintptr, QList<QSslError>)), Qt::QueuedConnection);
     }
     else
     {
@@ -157,53 +158,93 @@ void NetworkServerManager::incomingConnection(qintptr socketDescriptor)
 //
 // Supposed to fill the client input buffer
 //
-void NetworkServerManager::onClientReadyRead(qintptr socketDescriptor)
+void NetworkServerManager::_onClientReadyRead(qintptr socketDescriptor)
 {
     NetworkClient *client = _clientSockets[socketDescriptor];
-    QByteArray data;
-    qint64 size = -1;
+    ANetworkInstruction *instruction = client->getInputBuffer();
+    qint64 bytesAvailable = client->bytesAvailable(), readSize = -1, ret = -1;
+    QByteArray buffer;
 
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "" << socketDescriptor
-             << "Ready to read" << client->bytesAvailable() << "bytes";
-    data.resize(client->bytesAvailable());
-    size = client->read(data.data(), data.size());
-    qDebug() << "" << socketDescriptor << "Had read" << size << "bytes. Incoming data :" << data;
+    qDebug() << "" << socketDescriptor << "Ready to read" << bytesAvailable << "bytes";
 
-    data = "Hello world\n";
-    size = client->write(data.data(), data.size());
-    qDebug() << "" << socketDescriptor << "Had put" << size << "bytes. Outcoming data :" << data;
+    while (bytesAvailable > 0)
+    {
+        if (!instruction)
+        {
+            instruction = new ANetworkInstruction();
+            instruction->setPeerId(client->getClientId());
+            instruction->setLocalTransmitter(this);
+            client->setInputBuffer(instruction);
+        }
+        if (bytesAvailable <= instruction->getNextReadSize())
+            readSize = bytesAvailable;
+        else if (bytesAvailable > instruction->getNextReadSize())
+            readSize = instruction->getNextReadSize();
+        buffer.resize(readSize);
+        if ((ret = client->read(buffer, readSize)) == -1)
+        {
+            qDebug() << "Error: An error occured while trying to read";
+            _deleteClient(client);
+            return ;
+        }
+        else if (ret == 0)
+        {
+            qDebug() << "Warning: Trying to read more data than available";
+            break ;
+        }
+        buffer.resize(ret);
+        instruction->append(buffer);
+        bytesAvailable -= ret;
+        qDebug() << "" << socketDescriptor << "Had read" << ret << "bytes";
+        qDebug() << buffer;
+        if (!instruction->getNextReadSize())
+        {
+            mainController->getInstructionBus().pushInstruction(instruction);
+            client->setInputBuffer(NULL);
+        }
+    }
 }
 
 //
 // Supposed to handle the outcoming data
 //
-void NetworkServerManager::onClientBytesWritten(qintptr socketDescriptor, qint64 size)
+void NetworkServerManager::_onClientBytesWritten(qintptr socketDescriptor, qint64 size)
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "" << socketDescriptor
-             << "Written bytes :" << size;
+    qDebug() << "" << socketDescriptor << "Written bytes :" << size;
 }
 
 //
 // Delete a disconnected client
 //
-void NetworkServerManager::deleteClient(qintptr socketDescriptor)
+void NetworkServerManager::_deleteClient(qintptr socketDescriptor)
 {
     NetworkClient *client = _clientSockets[socketDescriptor];
 
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << socketDescriptor << "Client disconnected";
+    _deleteClient(client);
+}
+
+//
+// Delete a client
+//
+void NetworkServerManager::_deleteClient(NetworkClient *client)
+{
     _server.disconnect(client, 0, 0, 0);
-    _clientSockets.remove(socketDescriptor);
+    _clientSockets.remove(client->getSocketDescriptor());
+    _clientIds.remove(client->getClientId());
+    delete client->getInputBuffer();
+    delete client->getOutputBuffer();
     delete client;
-    qDebug() << "" << socketDescriptor << "Client deleted";
+    qDebug() << "Client deleted";
 }
 
 //
 // Print client encryption errors
 //
-void NetworkServerManager::onClientEncryptionError(qintptr socketDescriptor, QList<QSslError> errors)
+void NetworkServerManager::_onClientEncryptionError(qintptr socketDescriptor, QList<QSslError> errors)
 {
     QString errorStr = " ";
 
@@ -222,9 +263,42 @@ void NetworkServerManager::onClientEncryptionError(qintptr socketDescriptor, QLi
 //
 void NetworkServerManager::onInstructionPushed()
 {
-    AInstruction *instruction = NULL;
+    ANetworkInstruction *instruction = static_cast<ANetworkInstruction *>(_popInstruction());
+    NetworkClient *client = NULL;
+    qint64 writtenSize = 0, ret = 0;
+    QByteArray buffer;
 
     qDebug() << Q_FUNC_INFO;
-    instruction = _popInstruction();
-    (void)instruction;
+    if (!instruction)
+    {
+        qDebug() << "Error: Bad news, there is no instruction in the queue";
+        return ;
+    }
+    if (instruction->getPeerId() == 0 ||
+        !_clientIds.contains(instruction->getPeerId()))
+    {
+        qDebug() << "Error: Invalid network peer id";
+        delete instruction;
+        return ;
+    }
+    client = _clientIds[instruction->getPeerId()];
+    buffer = instruction->getRawData();
+    while (writtenSize != instruction->getRawData().size())
+    {
+        if ((ret = client->write(buffer, buffer.size())) == -1)
+        {
+            qDebug() << "Error: An error occured while trying to write";
+            _deleteClient(client);
+            break ;
+        }
+        else if (ret == 0)
+        {
+            qDebug() << "Warning: Trying to write too much data";
+            break ;
+        }
+        writtenSize += ret;
+        if (writtenSize < ret)
+            buffer = buffer.left(ret);
+    }
+    delete instruction;
 }

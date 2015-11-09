@@ -1,5 +1,7 @@
-#include <QByteArray>
 #include "NetworkClientManager.hpp"
+#include "ANetworkInstruction.hpp"
+#include "MainController.hpp"
+#include <QByteArray>
 
 #include <QDebug>
 
@@ -9,21 +11,21 @@ const QSsl::SslProtocol NetworkClientManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 //
 // Add signal to readReady.
 //
-
-NetworkClientManager::NetworkClientManager(QObject *parent)
-    : AFunctionality(parent), _client(this)
+NetworkClientManager::NetworkClientManager()
+    : AFunctionality(NETWORK_MANAGER), _socket(this)
 {
-    connect(&_client, SIGNAL(readyRead()), this, SLOT(readMsg()));
-    connect(&_client, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
+    connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    connect(&_socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
 }
 
 NetworkClientManager::~NetworkClientManager()
 {
+    disconnect();
 }
 
 //
-// Entry point
-// Start network client
+// Entry point of the functionality
+// Start the network client
 //
 void NetworkClientManager::run()
 {
@@ -34,66 +36,111 @@ void NetworkClientManager::run()
 //
 // Connection to server and send a first message
 //
-
 void NetworkClientManager::startConnection(const QString &ip, quint16 port)
 {
-    _client.setProtocol(_DEFAULT_PROTOCOL);
-    _client.addCaCertificates(_ENCRYPTION_CERTIFICATE_FILE);
-    _client.connectToHostEncrypted(ip, port);
-    if (_client.waitForEncrypted(3000))
-    {
-        qDebug() << "Client connected";
-        AInstructionModel *instruction = new AInstructionModel;
-        QByteArray *a = instruction->getByteArray();
-        *a = "allo?";
-        writeMsg(instruction);
-    }
-    else
-    {
-        qDebug() << "Error: " << _client.errorString();
-    }
+    _socket.setProtocol(_DEFAULT_PROTOCOL);
+    _socket.addCaCertificates(_ENCRYPTION_CERTIFICATE_FILE);
+    _socket.connectToHostEncrypted(ip, port);
+    if (!_socket.waitForEncrypted(15000))
+        qDebug() << "Error:" << _socket.errorString();
 }
 
 //
 // Disconnect socket from host
 //
-
 void NetworkClientManager::disconnect()
 {
-    _client.close();
+    _socket.close();
 }
 
 //
-// Send to the server through the network message
 //
-
-bool NetworkClientManager::writeMsg(AInstructionModel *instruction)
+//
+void NetworkClientManager::onInstructionPushed()
 {
-    if (_client.write(*(instruction->getByteArray())) == -1)
+    ANetworkInstruction *instruction = static_cast<ANetworkInstruction *>(_popInstruction());
+    qint64 writtenSize = 0, ret = 0;
+    QByteArray buffer;
+
+    qDebug() << Q_FUNC_INFO;
+    if (!instruction)
     {
-        qDebug() << "Error message not send";
-        return (false);
+        qDebug() << "Error: Bad news, there is no instruction in the queue";
+        return ;
     }
-  return (true);
+    buffer = instruction->getRawData();
+    while (writtenSize != instruction->getRawData().size())
+    {
+        if ((ret = _socket.write(buffer, buffer.size())) == -1)
+        {
+            qDebug() << "Error: An error occured while trying to write";
+            disconnect();
+            break ;
+        }
+        else if (ret == 0)
+        {
+            qDebug() << "Warning: Trying to write too much data";
+            break ;
+        }
+        writtenSize += ret;
+        if (writtenSize < ret)
+            buffer = buffer.left(ret);
+    }
+    delete instruction;
 }
 
 //
-// Read message from the server and return AInstructionModel
+// Read message from the server and push an AInstruction
+// to the instruction bus
 //
-
-QByteArray *NetworkClientManager::readMsg()
+void NetworkClientManager::onReadyRead()
 {
-    QByteArray *byteArray = new QByteArray();
+    ANetworkInstruction *instruction = _inputBuffer;
+    qint64 bytesAvailable = _socket.bytesAvailable(), readSize = -1, ret = -1;
+    QByteArray buffer;
 
-    *byteArray = _client.read(1024);
-    qDebug() << "Incoming data :" << *byteArray;
-    return (byteArray);
+    qDebug() << Q_FUNC_INFO;
+
+    while (bytesAvailable > 0)
+    {
+        if (!instruction)
+        {
+            instruction = new ANetworkInstruction();
+            instruction->setLocalTransmitter(this);
+            _inputBuffer = instruction;
+        }
+        if (bytesAvailable <= instruction->getNextReadSize())
+            readSize = bytesAvailable;
+        else if (bytesAvailable > instruction->getNextReadSize())
+            readSize = instruction->getNextReadSize();
+        buffer.resize(readSize);
+        if ((ret = _socket.read(buffer.data(), readSize)) == -1)
+        {
+            qDebug() << "Error: An error occured while trying to read";
+            disconnect();
+            return ;
+        }
+        else if (ret == 0)
+        {
+            qDebug() << "Warning: Trying to read more data than available";
+            break ;
+        }
+        buffer.resize(ret);
+        instruction->append(buffer);
+        bytesAvailable -= ret;
+        qDebug() << "Had read" << ret << "bytes";
+        qDebug() << buffer;
+        if (!instruction->getNextReadSize())
+        {
+            mainController->getInstructionBus().pushInstruction(instruction);
+            _inputBuffer = NULL;
+        }
+    }
 }
 
 //
-// Handle disconnected QSslSocket signal
+// Handle QSslSocket disconnected signal
 //
-
 void NetworkClientManager::onDisconnected()
 {
     qDebug() << "Disconnected from host";

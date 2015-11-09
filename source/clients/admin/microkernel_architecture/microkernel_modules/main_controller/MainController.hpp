@@ -3,6 +3,7 @@
 
 # include <QGuiApplication>
 # include "FunctionalitiesManager.hpp"
+# include "InstructionBus.hpp"
 
 class MainController : QObject
 {
@@ -11,12 +12,20 @@ class MainController : QObject
 private:
     QGuiApplication _qtCore;
     FunctionalitiesManager _fctsManager;
+    InstructionBus _instructionBus;
 
 public:
     MainController(int &, char **);
     ~MainController();
 
     int run();
+    InstructionBus &getInstructionBus();
 };
+
+# ifndef __MAIN_CONTROLLER_NO_GLOBAL_DECL
+
+extern MainController *mainController;
+
+# endif // !__MAIN_CONTROLLER_NO_GLOBAL_DECL
 
 #endif // !MAIN_CONTROLLER_HPP_

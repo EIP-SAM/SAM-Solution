@@ -10,7 +10,7 @@ private:
     QQmlApplicationEngine _qmlEngine;
 
 public:
-    explicit GUIController(QObject *parent = 0);
+    GUIController();
     virtual ~GUIController();
 
     void init();

@@ -2,9 +2,10 @@
 #include "AInstruction.hpp"
 
 #include <QDebug>
+#include <QThread>
 
-AInstructionBusClient::AInstructionBusClient(QObject *parent)
-    : QObject(parent), _clientId(INVALID)
+AInstructionBusClient::AInstructionBusClient(eClientId clientId)
+    : QObject(), _clientId(clientId)
 {
 }
 
@@ -28,6 +29,7 @@ void AInstructionBusClient::pushInstruction(AInstruction *instruction)
 {
     QMutexLocker locker(&_mutex);
 
+    qDebug() << Q_FUNC_INFO << QThread::currentThreadId();
     _instructions.enqueue(instruction);
 }
 
@@ -38,6 +40,7 @@ void AInstructionBusClient::pushInstruction(AInstruction *instruction)
 //
 void AInstructionBusClient::enableInstructionPushedSlot()
 {
+    qDebug() << Q_FUNC_INFO << QThread::currentThreadId();
     _slotEnabled = true;
 }
 
@@ -81,5 +84,5 @@ AInstruction *AInstructionBusClient::_popInstruction()
 //
 void AInstructionBusClient::onInstructionPushed()
 {
-    qDebug() << Q_FUNC_INFO << ": Needs to be overrided";
+    qDebug() << Q_FUNC_INFO << QThread::currentThreadId() << ": Needs to be overrided";
 }

@@ -44,44 +44,28 @@ protected:
     //
     STRUCT_PACKED(instructionParameterHeader_t,
         unsigned int parameterType;
-        unsigned int parameterSize;
+        int parameterSize;
         // byte_t parameterData[parameterSize];
     );
 
     //
-    // The following values are often used during the creation of an
-    // `AInstruction`, this is why they are stored staticaly
-    //
-    // They represent size and offsets of the previous defined
-    // structure and their members
+    // The following values are often used during the creation
+    // or during the reading/filling of an `AInstruction`
     //
     // Regarding `instructionHeader_t`
-    static const std::size_t _INSTRUCTION_HEADER_SIZE;
-    static const std::size_t _MAGIC_NUMBER_OFFSET;
-    static const std::size_t _FIRST_TRANSMITTER_ID_OFFSET;
-    static const std::size_t _FINAL_RECEIVER_ID_OFFSET;
-    static const std::size_t _INSTRUCTION_CODE_OFFSET;
-    static const std::size_t _RETURN_TYPE_OFFSET;
-    static const std::size_t _NUMBER_OF_PARAMETERS_OFFSET;
-    static const std::size_t _FIRST_PARAMETER_OFFSET;
+    static const int _INSTRUCTION_HEADER_SIZE;
+    static const int _FIRST_PARAMETER_OFFSET;
     //
     // Regarding `instructionParameterHeader_t`
-    static const std::size_t _INSTRUCTION_PARAMETER_HEADER_SIZE;
-    static const std::size_t _PARAMETER_TYPE_OFFSET;
-    static const std::size_t _PARAMETER_SIZE_OFFSET;
-    static const std::size_t _PARAMETER_DATA_OFFSET;
+    static const int _INSTRUCTION_PARAMETER_HEADER_SIZE;
+    static const int _PARAMETER_DATA_OFFSET;
 
 protected:
     QByteArray _data;
     AInstructionBusClient *_localTransmitter = NULL;
     //
     // Pointers to data
-    unsigned int *_magicNumber = NULL;
-    AInstructionBusClient::eClientId *_firstTransmitterId = NULL;
-    AInstructionBusClient::eClientId *_finalReceiverId = NULL;
-    unsigned int *_instructionCode = NULL;
-    unsigned int *_returnType = NULL;
-    unsigned int *_numberOfParameters = NULL;
+    instructionHeader_t *_header = NULL;
     void *_parametersData = NULL;
 
 public:

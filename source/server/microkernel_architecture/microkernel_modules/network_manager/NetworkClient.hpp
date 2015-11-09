@@ -2,6 +2,7 @@
 # define NETWORK_CLIENT_HPP_
 
 # include <QSslSocket>
+# include "ANetworkInstruction.hpp"
 
 class NetworkClient : public QObject
 {
@@ -10,9 +11,12 @@ class NetworkClient : public QObject
 private:
     QSslSocket _socket;
     qintptr _socketDescriptor = -1;
+    quint64 _clientId = 0;
+    ANetworkInstruction *_inputBuffer = NULL;
+    ANetworkInstruction *_outputBuffer = NULL;
 
 public:
-    explicit NetworkClient(QObject *parent = 0);
+    NetworkClient(quint64 clientId, QObject *parent = 0);
     ~NetworkClient();
 
     bool start(QSsl::SslProtocol protocol,
@@ -22,6 +26,13 @@ public:
     void close();
     qint64 bytesAvailable() const;
     qint64 bytesToWrite() const;
+    qintptr getSocketDescriptor() const;
+    quint64 getClientId() const;
+    ANetworkInstruction *getInputBuffer() const;
+    ANetworkInstruction *getOutputBuffer() const;
+
+    void setInputBuffer(ANetworkInstruction *);
+    void setOutputBuffer(ANetworkInstruction *);
 
 signals:
     void readyRead(qintptr socketDescriptor);
@@ -30,8 +41,8 @@ signals:
     void encryptionErrors(qintptr socketDescriptor, QList<QSslError> errors);
 
 public slots:
-    qint64 write(const char *data, qint64 size);
-    qint64 read(char *data, qint64 size);
+    qint64 write(const QByteArray &data, qint64 size);
+    qint64 read(QByteArray &data, qint64 size);
     void onReadyRead();
     void onBytesWritten(qint64 size);
     void onEncryptedState();

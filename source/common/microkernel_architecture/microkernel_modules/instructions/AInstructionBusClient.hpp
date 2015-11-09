@@ -24,7 +24,10 @@ public:
         ALL = 1,
 
         NETWORK_MANAGER = 2,
-        GUI = 3
+        GUI = 3,
+
+        HELLO_WORLD_FOO = 4, // test fct
+        HELLO_WORLD_BAR = 5 // test fct
     };
 
 private:
@@ -36,7 +39,7 @@ protected:
     eClientId _clientId;
 
 public:
-    AInstructionBusClient(QObject *parent = 0);
+    AInstructionBusClient(eClientId clientId = INVALID);
     virtual ~AInstructionBusClient();
 
     void pushInstruction(AInstruction *);

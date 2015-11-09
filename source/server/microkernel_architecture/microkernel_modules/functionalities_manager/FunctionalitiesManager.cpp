@@ -1,17 +1,13 @@
 #include "FunctionalitiesManager.hpp"
 #include "NetworkServerManager.hpp"
 
-//
-// Constructor : does nothing
-//
+#include "HelloWorldFunctionality.hpp"
+
 FunctionalitiesManager::FunctionalitiesManager(QObject *parent)
     : AFunctionalitiesManager(parent)
 {
 }
 
-//
-// Destructor : does nothing
-//
 FunctionalitiesManager::~FunctionalitiesManager()
 {
 }
@@ -41,4 +37,5 @@ void FunctionalitiesManager::_setInternalFcts()
 
 void FunctionalitiesManager::_setExternalFcts()
 {
+    _externalFcts << new HelloWorldFunctionality(); // temporary
 }

@@ -4,9 +4,12 @@
 
 #include <QDebug>
 
-InstructionBus::InstructionBus()
-    : _thread(NULL), _mutex(NULL)
+InstructionBus::InstructionBus(QObject *parent)
+    : QObject(parent), _thread(NULL), _mutex(NULL)
 {
+    // for testing purposes
+    _remoteClientsRegister << AInstructionBusClient::eClientId::HELLO_WORLD_FOO;
+    _remoteClientsRegister << AInstructionBusClient::eClientId::HELLO_WORLD_BAR;
 }
 
 InstructionBus::~InstructionBus()
@@ -29,6 +32,7 @@ InstructionBus::~InstructionBus()
 //
 bool InstructionBus::init()
 {
+    qDebug() << Q_FUNC_INFO << QThread::currentThreadId();
     if (_thread)
     {
         qDebug() << "Warning: Instruction bus already initialized, does nothing";
@@ -42,6 +46,7 @@ bool InstructionBus::init()
         _thread = NULL;
         return false;
     }
+    this->moveToThread(_thread);
     if (!connect(_thread, SIGNAL(started()), this, SLOT(_run())))
     {
         qDebug() << "Error: Fatal error in" << Q_FUNC_INFO;
@@ -61,6 +66,8 @@ bool InstructionBus::init()
 //
 bool InstructionBus::registerClient(AInstructionBusClient::eClientId clientId, AInstructionBusClient *client)
 {
+    qDebug() << Q_FUNC_INFO << QThread::currentThreadId();
+
     if (!_thread || !_mutex)
     {
         qDebug() << "Error: Instruction bus not yet initialized";
@@ -85,6 +92,8 @@ bool InstructionBus::registerClient(AInstructionBusClient::eClientId clientId, A
         }
         _localClientsRegister.insert(clientId, client);
         _transmitterClientsInstructions.insert(client, instructionsQueue);
+        qDebug() << "Success: Client" << client << "with id" << clientId
+                 << "successfuly registered";
         return true;
     }
     qDebug() << "Error: A client is already registered with this client id";
@@ -102,6 +111,7 @@ bool InstructionBus::pushInstruction(AInstruction *instruction)
     AInstructionBusClient *transmiterClient = NULL;
     QMutexLocker locker(_mutex);
 
+    qDebug() << Q_FUNC_INFO << QThread::currentThreadId();
     if (!_thread || !_mutex)
     {
         qDebug() << "Error: Instruction bus not yet initialized";
@@ -140,7 +150,7 @@ void InstructionBus::_run()
     QMap<AInstructionBusClient*, QQueue<AInstruction*>*>::iterator it;
     QQueue<AInstruction *> *instructionsQueue = NULL;
 
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << QThread::currentThreadId();
     while (42)
     {
         _mutex->lock();
@@ -149,7 +159,10 @@ void InstructionBus::_run()
         {
             instructionsQueue = *it;
             while (!instructionsQueue->empty())
+            {
                 _dispatchInstruction(instructionsQueue->dequeue());
+            }
+            ++it;
         }
         _mutex->unlock();
         QThread::msleep(30);
@@ -164,6 +177,7 @@ inline void InstructionBus::_dispatchInstruction(AInstruction *instruction)
 {
     AInstructionBusClient *receiverClient = NULL;
 
+    qDebug() << Q_FUNC_INFO << QThread::currentThreadId();
     if (!instruction)
         return ;
     if (!_localClientsRegister.contains(instruction->getFinalReceiver()))
@@ -180,5 +194,6 @@ inline void InstructionBus::_dispatchInstruction(AInstruction *instruction)
     else
         receiverClient = _localClientsRegister[instruction->getFinalReceiver()];
     receiverClient->pushInstruction(instruction);
+    qDebug() << "Instruction pushed to client id" << receiverClient->getClientId();
     emit receiverClient->instructionPushed();
 }

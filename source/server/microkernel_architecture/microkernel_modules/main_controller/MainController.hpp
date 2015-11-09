@@ -1,7 +1,7 @@
 #ifndef MAIN_CONTROLLER_HPP_
 # define MAIN_CONTROLLER_HPP_
 
-# include <QGuiApplication>
+# include <QCoreApplication>
 # include "FunctionalitiesManager.hpp"
 # include "InstructionBus.hpp"
 
@@ -10,7 +10,7 @@ class MainController : QObject
     Q_OBJECT
 
 private:
-    QGuiApplication _qtCore;
+    QCoreApplication _qtCore;
     FunctionalitiesManager _fctsManager;
     InstructionBus _instructionBus;
 
@@ -19,6 +19,13 @@ public:
     ~MainController();
 
     int run();
+    InstructionBus &getInstructionBus();
 };
+
+# ifndef __MAIN_CONTROLLER_NO_GLOBAL_DECL
+
+extern MainController *mainController;
+
+# endif // !__MAIN_CONTROLLER_NO_GLOBAL_DECL
 
 #endif // !MAIN_CONTROLLER_HPP_

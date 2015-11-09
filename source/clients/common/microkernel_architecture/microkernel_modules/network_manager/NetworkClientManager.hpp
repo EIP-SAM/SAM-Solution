@@ -2,7 +2,7 @@
 # define NETWORK_CLIENT_MANAGER_HPP_
 
 # include <QSslSocket>
-# include "AInstructionModel.hpp"
+# include "ANetworkInstruction.hpp"
 # include "AFunctionality.hpp"
 
 class NetworkClientManager : public AFunctionality
@@ -13,10 +13,12 @@ private:
     static const QString _ENCRYPTION_CERTIFICATE_FILE;
     static const QSsl::SslProtocol _DEFAULT_PROTOCOL;
 
-    QSslSocket _client;
+    QSslSocket _socket;
+    ANetworkInstruction *_inputBuffer = NULL;
+    ANetworkInstruction *_outputBuffer = NULL;
 
 public:
-    explicit NetworkClientManager(QObject *parent = 0);
+    NetworkClientManager();
     virtual ~NetworkClientManager();
 
     void startConnection(const QString &ip, quint16 port);
@@ -24,8 +26,10 @@ public:
 
 public slots:
     virtual void run();
-    bool writeMsg(AInstructionModel *instruction);
-    QByteArray *readMsg();
+    virtual void onInstructionPushed();
+
+private slots:
+    void onReadyRead();
     void onDisconnected();
 };
 

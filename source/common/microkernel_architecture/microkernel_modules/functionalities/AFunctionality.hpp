@@ -18,8 +18,9 @@ private:
     bool _running;
     bool _threaded;
 
+protected:
+    AFunctionality(eClientId clientId);
 public:
-    AFunctionality(QObject *parent = 0);
     virtual ~AFunctionality();
 
     bool start();

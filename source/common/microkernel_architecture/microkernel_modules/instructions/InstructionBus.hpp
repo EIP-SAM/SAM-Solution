@@ -20,7 +20,7 @@ private:
     QMap<AInstructionBusClient *, QQueue<AInstruction *> *> _transmitterClientsInstructions;
 
 public:
-    InstructionBus();
+    explicit InstructionBus(QObject *parent = 0);
     ~InstructionBus();
 
     bool init();

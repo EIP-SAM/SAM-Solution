@@ -1,7 +1,7 @@
 #include "GUIController.hpp"
 
-GUIController::GUIController(QObject *parent)
-    : AFunctionality(parent), _qmlEngine(this)
+GUIController::GUIController()
+    : AFunctionality(GUI), _qmlEngine(this)
 {
 }
 

@@ -1,12 +1,14 @@
 #include "AFunctionality.hpp"
+#include "MainController.hpp"
 
 //
 // Constructor and Destructor
 //
-AFunctionality::AFunctionality(QObject *parent)
-    : AInstructionBusClient(parent),
+AFunctionality::AFunctionality(eClientId clientId)
+    : AInstructionBusClient(clientId),
       _thread(NULL), _running(false), _threaded(true)
 {
+    mainController->getInstructionBus().registerClient(_clientId, this);
 }
 
 AFunctionality::~AFunctionality()

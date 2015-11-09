@@ -1,4 +1,5 @@
 #include "AFunctionalitiesManager.hpp"
+#include "MainController.hpp"
 
 //
 // Constructor and Destructor
@@ -17,8 +18,6 @@ AFunctionalitiesManager::~AFunctionalitiesManager()
     _internalFcts.clear();
     qDeleteAll(_microkernelFcts);
     _microkernelFcts.clear();
-//    qDeleteAll(_runningFcts);
-//    _runningFcts.clear();
 }
 
 //
@@ -109,7 +108,11 @@ AFunctionality *AFunctionalitiesManager::loadLibrary(const QString &name)
 //
 void AFunctionalitiesManager::_functionalityStarted()
 {
-    _runningFcts << static_cast<AFunctionality *>(QObject::sender());
+    AFunctionality *fct = NULL;
+
+    fct = static_cast<AFunctionality *>(QObject::sender());
+//    mainController->getInstructionBus().registerClient(fct->getClientId(), fct);
+    _runningFcts << fct;
 }
 
 //
