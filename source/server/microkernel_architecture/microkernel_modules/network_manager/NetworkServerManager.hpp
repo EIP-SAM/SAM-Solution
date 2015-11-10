@@ -39,6 +39,7 @@ private:
     bool _initEncryptionCertificate(const QString &file);
     bool _listen(quint16 portNumber);
     void _deleteClient(NetworkClient *);
+    bool _bindClientSignalsToSlots(NetworkClient *client);
 
 private slots:
     void _incomingConnection(qintptr socketDescriptor);

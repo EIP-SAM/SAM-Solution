@@ -8,14 +8,6 @@ NetworkClient::NetworkClient(quint64 clientId, QObject *parent)
     : QObject(parent), _socket(this), _clientId(clientId)
 {
     qDebug() << Q_FUNC_INFO;
-    connect(&_socket, SIGNAL(bytesWritten(qint64)),
-            this, SLOT(onBytesWritten(qint64)));
-    connect(&_socket, SIGNAL(encrypted()),
-            this, SLOT(onEncryptedState()));
-    connect(&_socket, SIGNAL(disconnected()),
-            this, SLOT(onDisconnectedState()));
-    connect(&_socket, SIGNAL(sslErrors(QList<QSslError>)),
-            this, SLOT(onEncryptionErrors(QList<QSslError>)));
 }
 
 //
@@ -26,6 +18,9 @@ NetworkClient::~NetworkClient()
     qDebug() << Q_FUNC_INFO;
     disconnect(&_socket, 0, 0, 0);
     disconnect(this, 0, 0, 0);
+    close();
+    delete _inputBuffer;
+    delete _outputBuffer;
 }
 
 //
@@ -37,6 +32,8 @@ bool NetworkClient::start(QSsl::SslProtocol protocol,
                           const QSslCertificate &encryptionCertificate)
 {
     qDebug() << Q_FUNC_INFO;
+    if (!_bindSocketSignalsToSlots())
+        return false;
     _socketDescriptor = socketDescriptor;
     _socket.setProtocol(protocol);
     _socket.addCaCertificate(encryptionCertificate);
@@ -57,11 +54,27 @@ bool NetworkClient::start(QSsl::SslProtocol protocol,
 }
 
 //
+// Bind `_socket` signals to `this` slots
+//
+bool NetworkClient::_bindSocketSignalsToSlots()
+{
+    return (connect(&_socket, SIGNAL(bytesWritten(qint64)),
+                    this, SLOT(_onBytesWritten(qint64))) &&
+            connect(&_socket, SIGNAL(encrypted()),
+                    this, SLOT(_onEncryptedState())) &&
+            connect(&_socket, SIGNAL(disconnected()),
+                    this, SLOT(_onDisconnectedState())) &&
+            connect(&_socket, SIGNAL(sslErrors(QList<QSslError>)),
+                    this, SLOT(_onEncryptionErrors(QList<QSslError>))));
+}
+
+//
 //
 //
 void NetworkClient::close()
 {
     qDebug() << Q_FUNC_INFO;
+    _socket.close();
 }
 
 //
@@ -151,7 +164,7 @@ qint64 NetworkClient::write(const QByteArray &data, qint64 size)
 //
 // Redirect QSslSocket signal to NetworkClient
 //
-void NetworkClient::onReadyRead()
+void NetworkClient::_onReadyRead()
 {
     qDebug() << Q_FUNC_INFO;
     emit readyRead(_socketDescriptor);
@@ -160,7 +173,7 @@ void NetworkClient::onReadyRead()
 //
 // Redirect QSslSocket signal to NetworkClient
 //
-void NetworkClient::onBytesWritten(qint64 size)
+void NetworkClient::_onBytesWritten(qint64 size)
 {
     qDebug() << Q_FUNC_INFO;
     emit bytesWritten(_socketDescriptor, size);
@@ -169,18 +182,18 @@ void NetworkClient::onBytesWritten(qint64 size)
 //
 // Handle encrypted state event
 //
-void NetworkClient::onEncryptedState()
+void NetworkClient::_onEncryptedState()
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << _socketDescriptor
              << "QSsl::TlsV1_2 connexion successfuly established";
-    connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    connect(&_socket, SIGNAL(readyRead()), this, SLOT(_onReadyRead()));
 }
 
 //
 // Handle disconnected state event
 //
-void NetworkClient::onDisconnectedState()
+void NetworkClient::_onDisconnectedState()
 {
     qDebug() << Q_FUNC_INFO;
     emit disconnected(_socket.socketDescriptor());
@@ -189,7 +202,7 @@ void NetworkClient::onDisconnectedState()
 //
 // Handle encryption errors event
 //
-void NetworkClient::onEncryptionErrors(QList<QSslError> errors)
+void NetworkClient::_onEncryptionErrors(QList<QSslError> errors)
 {
     qDebug() << Q_FUNC_INFO;
     emit encryptionErrors(_socketDescriptor, errors);

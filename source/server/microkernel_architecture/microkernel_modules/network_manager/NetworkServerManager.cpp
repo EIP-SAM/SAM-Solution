@@ -134,25 +134,33 @@ void NetworkServerManager::_incomingConnection(qintptr socketDescriptor)
 
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << socketDescriptor << "New client connected";
-    if (client->start(_DEFAULT_PROTOCOL, socketDescriptor,
+    if (_bindClientSignalsToSlots(client) &&
+        client->start(_DEFAULT_PROTOCOL, socketDescriptor,
                       *_encryptionKey, *_encryptionCertificate))
     {
         _clientSockets[socketDescriptor] = client;
         _clientIds[client->getClientId()] = client;
-        connect(client, SIGNAL(readyRead(qintptr)),
-                this, SLOT(_onClientReadyRead(qintptr)), Qt::QueuedConnection);
-        connect(client, SIGNAL(bytesWritten(qintptr, qint64)),
-                this, SLOT(_onClientBytesWritten(qintptr, qint64)), Qt::QueuedConnection);
-        connect(client, SIGNAL(disconnected(qintptr)),
-                this, SLOT(_deleteClient(qintptr)), Qt::QueuedConnection);
-        connect(client, SIGNAL(encryptionErrors(qintptr, QList<QSslError>)),
-                this, SLOT(_onClientEncryptionError(qintptr, QList<QSslError>)), Qt::QueuedConnection);
     }
     else
     {
         qDebug() << "" << socketDescriptor << " Error during client initialization";
         delete client;
     }
+}
+
+//
+// Bind `NetworkClient` signals to `this` slots
+//
+bool NetworkServerManager::_bindClientSignalsToSlots(NetworkClient *client)
+{
+    return (connect(client, SIGNAL(readyRead(qintptr)),
+                    this, SLOT(_onClientReadyRead(qintptr)), Qt::QueuedConnection) &&
+            connect(client, SIGNAL(bytesWritten(qintptr, qint64)),
+                    this, SLOT(_onClientBytesWritten(qintptr, qint64)), Qt::QueuedConnection) &&
+            connect(client, SIGNAL(disconnected(qintptr)),
+                    this, SLOT(_deleteClient(qintptr)), Qt::QueuedConnection) &&
+            connect(client, SIGNAL(encryptionErrors(qintptr, QList<QSslError>)),
+                    this, SLOT(_onClientEncryptionError(qintptr, QList<QSslError>)), Qt::QueuedConnection));
 }
 
 //
