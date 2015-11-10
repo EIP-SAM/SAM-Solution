@@ -27,7 +27,7 @@ NetworkClientManager::~NetworkClientManager()
 // Entry point of the functionality
 // Start the network client
 //
-void NetworkClientManager::run()
+void NetworkClientManager::_run()
 {
     qDebug() << Q_FUNC_INFO;
     startConnection("localhost", 42042);

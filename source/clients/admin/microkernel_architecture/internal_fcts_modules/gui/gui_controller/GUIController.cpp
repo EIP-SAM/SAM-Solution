@@ -9,7 +9,7 @@ GUIController::~GUIController()
 {
 }
 
-void GUIController::run()
+void GUIController::_run()
 {
     init();
 }

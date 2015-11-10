@@ -48,7 +48,7 @@ private slots:
     void _onClientEncryptionError(qintptr socketDescriptor, QList<QSslError> errors);
 
 protected slots:
-    virtual void run();
+    virtual void _run();
     virtual void onInstructionPushed();
 };
 

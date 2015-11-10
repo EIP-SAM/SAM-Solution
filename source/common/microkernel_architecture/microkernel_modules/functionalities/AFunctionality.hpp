@@ -20,6 +20,7 @@ private:
 
 protected:
     AFunctionality(eClientId clientId);
+
 public:
     virtual ~AFunctionality();
 
@@ -30,8 +31,8 @@ public:
     bool isThreaded() const;
     bool isRunning() const;
 
-public slots:
-    virtual void run() = 0;
+protected slots:
+    virtual void _run() = 0;
 
 private slots:
     void _fctStarted();

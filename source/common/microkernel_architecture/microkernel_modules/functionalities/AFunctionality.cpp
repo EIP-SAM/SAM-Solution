@@ -30,7 +30,7 @@ bool AFunctionality::start()
         _thread = new QThread();
         this->moveToThread(_thread);
         if (!connect(_thread, SIGNAL(started()), this, SLOT(_fctStarted())) ||
-            !connect(_thread, SIGNAL(started()), this, SLOT(run())) ||
+            !connect(_thread, SIGNAL(started()), this, SLOT(_run())) ||
             !connect(_thread, SIGNAL(finished()), this, SLOT(_fctFinished())))
             return false;
 	    _thread->start();
@@ -38,7 +38,7 @@ bool AFunctionality::start()
     else
     {
         _fctStarted();
-        run();
+        _run();
     }
     return true;
 }

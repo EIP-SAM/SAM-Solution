@@ -9,7 +9,7 @@ HelloWorldFunctionality::HelloWorldFunctionality()
     // SERVER TEST FUNCTIONALITY
 }
 
-void HelloWorldFunctionality::run()
+void HelloWorldFunctionality::_run()
 {
     AInstruction *inputInstruction = NULL;
     ANetworkInstruction *inputInstruction2 = NULL;

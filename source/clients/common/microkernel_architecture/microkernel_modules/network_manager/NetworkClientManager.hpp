@@ -25,8 +25,10 @@ public:
     void disconnect();
 
 public slots:
-    virtual void run();
     virtual void onInstructionPushed();
+
+protected slots:
+    virtual void _run();
 
 private slots:
     void onReadyRead();

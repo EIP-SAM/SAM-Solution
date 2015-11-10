@@ -38,7 +38,7 @@ NetworkServerManager::~NetworkServerManager()
 //
 // Entry point
 //
-void NetworkServerManager::run()
+void NetworkServerManager::_run()
 {
     connect(&_server, SIGNAL(hasIncomingConnection(qintptr)),
             this, SLOT(_incomingConnection(qintptr)));

@@ -17,8 +17,8 @@ public:
 
     void init();
 
-public slots:
-    virtual void run();
+protected slots:
+    virtual void _run();
 };
 
 #endif // !GUI_CONTROLLER_HPP_

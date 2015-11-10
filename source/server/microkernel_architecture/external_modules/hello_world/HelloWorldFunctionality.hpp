@@ -15,7 +15,8 @@ class HelloWorldFunctionality : public AFunctionality
 public:
     HelloWorldFunctionality();
 
-    virtual void run();
+protected slots:
+    virtual void _run();
 };
 
 #endif // !HELLO_WORLD_FUNCTIONALITY_HPP_
