@@ -24,11 +24,7 @@ void FunctionalitiesManager::_setFcts()
 
 void FunctionalitiesManager::_setMicrokernelFcts()
 {
-    AFunctionality *fct = NULL;
-
-    fct = new NetworkServerManager();
-    fct->setThreaded(false);
-    _microkernelFcts << fct;
+    _microkernelFcts << new NetworkServerManager(false);
 }
 
 void FunctionalitiesManager::_setInternalFcts()

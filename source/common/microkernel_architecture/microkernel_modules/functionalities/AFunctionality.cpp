@@ -4,10 +4,12 @@
 //
 // Constructor and Destructor
 //
-AFunctionality::AFunctionality(eClientId clientId)
+AFunctionality::AFunctionality(eClientId clientId, bool threaded)
     : AInstructionBusClient(clientId),
-      _thread(NULL), _running(false), _threaded(true)
+      _thread(NULL), _running(false), _threaded(threaded)
 {
+    if (!_threaded)
+        connect(this, SIGNAL(instructionPushed()), this, SLOT(onInstructionPushed()));
     mainController->getInstructionBus().registerClient(_clientId, this);
 }
 
@@ -59,26 +61,6 @@ void AFunctionality::stop()
 	}
     else
         emit stopped();
-}
-
-//
-// `_threaded` attribute setter
-// Plus repercussion on the parent class when using a
-// non-threaded functionality
-//
-void AFunctionality::setThreaded(bool threaded)
-{
-    _threaded = threaded;
-    if (!_threaded)
-        connect(this, SIGNAL(instructionPushed()), this, SLOT(onInstructionPushed()));
-}
-
-//
-// `_threaded` attribute getter
-//
-bool AFunctionality::isThreaded() const
-{
-    return _threaded;
 }
 
 //

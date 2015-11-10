@@ -1,7 +1,7 @@
 #include "GUIController.hpp"
 
 GUIController::GUIController()
-    : AFunctionality(GUI), _qmlEngine(this)
+    : AFunctionality(GUI, false), _qmlEngine(this)
 {
 }
 
@@ -14,7 +14,7 @@ void GUIController::_run()
     init();
 }
 
-inline void GUIController::init()
+void GUIController::init()
 {
     _qmlEngine.load(QUrl(QStringLiteral("qrc:/microkernel_architecture/internal_fcts_modules/gui/qml/main.qml")));
 }

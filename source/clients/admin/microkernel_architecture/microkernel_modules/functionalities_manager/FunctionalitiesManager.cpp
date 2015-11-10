@@ -31,20 +31,12 @@ void FunctionalitiesManager::_setFcts()
 
 void FunctionalitiesManager::_setMicrokernelFcts()
 {
-    AFunctionality *fct = NULL;
-
-    fct = new NetworkClientManager();
-    fct->setThreaded(false);
-    _microkernelFcts << fct;
+    _microkernelFcts << new NetworkClientManager();
 }
 
 void FunctionalitiesManager::_setInternalFcts()
 {
-    AFunctionality *fct = NULL;
-
-    fct = new GUIController();
-    fct->setThreaded(false);
-    _internalFcts << fct;
+    _internalFcts << new GUIController();
 }
 
 void FunctionalitiesManager::_setExternalFcts()

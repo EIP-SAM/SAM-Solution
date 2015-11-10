@@ -16,7 +16,7 @@ class NetworkServerManager : public AFunctionality
     Q_OBJECT
 
 public:
-    NetworkServerManager();
+    NetworkServerManager(bool threaded = false);
     ~NetworkServerManager();
 
 private:

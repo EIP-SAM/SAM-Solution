@@ -15,8 +15,8 @@ const QSsl::SslProtocol NetworkServerManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 //
 // Construct network server
 //
-NetworkServerManager::NetworkServerManager()
-    : AFunctionality(NETWORK_MANAGER), _server(this)
+NetworkServerManager::NetworkServerManager(bool threaded)
+    : AFunctionality(NETWORK_MANAGER, threaded), _server(this)
 {
     qRegisterMetaType<QList<QSslError> >("QList<QSslError>");
 }

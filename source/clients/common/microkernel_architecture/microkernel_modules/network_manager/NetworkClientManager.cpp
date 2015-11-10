@@ -12,7 +12,7 @@ const QSsl::SslProtocol NetworkClientManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 // Add signal to readReady.
 //
 NetworkClientManager::NetworkClientManager()
-    : AFunctionality(NETWORK_MANAGER), _socket(this)
+    : AFunctionality(NETWORK_MANAGER, false), _socket(this)
 {
     connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
     connect(&_socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));

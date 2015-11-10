@@ -1,7 +1,7 @@
 #include "GUIController.hpp"
 
 GUIController::GUIController()
-    : AFunctionality(GUI), _qmlEngine(this)
+    : AFunctionality(GUI, false), _qmlEngine(this)
 {
 }
 

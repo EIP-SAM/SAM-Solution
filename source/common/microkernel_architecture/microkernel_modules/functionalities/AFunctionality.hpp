@@ -19,16 +19,14 @@ private:
     bool _threaded;
 
 protected:
-    AFunctionality(eClientId clientId);
+    AFunctionality(eClientId clientId, bool threaded = true);
 
 public:
     virtual ~AFunctionality();
 
     bool start();
     void stop();
-    void setThreaded(bool threaded);
 
-    bool isThreaded() const;
     bool isRunning() const;
 
 protected slots:
