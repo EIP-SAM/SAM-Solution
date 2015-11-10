@@ -21,6 +21,8 @@ NetworkClientManager::NetworkClientManager()
 NetworkClientManager::~NetworkClientManager()
 {
     disconnect();
+    delete _inputBuffer;
+    delete _outputBuffer;
 }
 
 //
