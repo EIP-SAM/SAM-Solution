@@ -13,6 +13,7 @@ class ANetworkInstruction : public AInstruction
 private:
     int _dataValidUntilPos = 0;
     quint64 _peerId = 0;
+    instructionParameterHeader_t *_parametersData = NULL;
 
 public:
     ANetworkInstruction();
@@ -26,6 +27,9 @@ public:
 
     int getNextReadSize() const;
     quint64 getPeerId() const;
+
+protected:
+    void _setPointersToData();
 
 private:
     void _append(const QByteArray &, int);

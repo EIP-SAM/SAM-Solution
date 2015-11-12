@@ -28,8 +28,9 @@ protected:
         AInstructionBusClient::eClientId finalReceiverId;
         unsigned int instructionCode;
         unsigned int returnType;
-        unsigned int numberOfParameters;
+        int numberOfParameters;
     );
+    struct instructionHeader_t;
 
     //
     // `struct instructionParameterHeader_t` represents how the data
@@ -47,6 +48,7 @@ protected:
         int parameterSize;
         // byte_t parameterData[parameterSize];
     );
+    struct instructionParameterHeader_t;
 
     //
     // The following values are often used during the creation
@@ -60,13 +62,14 @@ protected:
     static const int _INSTRUCTION_PARAMETER_HEADER_SIZE;
     static const int _PARAMETER_DATA_OFFSET;
 
+public:
+    class Parameter;
+
 protected:
     QByteArray _data;
     AInstructionBusClient *_localTransmitter = NULL;
-    //
-    // Pointers to data
     instructionHeader_t *_header = NULL;
-    void *_parametersData = NULL;
+    QList<Parameter *> _parameters;
 
 public:
     AInstruction();
@@ -81,8 +84,8 @@ public:
     void setFinalReceiver(AInstructionBusClient::eClientId);
     void setInstructionCode(unsigned int);
     void setReturnType(unsigned int);
-    void setNumberOfParameters(unsigned int);
-    void appendParameter(unsigned int, unsigned int, const void *);
+    Parameter *createParameter(int size = 0);
+    void deleteParameterNumber(int);
 
     const QByteArray &getRawData() const;
     const AInstructionBusClient *getLocalTransmitter() const;
@@ -91,12 +94,18 @@ public:
     AInstructionBusClient::eClientId getFinalReceiver() const;
     unsigned int getInstructionCode() const;
     unsigned int getReturnType() const;
-    unsigned int getNumberOfParameters() const;
-    unsigned int getParameterNumber(unsigned int, void *&) const;
+    int getNumberOfParameters() const;
+    Parameter *getParameterNumber(int) const;
 
 protected:
+    instructionParameterHeader_t *_getParameterNumber(int) const;
     void _ensureMinimumDataSize(int minSize = _INSTRUCTION_HEADER_SIZE);
-    void _setPointersToData();
+    void _setPointerToData();
+    bool _parameterIsValid(instructionParameterHeader_t *);
+    void _resizeParameter(instructionParameterHeader_t *, int);
+    void _resetPointersToParameters();
 };
+
+# include "AInstructionParameter.hpp"
 
 #endif // !AINSTRUCTION_HPP_

@@ -88,6 +88,12 @@ int ANetworkInstruction::getNextReadSize() const
     }
 }
 
+void ANetworkInstruction::_setPointersToData()
+{
+    _setPointerToData();
+    _parametersData = _header->numberOfParameters == 0 ? NULL : (instructionParameterHeader_t *)(&_data.data()[_FIRST_PARAMETER_OFFSET]);
+}
+
 quint64 ANetworkInstruction::getPeerId() const
 {
     return _peerId;

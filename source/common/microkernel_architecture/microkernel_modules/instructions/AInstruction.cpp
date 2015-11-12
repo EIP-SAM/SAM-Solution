@@ -1,5 +1,7 @@
 #include "AInstruction.hpp"
 
+#include <QDebug>
+
 //
 // See notes in header file for a description of these static members
 //
@@ -12,20 +14,20 @@ const int AInstruction::_PARAMETER_DATA_OFFSET = _INSTRUCTION_PARAMETER_HEADER_S
 AInstruction::AInstruction()
     : _data(_INSTRUCTION_HEADER_SIZE, 0)
 {
-    _setPointersToData();
+    _setPointerToData();
 }
 
 AInstruction::AInstruction(const AInstruction &o)
     : _data(o._data), _localTransmitter(o._localTransmitter)
 {
-    _setPointersToData();
+    _setPointerToData();
 }
 
 AInstruction::AInstruction(const QByteArray &data)
     : _data(data)
 {
     _ensureMinimumDataSize();
-    _setPointersToData();
+    _setPointerToData();
 }
 
 AInstruction::~AInstruction()
@@ -36,7 +38,7 @@ void AInstruction::setRawData(const QByteArray &rawData)
 {
     _data = rawData;
     _ensureMinimumDataSize();
-    _setPointersToData();
+    _setPointerToData();
 }
 
 void AInstruction::setLocalTransmitter(AInstructionBusClient *localTransmitter)
@@ -69,18 +71,46 @@ void AInstruction::setReturnType(unsigned int returnType)
     _header->returnType = returnType;
 }
 
-void AInstruction::setNumberOfParameters(unsigned int n)
+//
+AInstruction::Parameter *AInstruction::createParameter(int size)
 {
-    _header->numberOfParameters = n;
+    instructionParameterHeader_t *paramHeader = NULL;
+    Parameter *parameter = NULL;
+    int paramHeaderOffset = _data.size();
+
+    _data.append(QByteArray(_INSTRUCTION_PARAMETER_HEADER_SIZE + size, 0));
+    _setPointerToData();
+    paramHeader = (instructionParameterHeader_t *)(((char *)_header) + paramHeaderOffset);
+    if (!(parameter = new (std::nothrow) Parameter(*this, paramHeader)))
+    {
+        _data.resize(paramHeaderOffset);
+        _setPointerToData();
+        return NULL;
+    }
+    ++_header->numberOfParameters;
+    paramHeader->parameterSize = size;
+    _parameters << parameter;
+    return parameter;
 }
 
-void AInstruction::appendParameter(unsigned int parameterType,
-                                   unsigned int parameterSize,
-                                   const void *rawParameterData)
+//
+// delete in list + in raw data
+// -- nb params
+//
+void AInstruction::deleteParameterNumber(int n)
 {
-    (void)parameterType;
-    (void)parameterSize;
-    (void)rawParameterData;
+    instructionParameterHeader_t *parameterHeader = NULL;
+    QByteArray newData;
+
+    if (!n || _parameters.size() < n)
+        return ;
+    parameterHeader = _parameters[n - 1]->getHeader();
+    newData.append(_data.left(((char *)parameterHeader) - ((char *)_header)));
+    newData.append(_data.right(((char *)parameterHeader) - ((char *)_header) + _INSTRUCTION_PARAMETER_HEADER_SIZE + parameterHeader->parameterSize));
+    delete _parameters[n - 1];
+    _parameters.removeAt(n - 1);
+    _data = newData;
+    _resetPointersToParameters();
 }
 
 const QByteArray &AInstruction::getRawData() const
@@ -118,16 +148,27 @@ unsigned int AInstruction::getReturnType() const
     return _header->returnType;
 }
 
-unsigned int AInstruction::getNumberOfParameters() const
+int AInstruction::getNumberOfParameters() const
 {
     return _header->numberOfParameters;
 }
 
-unsigned int AInstruction::getParameterNumber(unsigned int n, void *&data) const
+//
+AInstruction::Parameter *AInstruction::getParameterNumber(int n) const
 {
-    (void)n;
-    (void)data;
-    return 0; // size of param
+    if (!n || n > _parameters.size() || n > _header->numberOfParameters)
+        return NULL;
+    return _parameters[n - 1];
+}
+
+//
+AInstruction::instructionParameterHeader_t *AInstruction::_getParameterNumber(int n) const
+{
+    Parameter *parameter = getParameterNumber(n);
+
+    if (parameter)
+        return parameter->getHeader();
+    return NULL;
 }
 
 void AInstruction::_ensureMinimumDataSize(int minSize)
@@ -139,10 +180,62 @@ void AInstruction::_ensureMinimumDataSize(int minSize)
 //
 // Note: Do not check if `_data` is big enough
 //
-void AInstruction::_setPointersToData()
+inline void AInstruction::_setPointerToData()
 {
-    char *data = _data.data();
+    _header = (instructionHeader_t *)_data.data();
+}
 
-    _header = (instructionHeader_t *)data;
-    _parametersData = _header->numberOfParameters == 0 ? NULL : (void *)(&data[_FIRST_PARAMETER_OFFSET]);
+//
+bool AInstruction::_parameterIsValid(instructionParameterHeader_t *parameterHeader)
+{
+    instructionParameterHeader_t *parameterHeaderCmp = NULL;
+    unsigned int paramN = 1;
+
+    if (!parameterHeader)
+        return false;
+    while (parameterHeader != (parameterHeaderCmp = _getParameterNumber(paramN++)) && parameterHeaderCmp);
+    return parameterHeaderCmp && parameterHeader == parameterHeaderCmp;
+}
+
+//
+// Resize the parameter if possible
+// Reset data pointers in all `AInstruction::Parameter` instanciated in
+// `_parameters`
+//
+void AInstruction::_resizeParameter(instructionParameterHeader_t *parameterHeader, int size)
+{
+    int endParameterOffset = 0;
+
+    if (_parameterIsValid(parameterHeader) && size != parameterHeader->parameterSize)
+    {
+        QByteArray newData(_data.left(((char *)parameterHeader) - ((char *)_header)));
+
+        if (size > parameterHeader->parameterSize)
+        {
+            newData.append((char *)parameterHeader, _INSTRUCTION_PARAMETER_HEADER_SIZE + parameterHeader->parameterSize);
+            newData.append(QByteArray(size - parameterHeader->parameterSize, 0));
+        }
+        else
+            newData.append((char *)parameterHeader, _INSTRUCTION_PARAMETER_HEADER_SIZE + size);
+        endParameterOffset = (((char *)parameterHeader) + _INSTRUCTION_PARAMETER_HEADER_SIZE + parameterHeader->parameterSize) - ((char *)_header);
+        if (_data.size() > endParameterOffset)
+            newData.append(_data.mid(endParameterOffset));
+        ((instructionParameterHeader_t *)(newData.data() + (((char *)parameterHeader) - ((char *)_header))))->parameterSize = size;
+        _data = newData;
+        _resetPointersToParameters();
+    }
+}
+
+void AInstruction::_resetPointersToParameters()
+{
+    instructionParameterHeader_t *paramHeader = NULL;
+    int i = 0, paramHeaderOffset = _FIRST_PARAMETER_OFFSET;
+
+    _setPointerToData();
+    while (paramHeaderOffset < _data.size())
+    {
+        paramHeader = (instructionParameterHeader_t *)(((char *)_header) + paramHeaderOffset);
+        _parameters[i++]->setHeader(paramHeader);
+        paramHeaderOffset += _INSTRUCTION_PARAMETER_HEADER_SIZE + paramHeader->parameterSize;
+    }
 }
