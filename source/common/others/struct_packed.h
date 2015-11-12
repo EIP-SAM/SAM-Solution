@@ -10,8 +10,14 @@
 //     int foo;
 //     char bar;
 // );
+// struct toto;
 //
 // Note: (nov 2015) Works fine with g++ 5.2.0, and MSVC 2013
+// Note2: Why adding an other declaration of the structure right
+//  after the first one ? To make your IDE/Editor happy; like that
+//  you are sure that the type is well defined, and recocognized for
+//  the syntaxic coloration; plus, the indentation may be broken
+//  after the usage of the macro, so it tries to reset it
 //
 
 # if __GNUC__
