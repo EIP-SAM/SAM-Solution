@@ -10,7 +10,9 @@
 # include <QString>
 # include <QSqlRecord>
 # include <QSqlQuery>
-# include "QueryBuilder.hpp"
+# include "QueryBuilderMySql.hpp"
+
+# define MYSQL_TYPE "MYSQL"
 
 class Entity : public QObject
 {
@@ -18,6 +20,7 @@ class Entity : public QObject
 
 private:
     QSqlDatabase *_db;
+    QString _dbType;
     std::vector<QString> *_propertiesName;
     std::vector<QString> *_propertiesValue;
     bool connect();
@@ -35,8 +38,8 @@ public:
     Entity();
     virtual ~Entity();
     bool save();
-    bool deleteQuery(QueryBuilder *builder);
-    QueryBuilder *getQueryBuilder();
+    bool deleteQuery(AQueryBuilder *builder);
+    AQueryBuilder *getQueryBuilder();
 
 
     //
@@ -48,7 +51,7 @@ public:
       if (!startConnection())
 	return NULL;
 
-      QueryBuilder *builder = this->getQueryBuilder();
+      AQueryBuilder *builder = this->getQueryBuilder();
       builder->select("*")
 	->where("id = :id")
 	->bindValue(":id", id)
@@ -67,7 +70,7 @@ public:
     // Function in .hpp because of templating
     //
     template<class T>
-    std::vector<T *> request(QueryBuilder *builder)
+    std::vector<T *> request(AQueryBuilder *builder)
 	{
 	    std::vector<T *> result;
 	    QSqlRecord recQuery;

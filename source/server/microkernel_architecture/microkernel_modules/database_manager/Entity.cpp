@@ -5,6 +5,7 @@
 Entity::Entity()
 {
     _db = new QSqlDatabase();
+    _dbType = MYSQL_TYPE;
     _propertiesName = NULL;
     _propertiesValue = NULL;
 }
@@ -171,7 +172,7 @@ void Entity::getAllProperties()
 //
 // Send a query request to delete data
 //
-bool Entity::deleteQuery(QueryBuilder *builder)
+bool Entity::deleteQuery(AQueryBuilder *builder)
 {
     QSqlRecord recQuery;
 
@@ -184,7 +185,14 @@ bool Entity::deleteQuery(QueryBuilder *builder)
 // Get a new fresh instance of the
 // QueryBuilder, set with Entity data
 //
-QueryBuilder *Entity::getQueryBuilder()
+AQueryBuilder *Entity::getQueryBuilder()
 {
-    return (new QueryBuilder(this->_table, this->_db));
+    AQueryBuilder *ret = NULL;
+
+    if (this->_dbType == MYSQL_TYPE)
+	ret = new QueryBuilderMySql(this->_table, this->_db);
+    else
+	qDebug() << "Unknown database type";
+
+    return (ret);
 }

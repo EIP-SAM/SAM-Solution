@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 
-#include "QueryBuilder.hpp"
+#include "AQueryBuilder.hpp"
 #include "UsersEntity.hpp"
 
 int main(int argc, char **argv)
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
   // Test the request() function and
   // the QueryBuilder
   ////////////////////////////////////
-  QueryBuilder *builder = user.getQueryBuilder();
+  AQueryBuilder *builder = user.getQueryBuilder();
   builder->select("id, login, password")
           ->where("id > :id")
           ->orderBy("id")
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
   ////////////////////////////////////
   // Test the deleteQuery() function
   ////////////////////////////////////
-  QueryBuilder *builder2 = user.getQueryBuilder();
+  AQueryBuilder *builder2 = user.getQueryBuilder();
   builder2->deleteRow()
       ->where("id = :id")
       ->bindValue(":id", 6)
