@@ -1,13 +1,5 @@
+#define __AINSTRUCTION_PRIVATE_DEF
 #include "AInstruction.hpp"
-
-//
-// See notes in header file for a description of these static members
-//
-const magicNumber_t AInstruction::_MAGIC_NUMBER = 0x10101042;
-const int AInstruction::_INSTRUCTION_HEADER_SIZE = sizeof(AInstruction::instructionHeader_t);
-const int AInstruction::_FIRST_PARAMETER_OFFSET = _INSTRUCTION_HEADER_SIZE;
-const int AInstruction::_INSTRUCTION_PARAMETER_HEADER_SIZE = sizeof(AInstruction::instructionParameterHeader_t);
-const int AInstruction::_PARAMETER_DATA_OFFSET = _INSTRUCTION_PARAMETER_HEADER_SIZE;
 
 //
 // Construct a byte array of the size an instruction header, filled of 0
@@ -20,18 +12,22 @@ AInstruction::AInstruction()
 
 //
 // Initialize a copy of the instruction
+// Note: Consider that the other instruction data are valid
 //
 AInstruction::AInstruction(const AInstruction &o)
     : _data(o._data), _localTransmitter(o._localTransmitter)
 {
-    _setPointerToData();
-    // copy parameters
+    while (_parameters.size() != o._parameters.size())
+        _parameters << new Parameter(*this, NULL);
+    _resetPointersToParameters();
 }
 
 //
 // Initialize the instruction data with the given byte array
 // The byte array is enlarged if it doesn't have at least the size of
 // an instruction header
+// Note: Accessible to subclasses only
+// Note2: This method does not create `Parameter`s from `data`
 //
 AInstruction::AInstruction(const QByteArray &data)
     : _data(data)

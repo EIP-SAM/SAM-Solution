@@ -9,9 +9,6 @@ typedef unsigned int magicNumber_t;
 
 class AInstruction
 {
-private:
-    static const magicNumber_t _MAGIC_NUMBER;
-
 protected:
     //
     // `struct instructionHeader_t` represents how the data is
@@ -37,11 +34,11 @@ protected:
     // is supposed to be organized inside `QByteArray _data`, after
     // the bytes representing the instruction header
     //
-    // The first two parameters will be followed by
+    // The parameter header will be followed by
     // `parameterSize` bytes, these are the parameter data
     //
     // The next parameter, if any, is directly after the last
-    // parameter byte, symbolized by `parameterData[parameterSize]`
+    // parameter byte, symbolized by `// parameterData[parameterSize]`
     //
     STRUCT_PACKED(instructionParameterHeader_t,
         unsigned int parameterType;
@@ -53,6 +50,9 @@ protected:
     //
     // The following values are often used during the creation
     // or during the reading/filling of an `AInstruction`
+
+    static const magicNumber_t _MAGIC_NUMBER;
+
     //
     // Regarding `instructionHeader_t`
     static const int _INSTRUCTION_HEADER_SIZE;
@@ -107,5 +107,15 @@ protected:
 };
 
 # include "AInstructionParameter.hpp"
+
+# ifdef __AINSTRUCTION_PRIVATE_DEF
+
+const magicNumber_t AInstruction::_MAGIC_NUMBER = 0x10101042;
+const int AInstruction::_INSTRUCTION_HEADER_SIZE = sizeof(AInstruction::instructionHeader_t);
+const int AInstruction::_FIRST_PARAMETER_OFFSET = _INSTRUCTION_HEADER_SIZE;
+const int AInstruction::_INSTRUCTION_PARAMETER_HEADER_SIZE = sizeof(AInstruction::instructionParameterHeader_t);
+const int AInstruction::_PARAMETER_DATA_OFFSET = _INSTRUCTION_PARAMETER_HEADER_SIZE;
+
+# endif // !__AINSTRUCTION_PRIVATE_DEF
 
 #endif // !AINSTRUCTION_HPP_
