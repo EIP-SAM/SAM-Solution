@@ -21,6 +21,16 @@ ANetworkInstruction::~ANetworkInstruction()
 {
 }
 
+//
+//
+//
+void ANetworkInstruction::setRawData(const QByteArray &rawData)
+{
+    _data = rawData;
+    _ensureMinimumDataSize();
+    _setPointerToData();
+}
+
 void ANetworkInstruction::append(const QByteArray &data)
 {
     _append(data, _dataValidUntilPos);
@@ -86,6 +96,11 @@ int ANetworkInstruction::getNextReadSize() const
             }
         }
     }
+}
+
+const QByteArray &ANetworkInstruction::getRawData() const
+{
+    return _data;
 }
 
 void ANetworkInstruction::_setPointersToData()

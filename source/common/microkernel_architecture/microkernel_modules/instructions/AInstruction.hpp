@@ -74,10 +74,11 @@ protected:
 public:
     AInstruction();
     AInstruction(const AInstruction &);
-    AInstruction(const QByteArray &);
+protected:
+    AInstruction(const QByteArray&);
+public:
     virtual ~AInstruction();
 
-    void setRawData(const QByteArray &);
     void setLocalTransmitter(AInstructionBusClient *);
     void resetMagicNumber();
     void setFirstTransmitter(AInstructionBusClient::eClientId);
@@ -87,7 +88,6 @@ public:
     Parameter *createParameter(int size = 0);
     void deleteParameterNumber(int);
 
-    const QByteArray &getRawData() const;
     const AInstructionBusClient *getLocalTransmitter() const;
     bool isMagicNumberValid() const;
     AInstructionBusClient::eClientId getFirstTransmitter() const;

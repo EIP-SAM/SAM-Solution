@@ -25,7 +25,6 @@ void HelloWorldFunctionality::_run()
         if ((inputInstruction = _popInstruction()))
         {
             qDebug() << Q_FUNC_INFO << ": Instruction received !";
-            qDebug() << inputInstruction->getRawData();
             delete inputInstruction;
             inputInstruction = NULL;
         }

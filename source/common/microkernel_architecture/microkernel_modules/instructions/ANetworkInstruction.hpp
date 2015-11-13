@@ -21,11 +21,13 @@ public:
     ANetworkInstruction(const QByteArray &);
     virtual ~ANetworkInstruction();
 
+    void setRawData(const QByteArray &);
     void append(const QByteArray &);
     void append(const QByteArray &, int);
     void setPeerId(quint64 peerId);
 
     int getNextReadSize() const;
+    const QByteArray &getRawData() const;
     quint64 getPeerId() const;
 
 protected:

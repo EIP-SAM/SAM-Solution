@@ -23,8 +23,7 @@ void AInstruction::Parameter::setRawData(const QByteArray& data)
     if (!isValid())
         return ;
     _parent._resizeParameter(_header, data.size());
-    _header->parameterSize = data.size();//
-    rawData = ((char *)_header) + _INSTRUCTION_PARAMETER_HEADER_SIZE;
+    rawData = ((char *)_header) + _PARAMETER_DATA_OFFSET;
     while (++i != data.size())
         rawData[i] = data[i];
 }
@@ -37,9 +36,8 @@ void AInstruction::Parameter::appendRawData(const QByteArray& data)
     if (!isValid())
         return ;
     _parent._resizeParameter(_header, _header->parameterSize + data.size());
-    _header->parameterSize = _header->parameterSize + data.size();
     i += _header->parameterSize;
-    rawData = ((char *)_header) + _INSTRUCTION_PARAMETER_HEADER_SIZE;
+    rawData = ((char *)_header) + _PARAMETER_DATA_OFFSET;
     while (++i != data.size())
         rawData[i] = data[i];
 }

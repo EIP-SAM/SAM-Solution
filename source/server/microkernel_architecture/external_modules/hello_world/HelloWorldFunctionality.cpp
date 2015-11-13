@@ -21,7 +21,6 @@ void HelloWorldFunctionality::_run()
         if ((inputInstruction = _popInstruction()))
         {
             qDebug() << Q_FUNC_INFO << ": Instruction received !";
-            qDebug() << inputInstruction->getRawData();
             inputInstruction2 = static_cast<ANetworkInstruction *>(inputInstruction);
 
             outputInstruction = new ANetworkInstruction();
