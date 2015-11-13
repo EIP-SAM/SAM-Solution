@@ -1,5 +1,4 @@
 #include "NetworkClientManager.hpp"
-#include "ANetworkInstruction.hpp"
 #include "MainController.hpp"
 #include <QByteArray>
 
@@ -60,7 +59,7 @@ void NetworkClientManager::disconnect()
 //
 void NetworkClientManager::onInstructionPushed()
 {
-    ANetworkInstruction *instruction = static_cast<ANetworkInstruction *>(_popInstruction());
+    InstructionBuffer *instruction = static_cast<InstructionBuffer *>(_popInstruction());
     qint64 writtenSize = 0, ret = 0;
     QByteArray buffer;
 
@@ -97,7 +96,7 @@ void NetworkClientManager::onInstructionPushed()
 //
 void NetworkClientManager::onReadyRead()
 {
-    ANetworkInstruction *instruction = _inputBuffer;
+    InstructionBuffer *instruction = _inputBuffer;
     qint64 bytesAvailable = _socket.bytesAvailable(), readSize = -1, ret = -1;
     QByteArray buffer;
 
@@ -107,7 +106,7 @@ void NetworkClientManager::onReadyRead()
     {
         if (!instruction)
         {
-            instruction = new ANetworkInstruction();
+            instruction = new InstructionBuffer();
             instruction->setLocalTransmitter(this);
             _inputBuffer = instruction;
         }

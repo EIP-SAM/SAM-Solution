@@ -1,47 +1,49 @@
-#include "ANetworkInstruction.hpp"
+#include "InstructionBuffer.hpp"
 
 #include <QDebug>
 
-ANetworkInstruction::ANetworkInstruction()
+InstructionBuffer::InstructionBuffer()
     : AInstruction()
 {
 }
 
-ANetworkInstruction::ANetworkInstruction(const ANetworkInstruction &o)
+InstructionBuffer::InstructionBuffer(const InstructionBuffer &o)
     : AInstruction(o), _dataValidUntilPos(o._dataValidUntilPos)
 {
 }
 
-ANetworkInstruction::ANetworkInstruction(const QByteArray &data)
+InstructionBuffer::InstructionBuffer(const QByteArray &data)
     : AInstruction(data), _dataValidUntilPos(data.size())
 {
+    // check data
+    // create `Parameter`s
 }
 
-ANetworkInstruction::~ANetworkInstruction()
+InstructionBuffer::~InstructionBuffer()
 {
 }
 
 //
 //
 //
-void ANetworkInstruction::setRawData(const QByteArray &rawData)
+void InstructionBuffer::setRawData(const QByteArray &rawData)
 {
     _data = rawData;
     _ensureMinimumDataSize();
-    _setPointerToData();
+    _setPointersToData();
 }
 
-void ANetworkInstruction::append(const QByteArray &data)
+void InstructionBuffer::append(const QByteArray &data)
 {
     _append(data, _dataValidUntilPos);
 }
 
-void ANetworkInstruction::append(const QByteArray &data, int pos)
+void InstructionBuffer::append(const QByteArray &data, int pos)
 {
     _append(data, pos);
 }
 
-void ANetworkInstruction::_append(const QByteArray &data, int pos)
+void InstructionBuffer::_append(const QByteArray &data, int pos)
 {
     QByteArray dataBegin(_data.left(pos));
 
@@ -51,12 +53,17 @@ void ANetworkInstruction::_append(const QByteArray &data, int pos)
     _setPointersToData();
 }
 
-void ANetworkInstruction::setPeerId(quint64 peerId)
+void InstructionBuffer::setPeerId(quint64 peerId)
 {
     _peerId = peerId;
 }
 
-int ANetworkInstruction::getNextReadSize() const
+bool InstructionBuffer::inputBufferFilled()
+{
+    return false;
+}
+
+int InstructionBuffer::getNextReadSize() const
 {
     if (_dataValidUntilPos < _INSTRUCTION_HEADER_SIZE)
     {
@@ -98,18 +105,18 @@ int ANetworkInstruction::getNextReadSize() const
     }
 }
 
-const QByteArray &ANetworkInstruction::getRawData() const
+const QByteArray &InstructionBuffer::getRawData() const
 {
     return _data;
 }
 
-void ANetworkInstruction::_setPointersToData()
+void InstructionBuffer::_setPointersToData()
 {
     _setPointerToData();
     _parametersData = _header->numberOfParameters == 0 ? NULL : (instructionParameterHeader_t *)(&_data.data()[_FIRST_PARAMETER_OFFSET]);
 }
 
-quint64 ANetworkInstruction::getPeerId() const
+quint64 InstructionBuffer::getPeerId() const
 {
     return _peerId;
 }

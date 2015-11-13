@@ -1,6 +1,6 @@
 #include "HelloWorldFunctionality.hpp"
 #include "MainController.hpp"
-#include "ANetworkInstruction.hpp"
+#include "InstructionBuffer.hpp"
 #include <QDebug>
 
 HelloWorldFunctionality::HelloWorldFunctionality()
@@ -12,8 +12,8 @@ HelloWorldFunctionality::HelloWorldFunctionality()
 void HelloWorldFunctionality::_run()
 {
     AInstruction *inputInstruction = NULL;
-    ANetworkInstruction *inputInstruction2 = NULL;
-    ANetworkInstruction *outputInstruction = NULL;
+    InstructionBuffer *inputInstruction2 = NULL;
+    InstructionBuffer *outputInstruction = NULL;
 
     qDebug() << Q_FUNC_INFO;
     while (42)
@@ -21,9 +21,9 @@ void HelloWorldFunctionality::_run()
         if ((inputInstruction = _popInstruction()))
         {
             qDebug() << Q_FUNC_INFO << ": Instruction received !";
-            inputInstruction2 = static_cast<ANetworkInstruction *>(inputInstruction);
+            inputInstruction2 = static_cast<InstructionBuffer *>(inputInstruction);
 
-            outputInstruction = new ANetworkInstruction();
+            outputInstruction = new InstructionBuffer();
             outputInstruction->setLocalTransmitter(this);
             outputInstruction->setFinalReceiver(HELLO_WORLD_BAR);
             outputInstruction->setPeerId(inputInstruction2->getPeerId());

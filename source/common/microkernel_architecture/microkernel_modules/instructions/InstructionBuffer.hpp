@@ -1,5 +1,5 @@
-#ifndef ANETWORK_INSTRUCTION_HPP_
-# define ANETWORK_INSTRUCTION_HPP_
+#ifndef INSTRUCTION_BUFFER_HPP_
+# define INSTRUCTION_BUFFER_HPP_
 
 # include "AInstruction.hpp"
 
@@ -8,7 +8,7 @@
 // instruction as a I/O network buffer
 //
 
-class ANetworkInstruction : public AInstruction
+class InstructionBuffer : public AInstruction
 {
 private:
     int _dataValidUntilPos = 0;
@@ -16,15 +16,16 @@ private:
     instructionParameterHeader_t *_parametersData = NULL;
 
 public:
-    ANetworkInstruction();
-    ANetworkInstruction(const ANetworkInstruction &);
-    ANetworkInstruction(const QByteArray &);
-    virtual ~ANetworkInstruction();
+    InstructionBuffer();
+    InstructionBuffer(const InstructionBuffer &);
+    InstructionBuffer(const QByteArray &);
+    virtual ~InstructionBuffer();
 
     void setRawData(const QByteArray &);
     void append(const QByteArray &);
     void append(const QByteArray &, int);
     void setPeerId(quint64 peerId);
+    bool inputBufferFilled();
 
     int getNextReadSize() const;
     const QByteArray &getRawData() const;
@@ -37,4 +38,4 @@ private:
     void _append(const QByteArray &, int);
 };
 
-#endif // !ANETWORK_INSTRUCTION_HPP_
+#endif // !INSTRUCTION_BUFFER_HPP_

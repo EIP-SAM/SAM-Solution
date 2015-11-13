@@ -1,6 +1,5 @@
 #include "NetworkServerManager.hpp"
 #include "NetworkClient.hpp"
-#include "ANetworkInstruction.hpp"
 #include "MainController.hpp"
 #include "_QFile.hpp"
 #include <QByteArray>
@@ -169,7 +168,7 @@ bool NetworkServerManager::_bindClientSignalsToSlots(NetworkClient *client)
 void NetworkServerManager::_onClientReadyRead(qintptr socketDescriptor)
 {
     NetworkClient *client = _clientSockets[socketDescriptor];
-    ANetworkInstruction *instruction = client->getInputBuffer();
+    InstructionBuffer *instruction = client->getInputBuffer();
     qint64 bytesAvailable = client->bytesAvailable(), readSize = -1, ret = -1;
     QByteArray buffer;
 
@@ -180,7 +179,7 @@ void NetworkServerManager::_onClientReadyRead(qintptr socketDescriptor)
     {
         if (!instruction)
         {
-            instruction = new ANetworkInstruction();
+            instruction = new InstructionBuffer();
             instruction->setPeerId(client->getClientId());
             instruction->setLocalTransmitter(this);
             client->setInputBuffer(instruction);
@@ -271,7 +270,7 @@ void NetworkServerManager::_onClientEncryptionError(qintptr socketDescriptor, QL
 //
 void NetworkServerManager::onInstructionPushed()
 {
-    ANetworkInstruction *instruction = static_cast<ANetworkInstruction *>(_popInstruction());
+    InstructionBuffer *instruction = static_cast<InstructionBuffer *>(_popInstruction());
     NetworkClient *client = NULL;
     qint64 writtenSize = 0, ret = 0;
     QByteArray buffer;

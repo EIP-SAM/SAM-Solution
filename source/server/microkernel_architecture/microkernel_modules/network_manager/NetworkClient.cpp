@@ -114,7 +114,7 @@ quint64 NetworkClient::getClientId() const
 //
 // Getter: return input buffer
 //
-ANetworkInstruction *NetworkClient::getInputBuffer() const
+InstructionBuffer *NetworkClient::getInputBuffer() const
 {
     return _inputBuffer;
 }
@@ -122,7 +122,7 @@ ANetworkInstruction *NetworkClient::getInputBuffer() const
 //
 // Getter: return output buffer
 //
-ANetworkInstruction *NetworkClient::getOutputBuffer() const
+InstructionBuffer *NetworkClient::getOutputBuffer() const
 {
     return _outputBuffer;
 }
@@ -130,7 +130,7 @@ ANetworkInstruction *NetworkClient::getOutputBuffer() const
 //
 // Setter: set input buffer
 //
-void NetworkClient::setInputBuffer(ANetworkInstruction *inputBuffer)
+void NetworkClient::setInputBuffer(InstructionBuffer *inputBuffer)
 {
     _inputBuffer = inputBuffer;
 }
@@ -138,7 +138,7 @@ void NetworkClient::setInputBuffer(ANetworkInstruction *inputBuffer)
 //
 // Setter: set output buffer
 //
-void NetworkClient::setOutputBuffer(ANetworkInstruction *outputBuffer)
+void NetworkClient::setOutputBuffer(InstructionBuffer *outputBuffer)
 {
     _outputBuffer = outputBuffer;
 }

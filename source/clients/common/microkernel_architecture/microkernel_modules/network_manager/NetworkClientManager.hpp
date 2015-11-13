@@ -2,7 +2,7 @@
 # define NETWORK_CLIENT_MANAGER_HPP_
 
 # include <QSslSocket>
-# include "ANetworkInstruction.hpp"
+# include "InstructionBuffer.hpp"
 # include "AFunctionality.hpp"
 
 class NetworkClientManager : public AFunctionality
@@ -14,8 +14,8 @@ private:
     static const QSsl::SslProtocol _DEFAULT_PROTOCOL;
 
     QSslSocket _socket;
-    ANetworkInstruction *_inputBuffer = NULL;
-    ANetworkInstruction *_outputBuffer = NULL;
+    InstructionBuffer *_inputBuffer = NULL;
+    InstructionBuffer *_outputBuffer = NULL;
 
 public:
     NetworkClientManager();

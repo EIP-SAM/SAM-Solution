@@ -1,6 +1,6 @@
 #include "HelloWorldFunctionality.hpp"
 #include "MainController.hpp"
-#include "ANetworkInstruction.hpp"
+#include "InstructionBuffer.hpp"
 #include <QDebug>
 
 HelloWorldFunctionality::HelloWorldFunctionality()
@@ -12,10 +12,10 @@ HelloWorldFunctionality::HelloWorldFunctionality()
 void HelloWorldFunctionality::_run()
 {
     AInstruction *inputInstruction = NULL;
-    ANetworkInstruction *outputInstruction = NULL;
+    InstructionBuffer *outputInstruction = NULL;
 
     qDebug() << Q_FUNC_INFO;
-    outputInstruction = new ANetworkInstruction();
+    outputInstruction = new InstructionBuffer();
     outputInstruction->setLocalTransmitter(this);
     outputInstruction->setFinalReceiver(HELLO_WORLD_FOO);
     mainController->getInstructionBus().pushInstruction(outputInstruction);

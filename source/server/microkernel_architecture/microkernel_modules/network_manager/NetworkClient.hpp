@@ -2,7 +2,7 @@
 # define NETWORK_CLIENT_HPP_
 
 # include <QSslSocket>
-# include "ANetworkInstruction.hpp"
+# include "InstructionBuffer.hpp"
 
 class NetworkClient : public QObject
 {
@@ -12,8 +12,8 @@ private:
     QSslSocket _socket;
     qintptr _socketDescriptor = -1;
     quint64 _clientId = 0;
-    ANetworkInstruction *_inputBuffer = NULL;
-    ANetworkInstruction *_outputBuffer = NULL;
+    InstructionBuffer *_inputBuffer = NULL;
+    InstructionBuffer *_outputBuffer = NULL;
 
 public:
     NetworkClient(quint64 clientId, QObject *parent = 0);
@@ -28,11 +28,11 @@ public:
     qint64 bytesToWrite() const;
     qintptr getSocketDescriptor() const;
     quint64 getClientId() const;
-    ANetworkInstruction *getInputBuffer() const;
-    ANetworkInstruction *getOutputBuffer() const;
+    InstructionBuffer *getInputBuffer() const;
+    InstructionBuffer *getOutputBuffer() const;
 
-    void setInputBuffer(ANetworkInstruction *);
-    void setOutputBuffer(ANetworkInstruction *);
+    void setInputBuffer(InstructionBuffer *);
+    void setOutputBuffer(InstructionBuffer *);
     qint64 write(const QByteArray &data, qint64 size);
     qint64 read(QByteArray &data, qint64 size);
 
