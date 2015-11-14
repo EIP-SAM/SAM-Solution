@@ -3,6 +3,10 @@
 
 #include	"Entity.hpp"
 
+//
+// \\\\This class is just an example !///
+// It does not respect the norme
+//
 class UsersEntity : public Entity
 {
 

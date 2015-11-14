@@ -8,79 +8,112 @@ QueryBuilderMySql::~QueryBuilderMySql()
 {
 }
 
+//
+// My SQL command 'delete'
+//
 AQueryBuilder *QueryBuilderMySql::deleteRow()
 {
-    this->_queryStr += "DELETE FROM " + this->_table;
+    _queryStr += "DELETE FROM " + _table;
 
     return (this);
 }
 
+//
+// My SQL command 'select'
+//
 AQueryBuilder *QueryBuilderMySql::select(QString str)
 {
-    this->_queryStr += "SELECT " + str + " FROM " + this->_table;
+    _queryStr += "SELECT " + str + " FROM " + _table;
 
     return (this);
 }
 
+//
+// My SQL command 'join'
+//
 AQueryBuilder *QueryBuilderMySql::join(QString table, QString firstOn, QString secondOn)
 {
-    this->_queryStr += " JOIN " + table + " on " + firstOn + " = " + secondOn;
+    _queryStr += " JOIN " + table + " on " + firstOn + " = " + secondOn;
 
     return (this);
 }
 
+//
+// My SQL command 'left join'
+//
 AQueryBuilder *QueryBuilderMySql::leftJoin(QString table, QString firstOn, QString secondOn)
 {
-    this->_queryStr += " LEFT JOIN " + table + " on " + firstOn + " = " + secondOn;
+    _queryStr += " LEFT JOIN " + table + " on " + firstOn + " = " + secondOn;
 
     return (this);
 }
 
+//
+// My SQL command 'right join'
+//
 AQueryBuilder *QueryBuilderMySql::rightJoin(QString table, QString firstOn, QString secondOn)
 {
-    this->_queryStr += " RIGHT JOIN " + table + " on " + firstOn + " = " + secondOn;
+    _queryStr += " RIGHT JOIN " + table + " on " + firstOn + " = " + secondOn;
 
     return (this);
 }
 
+//
+// My SQL command 'where'
+//
 AQueryBuilder *QueryBuilderMySql::where(QString str)
 {
-    this->_queryStr += " WHERE " + str;
+    _queryStr += " WHERE " + str;
 
     return (this);
 }
 
-AQueryBuilder *QueryBuilderMySql::addWhere(QString str)
+//
+// My SQL command 'and'
+//
+AQueryBuilder *QueryBuilderMySql::andWhere(QString str)
 {
-    this->_queryStr += " AND " + str;
+    _queryStr += " AND " + str;
 
     return (this);
 }
 
+//
+// My SQL command 'or'
+//
 AQueryBuilder *QueryBuilderMySql::orWhere(QString str)
 {
-    this->_queryStr += " OR " + str;
+    _queryStr += " OR " + str;
 
     return (this);
 }
 
+//
+// My SQL command 'order by'
+//
 AQueryBuilder *QueryBuilderMySql::orderBy(QString str)
 {
-    this->_queryStr += " ORDER BY " + str;
+    _queryStr += " ORDER BY " + str;
 
     return (this);
 }
 
+//
+// My SQL command 'limit'
+//
 AQueryBuilder *QueryBuilderMySql::limit(QString str)
 {
-    this->_queryStr += " LIMIT " + str;
+    _queryStr += " LIMIT " + str;
 
     return (this);
 }
 
+//
+// My SQL command 'limit'
+//
 AQueryBuilder *QueryBuilderMySql::limit(int nb)
 {
-    this->_queryStr += " LIMIT " + QString::number(nb);
+    _queryStr += " LIMIT " + QString::number(nb);
 
     return (this);
 }

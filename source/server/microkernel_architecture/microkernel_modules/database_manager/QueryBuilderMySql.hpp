@@ -1,5 +1,5 @@
-#ifndef QUERYBUILDERSQL_HPP_
-# define QUERYBUILDERMSQL_HPP_
+#ifndef QUERY_BUILDER_MY_SQL_HPP_
+# define QUERY_BUILDER_MY_SQL_HPP_
 
 # include "AQueryBuilder.hpp"
 
@@ -17,11 +17,11 @@ public:
     virtual AQueryBuilder *leftJoin(QString table, QString firstOn, QString secondOn);
     virtual AQueryBuilder *rightJoin(QString table, QString firstOn, QString secondOn);
     virtual AQueryBuilder *where(QString str);
-    virtual AQueryBuilder *addWhere(QString str);
+    virtual AQueryBuilder *andWhere(QString str);
     virtual AQueryBuilder *orWhere(QString str);
     virtual AQueryBuilder *orderBy(QString str);
     virtual AQueryBuilder *limit(QString str);
     virtual AQueryBuilder *limit(int nb);
 };
 
-#endif // !QUERYBUILDERMYSQL_HPP_
+#endif // !QUERY_BUILDER_MYSQL_HPP_

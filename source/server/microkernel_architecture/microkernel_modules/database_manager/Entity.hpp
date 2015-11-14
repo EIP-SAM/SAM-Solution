@@ -43,7 +43,8 @@ public:
 
 
     //
-    // find and return the entity by its id
+    // Find and return the entity by its id
+    // Function in .hpp because of templating
     //
     template<class T>
     T *find(int id)
@@ -51,7 +52,7 @@ public:
       if (!startConnection())
 	return NULL;
 
-      AQueryBuilder *builder = this->getQueryBuilder();
+      AQueryBuilder *builder = getQueryBuilder();
       builder->select("*")
 	->where("id = :id")
 	->bindValue(":id", id)

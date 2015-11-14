@@ -1,5 +1,8 @@
 #include "AQueryBuilder.hpp"
 
+//
+// Init attributs
+//
 AQueryBuilder::AQueryBuilder(QString table, QSqlDatabase *db)
 {
     _queryObj = NULL;
@@ -11,17 +14,21 @@ AQueryBuilder::~AQueryBuilder()
 {
 }
 
+//
+// Bind value to construct a secure query
+//
 AQueryBuilder *AQueryBuilder::bindValue(QString key, QString value)
 {
-    this->_bindedValues.insert(std::pair<QString,QString>(key, value));
-
+    _bindedValues.insert(std::pair<QString,QString>(key, value));
     return (this);
 }
 
+//
+// Bind value to construct a secure query
+//
 AQueryBuilder *AQueryBuilder::bindValue(QString key, int value)
 {
-    this->_bindedValues.insert(std::pair<QString,QString>(key, QString::number(value)));
-
+    _bindedValues.insert(std::pair<QString,QString>(key, QString::number(value)));
     return (this);
 }
 
@@ -35,19 +42,19 @@ QSqlQuery *AQueryBuilder::build()
 {
     std::map<QString, QString>::const_iterator it;
 
-    this->_queryObj = new QSqlQuery(*(this->_db));
-    this->_queryObj->prepare(this->_queryStr);
+    _queryObj = new QSqlQuery(*(_db));
+    _queryObj->prepare(_queryStr);
 
-    for (it = this->_bindedValues.begin(); it != this->_bindedValues.end(); ++it)
+    for (it = _bindedValues.begin(); it != _bindedValues.end(); ++it)
     {
 	QVariant value(it->second);
-	this->_queryObj->bindValue(it->first, value);
+	_queryObj->bindValue(it->first, value);
     }
 
-    return this->_queryObj;
+    return _queryObj;
 }
 
 QString AQueryBuilder::getQueryString() const
 {
-    return this->_queryStr;
+    return _queryStr;
 }

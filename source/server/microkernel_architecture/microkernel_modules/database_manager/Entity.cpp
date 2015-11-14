@@ -2,6 +2,10 @@
 #include <iostream>
 #include "Entity.hpp"
 
+//
+// Init attributs
+// Create database instance
+//
 Entity::Entity()
 {
     _db = new QSqlDatabase();
@@ -10,6 +14,10 @@ Entity::Entity()
     _propertiesValue = NULL;
 }
 
+//
+// Close database instance
+// Clean object properties
+//
 Entity::~Entity()
 {
     if (_db->isOpen())
@@ -61,13 +69,13 @@ bool Entity::save()
 {
     QSqlQuery query;
 
-    if(!this->startConnection())
+    if(!startConnection())
 	return false;
 
-    if (this->_propertiesValue->at(0).compare("-1") == 0)
-	query = this->prepareInsert();
+    if (_propertiesValue->at(0).compare("-1") == 0)
+	query = prepareInsert();
     else
-	query = this->prepareUpdate();
+	query = prepareUpdate();
 
     return (query.exec());
 }
@@ -78,26 +86,26 @@ bool Entity::save()
 QSqlQuery Entity::prepareInsert() const
 {
     QSqlQuery queryObj;
-    QString query = "INSERT INTO " + this->_table;
+    QString query = "INSERT INTO " + _table;
     QString fields;
     QString values;
 
-    for (unsigned int i = 1; i < this->_propertiesName->size(); ++i)
+    for (unsigned int i = 1; i < _propertiesName->size(); ++i)
     {
-	fields += this->_propertiesName->at(i);
-	if (i < this->_propertiesName->size() - 1)
+	fields += _propertiesName->at(i);
+	if (i < _propertiesName->size() - 1)
 	    fields += ", ";
 
-	values += ":" + this->_propertiesName->at(i);
-	if (i < this->_propertiesValue->size() - 1)
+	values += ":" + _propertiesName->at(i);
+	if (i < _propertiesValue->size() - 1)
 	    values += ", ";
     }
 
     queryObj.prepare(query + " (" + fields + ") VALUES (" + values + ");");
 
-    for (unsigned int i = 1; i < this->_propertiesValue->size(); ++i)
+    for (unsigned int i = 1; i < _propertiesValue->size(); ++i)
     {
-	queryObj.bindValue(":" + this->_propertiesName->at(i), this->_propertiesValue->at(i));
+	queryObj.bindValue(":" + _propertiesName->at(i), _propertiesValue->at(i));
     }
 
     return queryObj;
@@ -109,22 +117,22 @@ QSqlQuery Entity::prepareInsert() const
 QSqlQuery Entity::prepareUpdate() const
 {
     QSqlQuery queryObj;
-    QString query = "UPDATE " + this->_table;
+    QString query = "UPDATE " + _table;
     QString fields;
-    QString where = "WHERE id = '" + this->_propertiesValue->at(0)  + "'";
+    QString where = "WHERE id = '" + _propertiesValue->at(0)  + "'";
 
-    for (unsigned int i = 0; i < this->_propertiesName->size(); ++i)
+    for (unsigned int i = 0; i < _propertiesName->size(); ++i)
     {
-	fields += this->_propertiesName->at(i) + " = :" + this->_propertiesName->at(i);
-	if (i < this->_propertiesName->size() - 1)
+	fields += _propertiesName->at(i) + " = :" + _propertiesName->at(i);
+	if (i < _propertiesName->size() - 1)
 	    fields += ", ";
     }
 
     queryObj.prepare(query + " SET " + fields + " " + where + ";");
 
-    for (unsigned int i = 0; i < this->_propertiesValue->size(); ++i)
+    for (unsigned int i = 0; i < _propertiesValue->size(); ++i)
     {
-	queryObj.bindValue(":" + this->_propertiesName->at(i), this->_propertiesValue->at(i));
+	queryObj.bindValue(":" + _propertiesName->at(i), _propertiesValue->at(i));
     }
 
     return queryObj;
@@ -138,11 +146,11 @@ bool Entity::startConnection()
 {
     if (!_db->isOpen())
     {
-	if (!this->connect())
+	if (!connect())
 	    return false;
 	qDebug() << "CONNECTION SUCCESS";
     }
-    this->getAllProperties();
+    getAllProperties();
     return true;
 }
 
@@ -152,8 +160,8 @@ bool Entity::startConnection()
 //
 void Entity::getAllProperties()
 {
-    this->_propertiesName = new std::vector<QString>;
-    this->_propertiesValue = new std::vector<QString>;
+    _propertiesName = new std::vector<QString>;
+    _propertiesValue = new std::vector<QString>;
 
     const QMetaObject *metaObject = this->metaObject();
     int count = metaObject->propertyCount();
@@ -162,10 +170,10 @@ void Entity::getAllProperties()
     for (int i = offset; i < count; ++i) {
 	QMetaProperty metaProperty = metaObject->property(i);
 	const char *propertyName = metaProperty.name();
-	this->_propertiesName->push_back(propertyName);
+	_propertiesName->push_back(propertyName);
 
-	QVariant value = this->property(propertyName);
-	this->_propertiesValue->push_back(value.toString());
+	QVariant value = property(propertyName);
+	_propertiesValue->push_back(value.toString());
     }
 }
 
@@ -176,7 +184,7 @@ bool Entity::deleteQuery(AQueryBuilder *builder)
 {
     QSqlRecord recQuery;
 
-    if(!this->startConnection())
+    if(!startConnection())
 	return false;
     return (builder->build()->exec());
 }
@@ -189,8 +197,8 @@ AQueryBuilder *Entity::getQueryBuilder()
 {
     AQueryBuilder *ret = NULL;
 
-    if (this->_dbType == MYSQL_TYPE)
-	ret = new QueryBuilderMySql(this->_table, this->_db);
+    if (_dbType == MYSQL_TYPE)
+	ret = new QueryBuilderMySql(_table, _db);
     else
 	qDebug() << "Unknown database type";
 

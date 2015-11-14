@@ -1,5 +1,5 @@
-#ifndef QUERYBUILDER_HPP_
-# define QUERYBUILDER_HPP_
+#ifndef QUERY_BUILDER_HPP_
+# define QUERY_BUILDER_HPP_
 
 # include <QSqlQuery>
 # include <QSqlDatabase>
@@ -23,7 +23,7 @@ public:
     virtual AQueryBuilder *leftJoin(QString table, QString firstOn, QString secondOn) = 0;
     virtual AQueryBuilder *rightJoin(QString table, QString firstOn, QString secondOn) = 0;
     virtual AQueryBuilder *where(QString str) = 0;
-    virtual AQueryBuilder *addWhere(QString str) = 0;
+    virtual AQueryBuilder *andWhere(QString str) = 0;
     virtual AQueryBuilder *orWhere(QString str) = 0;
     virtual AQueryBuilder *orderBy(QString str) = 0;
     virtual AQueryBuilder *limit(QString str) = 0;
@@ -45,4 +45,4 @@ protected:
 
 };
 
-#endif // !QUERYBUILDER_HPP_
+#endif // !QUERY_BUILDER_HPP_
