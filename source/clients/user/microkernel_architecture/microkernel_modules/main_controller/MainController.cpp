@@ -1,7 +1,5 @@
-#define __MAIN_CONTROLLER_NO_GLOBAL_DECL
+#define __MAIN_CONTROLLER_PRIVATE_DECL
 #include "MainController.hpp"
-
-MainController *mainController = NULL;
 
 MainController::MainController(int &ac, char **av)
     : _qtCore(ac, av), _fctsManager(this)

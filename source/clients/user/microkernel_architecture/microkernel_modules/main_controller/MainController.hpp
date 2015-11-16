@@ -22,10 +22,14 @@ public:
     InstructionBus &getInstructionBus();
 };
 
-# ifndef __MAIN_CONTROLLER_NO_GLOBAL_DECL
+# ifdef __MAIN_CONTROLLER_PRIVATE_DECL
+
+MainController *mainController = NULL;
+
+# else
 
 extern MainController *mainController;
 
-# endif // !__MAIN_CONTROLLER_NO_GLOBAL_DECL
+# endif // !__MAIN_CONTROLLER_PRIVATE_DECL
 
 #endif // !MAIN_CONTROLLER_HPP_
