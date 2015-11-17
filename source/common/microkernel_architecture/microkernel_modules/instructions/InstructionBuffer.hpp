@@ -5,7 +5,7 @@
 
 //
 // Contain the specific methods to handle an
-// instruction as a I/O network buffer
+// instruction as a I/O buffer (for network, pipe, ...)
 //
 
 class InstructionBuffer : public AInstruction
@@ -13,7 +13,6 @@ class InstructionBuffer : public AInstruction
 private:
     int _dataValidUntilPos = 0;
     quint64 _peerId = 0;
-    instructionParameterHeader_t *_parametersData = NULL;
 
 public:
     InstructionBuffer();
@@ -21,21 +20,17 @@ public:
     InstructionBuffer(const QByteArray &);
     virtual ~InstructionBuffer();
 
-    void setRawData(const QByteArray &);
-    void append(const QByteArray &);
-    void append(const QByteArray &, int);
+    InstructionBuffer &operator=(const QByteArray&);
+    InstructionBuffer &operator<<(const QByteArray&);
+
+    void setData(const QByteArray &);
+    void appendData(const QByteArray &);
     void setPeerId(quint64 peerId);
-    bool inputBufferFilled();
+    bool finalizeFilling();
 
     int getNextReadSize() const;
-    const QByteArray &getRawData() const;
+    const QByteArray &getData() const;
     quint64 getPeerId() const;
-
-protected:
-    void _setPointersToData();
-
-private:
-    void _append(const QByteArray &, int);
 };
 
 #endif // !INSTRUCTION_BUFFER_HPP_

@@ -201,13 +201,19 @@ void NetworkServerManager::_onClientReadyRead(qintptr socketDescriptor)
             break ;
         }
         buffer.resize(ret);
-        instruction->append(buffer);
+        *instruction << buffer;
         bytesAvailable -= ret;
         qDebug() << "" << socketDescriptor << "Had read" << ret << "bytes";
         qDebug() << buffer;
         if (!instruction->getNextReadSize())
         {
-            mainController->getInstructionBus().pushInstruction(instruction);
+            if (instruction->finalizeFilling())
+                mainController->getInstructionBus().pushInstruction(instruction);
+            else
+            {
+                delete instruction;
+                qDebug() << "Error: Malformed instruction received; Instruction deleted";
+            }
             client->setInputBuffer(NULL);
         }
     }
@@ -289,8 +295,8 @@ void NetworkServerManager::onInstructionPushed()
         return ;
     }
     client = _clientIds[instruction->getPeerId()];
-    buffer = instruction->getRawData();
-    while (writtenSize != instruction->getRawData().size())
+    buffer = instruction->getData();
+    while (writtenSize != instruction->getData().size())
     {
         if ((ret = client->write(buffer, buffer.size())) == -1)
         {

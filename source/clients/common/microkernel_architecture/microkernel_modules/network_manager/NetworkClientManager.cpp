@@ -69,8 +69,8 @@ void NetworkClientManager::onInstructionPushed()
         qDebug() << "Error: Bad news, there is no instruction in the queue";
         return ;
     }
-    buffer = instruction->getRawData();
-    while (writtenSize != instruction->getRawData().size())
+    buffer = instruction->getData();
+    while (writtenSize != instruction->getData().size())
     {
         if ((ret = _socket.write(buffer, buffer.size())) == -1)
         {
@@ -127,13 +127,19 @@ void NetworkClientManager::onReadyRead()
             break ;
         }
         buffer.resize(ret);
-        instruction->append(buffer);
+        *instruction << buffer;
         bytesAvailable -= ret;
         qDebug() << "Had read" << ret << "bytes";
         qDebug() << buffer;
         if (!instruction->getNextReadSize())
         {
-            mainController->getInstructionBus().pushInstruction(instruction);
+            if (instruction->finalizeFilling())
+                mainController->getInstructionBus().pushInstruction(instruction);
+            else
+            {
+                delete instruction;
+                qDebug() << "Error: Malformed instruction received; Instruction deleted";
+            }
             _inputBuffer = NULL;
         }
     }
