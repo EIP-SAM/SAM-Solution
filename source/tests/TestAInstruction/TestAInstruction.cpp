@@ -16,8 +16,8 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    void testCase1();
-    void testCase2();
+    void testConstructedParameters();
+    void testResetParameters();
 };
 
 TestAInstruction::TestAInstruction()
@@ -26,7 +26,7 @@ TestAInstruction::TestAInstruction()
 
 void TestAInstruction::initTestCase()
 {
-    QVERIFY((_foobar = new FooBarInstruction()) != NULL);
+    _foobar = new FooBarInstruction;
     QVERIFY(_foobar->init(42, "Foo Bar Baz") == true);
 }
 
@@ -35,13 +35,13 @@ void TestAInstruction::cleanupTestCase()
     delete _foobar;
 }
 
-void TestAInstruction::testCase1()
+void TestAInstruction::testConstructedParameters()
 {
     QVERIFY(_foobar->getFoo() == 42);
     QVERIFY(_foobar->getBar() == "Foo Bar Baz");
 }
 
-void TestAInstruction::testCase2()
+void TestAInstruction::testResetParameters()
 {
     _foobar->setFoo(-21);
     QVERIFY(_foobar->getFoo() == -21);
