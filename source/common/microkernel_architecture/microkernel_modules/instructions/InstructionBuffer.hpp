@@ -16,15 +16,15 @@ private:
 
 public:
     InstructionBuffer();
-    InstructionBuffer(const InstructionBuffer &);
-    InstructionBuffer(const QByteArray &);
+    InstructionBuffer(const InstructionBuffer &o);
+    InstructionBuffer(const QByteArray &data);
     virtual ~InstructionBuffer();
 
-    InstructionBuffer &operator=(const QByteArray&);
-    InstructionBuffer &operator<<(const QByteArray&);
+    InstructionBuffer &operator=(const QByteArray &data);
+    InstructionBuffer &operator<<(const QByteArray &data);
 
-    void setData(const QByteArray &);
-    void appendData(const QByteArray &);
+    void setData(const QByteArray &data);
+    void appendData(const QByteArray &data);
     void setPeerId(quint64 peerId);
     bool finalizeFilling();
 

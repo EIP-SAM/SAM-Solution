@@ -1,7 +1,5 @@
 #include "InstructionBuffer.hpp"
 
-#include <QDebug>
-
 //
 // Default constructor
 //
@@ -70,7 +68,7 @@ void InstructionBuffer::setData(const QByteArray &data)
 //
 void InstructionBuffer::appendData(const QByteArray &data)
 {
-    QByteArray dataBegin(_data.left(_dataValidUntilPos));
+    QByteArray dataBegin(_data.mid(0, _dataValidUntilPos));
 
     _dataValidUntilPos += data.size();
     _data = dataBegin + data;
@@ -94,6 +92,7 @@ void InstructionBuffer::setPeerId(quint64 peerId)
 //
 bool InstructionBuffer::finalizeFilling()
 {
+    QList<Parameter *> parameters;
     Parameter *parameter = NULL;
     instructionParameterHeader_t *paramHeader = NULL;
     int i = 0, paramHeaderOffset = _FIRST_PARAMETER_OFFSET;
@@ -104,12 +103,17 @@ bool InstructionBuffer::finalizeFilling()
         {
             paramHeader = (instructionParameterHeader_t *)(((char *)_header) + paramHeaderOffset);
             if (paramHeader->parameterSize < 0 ||
+                (paramHeaderOffset + paramHeader->parameterSize) > _data.size() ||
                 !(parameter = new (std::nothrow) Parameter(*this, paramHeader)))
                 return false;
-            _parameters << parameter;
+            parameters << parameter;
             paramHeaderOffset += _INSTRUCTION_PARAMETER_HEADER_SIZE + paramHeader->parameterSize;
         }
     }
+    if (_dataValidUntilPos < _INSTRUCTION_HEADER_SIZE ||
+        paramHeaderOffset != _data.size() || i != _header->numberOfParameters)
+        return false;
+    _parameters = parameters;
     return true;
 }
 
@@ -122,28 +126,19 @@ int InstructionBuffer::getNextReadSize() const
     instructionParameterHeader_t *paramHeader = NULL;
     int i = 0, paramHeaderOffset = _FIRST_PARAMETER_OFFSET;
 
-    // INSTRUCTION HEADER IS NOT COMPLETE
-    // Returns size needed to reconstruct an instruction header
     if (_dataValidUntilPos < _INSTRUCTION_HEADER_SIZE)
         return _INSTRUCTION_HEADER_SIZE - _dataValidUntilPos;
-    // INSTRUCTION HEADER IS COMPLETE
-    // Returns 0 because there is nothing supposed to be placed after the instruction header
     if (_header->numberOfParameters <= 0)
         return 0;
     while (paramHeaderOffset < _data.size() && i++ != _header->numberOfParameters)
     {
-        // INSTRUCTION PARAMETER HEADER IS NOT COMPLETE
-        // Returns size needed to reconstruct an instruction parameter header
         if (_dataValidUntilPos < paramHeaderOffset + _INSTRUCTION_PARAMETER_HEADER_SIZE)
             return paramHeaderOffset + _INSTRUCTION_PARAMETER_HEADER_SIZE - _dataValidUntilPos;
-        // INSTRUCTION PARAMETER HEADER IS COMPLETE
-        // Returns size needed to reconstruct instruction parameter
         paramHeader = (instructionParameterHeader_t *)(((char *)_header) + paramHeaderOffset);
         if (_dataValidUntilPos < paramHeaderOffset + _INSTRUCTION_PARAMETER_HEADER_SIZE + paramHeader->parameterSize)
             return paramHeaderOffset + _INSTRUCTION_PARAMETER_HEADER_SIZE + paramHeader->parameterSize - _dataValidUntilPos;
         paramHeaderOffset += _INSTRUCTION_PARAMETER_HEADER_SIZE + paramHeader->parameterSize;
     }
-    // INSTRUCTION IS COMPLETE
     return 0;
 }
 
