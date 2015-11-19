@@ -1,20 +1,23 @@
 #include "InstructionBus.hpp"
 #include "AInstruction.hpp"
 #include <QMutexLocker>
-
 #include <QDebug>
 
+//
+// Constructor
+//
 InstructionBus::InstructionBus(QObject *parent)
     : QObject(parent), _thread(NULL), _mutex(NULL)
 {
 }
 
+//
+// Destructor
+// Note: Exit is quick and dirty for now, need to do it
+// Note2: And do not forget to free the QQueue* in _transmitterClientsInstructions
+//
 InstructionBus::~InstructionBus()
 {
-    //
-    // Do it properly !
-    // And do not forget to free the QQueue* in _transmitterClientsInstructions
-    //
     if (_thread)
     {
         _thread->quit();
