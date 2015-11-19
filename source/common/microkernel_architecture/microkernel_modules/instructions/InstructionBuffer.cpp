@@ -118,7 +118,7 @@ bool InstructionBuffer::finalizeFilling()
 }
 
 //
-// Get the size of the data needed to fill the instruction
+// Get the size of the data needed to fill the unfinalized instruction
 // Return 0 when the instruction is supposed to be entirely filled
 //
 int InstructionBuffer::getNextReadSize() const
