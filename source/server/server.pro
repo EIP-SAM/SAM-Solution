@@ -26,8 +26,7 @@ INCLUDEPATH += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities \
     microkernel_architecture/microkernel_modules/functionalities_manager \
     microkernel_architecture/microkernel_modules/network_manager \
-    microkernel_architecture/microkernel_modules/main_controller \
-    microkernel_architecture/external_modules/hello_world ##
+    microkernel_architecture/microkernel_modules/main_controller
 
 HEADERS += \
     $${COMMON_ALL}/others/struct_packed.h \
@@ -43,8 +42,7 @@ HEADERS += \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.hpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkServerManager.hpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkClient.hpp \
-    microkernel_architecture/microkernel_modules/main_controller/MainController.hpp \
-    microkernel_architecture/external_modules/hello_world/HelloWorldFunctionality.hpp ##
+    microkernel_architecture/microkernel_modules/main_controller/MainController.hpp
 
 SOURCES += \
     $${COMMON_ALL}/qt_custom_extensions/_QFile.cpp \
@@ -60,5 +58,4 @@ SOURCES += \
     microkernel_architecture/microkernel_modules/network_manager/NetworkServerManager.cpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkClient.cpp \
     microkernel_architecture/microkernel_modules/main_controller/MainController.cpp \
-    microkernel_architecture/main.cpp \
-    microkernel_architecture/external_modules/hello_world/HelloWorldFunctionality.cpp ##
+    microkernel_architecture/main.cpp

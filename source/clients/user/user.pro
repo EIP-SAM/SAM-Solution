@@ -34,8 +34,7 @@ INCLUDEPATH += \
     $${COMMON_CLIENTS}/microkernel_architecture/microkernel_modules/network_manager \
     microkernel_architecture/microkernel_modules/functionalities_manager \
     microkernel_architecture/internal_fcts_modules/gui/gui_controller \
-    microkernel_architecture/microkernel_modules/main_controller \
-    $${COMMON_CLIENTS}/microkernel_architecture/external_modules/hello_world ##
+    microkernel_architecture/microkernel_modules/main_controller
 
 HEADERS += \
     $${COMMON_ALL}/others/struct_packed.h \
@@ -49,8 +48,7 @@ HEADERS += \
     $${COMMON_CLIENTS}/microkernel_architecture/microkernel_modules/network_manager/NetworkClientManager.hpp \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.hpp \
     microkernel_architecture/internal_fcts_modules/gui/gui_controller/GUIController.hpp \
-    microkernel_architecture/microkernel_modules/main_controller/MainController.hpp \
-    $${COMMON_CLIENTS}/microkernel_architecture/external_modules/hello_world/HelloWorldFunctionality.hpp ##
+    microkernel_architecture/microkernel_modules/main_controller/MainController.hpp
 
 SOURCES += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBus.cpp \
@@ -64,5 +62,4 @@ SOURCES += \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.cpp \
     microkernel_architecture/internal_fcts_modules/gui/gui_controller/GUIController.cpp \
     microkernel_architecture/microkernel_modules/main_controller/MainController.cpp \
-    microkernel_architecture/main.cpp \
-    $${COMMON_CLIENTS}/microkernel_architecture/external_modules/hello_world/HelloWorldFunctionality.cpp ##
+    microkernel_architecture/main.cpp

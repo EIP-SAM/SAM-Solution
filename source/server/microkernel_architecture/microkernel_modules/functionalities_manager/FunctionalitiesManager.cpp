@@ -1,13 +1,17 @@
 #include "FunctionalitiesManager.hpp"
 #include "NetworkServerManager.hpp"
 
-#include "HelloWorldFunctionality.hpp"
-
+//
+// Constructor
+//
 FunctionalitiesManager::FunctionalitiesManager(QObject *parent)
     : AFunctionalitiesManager(parent)
 {
 }
 
+//
+// Destructor
+//
 FunctionalitiesManager::~FunctionalitiesManager()
 {
 }
@@ -22,16 +26,24 @@ void FunctionalitiesManager::_setFcts()
     _setExternalFcts();
 }
 
+//
+// Instanciate the microkernel functionalities
+//
 void FunctionalitiesManager::_setMicrokernelFcts()
 {
     _microkernelFcts << new NetworkServerManager(false);
 }
 
+//
+// Instanciate the internal functionalities
+//
 void FunctionalitiesManager::_setInternalFcts()
 {
 }
 
+//
+// Instanciate the external functionalities
+//
 void FunctionalitiesManager::_setExternalFcts()
 {
-    _externalFcts << new HelloWorldFunctionality(); // temporary
 }
