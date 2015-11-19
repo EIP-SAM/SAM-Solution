@@ -25,9 +25,6 @@ public:
 
         NETWORK_MANAGER = 2,
         GUI = 3,
-
-        HELLO_WORLD_FOO = 4, // test fct
-        HELLO_WORLD_BAR = 5 // test fct
     };
 
 private:

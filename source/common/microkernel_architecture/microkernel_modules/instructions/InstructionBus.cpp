@@ -7,9 +7,6 @@
 InstructionBus::InstructionBus(QObject *parent)
     : QObject(parent), _thread(NULL), _mutex(NULL)
 {
-    // for testing purposes
-    _remoteClientsRegister << AInstructionBusClient::eClientId::HELLO_WORLD_FOO;
-    _remoteClientsRegister << AInstructionBusClient::eClientId::HELLO_WORLD_BAR;
 }
 
 InstructionBus::~InstructionBus()
