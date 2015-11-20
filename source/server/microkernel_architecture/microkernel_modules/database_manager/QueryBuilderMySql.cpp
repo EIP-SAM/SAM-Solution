@@ -1,6 +1,6 @@
 #include "QueryBuilderMySql.hpp"
 
-QueryBuilderMySql::QueryBuilderMySql(QString table, QSqlDatabase *db) : AQueryBuilder(table, db)
+QueryBuilderMySql::QueryBuilderMySql(const QString &table, QSqlDatabase *db) : AQueryBuilder(table, db)
 {
 }
 
@@ -21,7 +21,7 @@ AQueryBuilder *QueryBuilderMySql::deleteRow()
 //
 // My SQL command 'select'
 //
-AQueryBuilder *QueryBuilderMySql::select(QString str)
+AQueryBuilder *QueryBuilderMySql::select(const QString &str)
 {
     _queryStr += "SELECT " + str + " FROM " + _table;
 
@@ -31,7 +31,7 @@ AQueryBuilder *QueryBuilderMySql::select(QString str)
 //
 // My SQL command 'join'
 //
-AQueryBuilder *QueryBuilderMySql::join(QString table, QString firstOn, QString secondOn)
+AQueryBuilder *QueryBuilderMySql::join(const QString &table, const QString &firstOn, const QString &secondOn)
 {
     _queryStr += " JOIN " + table + " on " + firstOn + " = " + secondOn;
 
@@ -41,7 +41,7 @@ AQueryBuilder *QueryBuilderMySql::join(QString table, QString firstOn, QString s
 //
 // My SQL command 'left join'
 //
-AQueryBuilder *QueryBuilderMySql::leftJoin(QString table, QString firstOn, QString secondOn)
+AQueryBuilder *QueryBuilderMySql::leftJoin(const QString &table, const QString &firstOn, const QString &secondOn)
 {
     _queryStr += " LEFT JOIN " + table + " on " + firstOn + " = " + secondOn;
 
@@ -51,7 +51,7 @@ AQueryBuilder *QueryBuilderMySql::leftJoin(QString table, QString firstOn, QStri
 //
 // My SQL command 'right join'
 //
-AQueryBuilder *QueryBuilderMySql::rightJoin(QString table, QString firstOn, QString secondOn)
+AQueryBuilder *QueryBuilderMySql::rightJoin(const QString &table, const QString &firstOn, const QString &secondOn)
 {
     _queryStr += " RIGHT JOIN " + table + " on " + firstOn + " = " + secondOn;
 
@@ -61,7 +61,7 @@ AQueryBuilder *QueryBuilderMySql::rightJoin(QString table, QString firstOn, QStr
 //
 // My SQL command 'where'
 //
-AQueryBuilder *QueryBuilderMySql::where(QString str)
+AQueryBuilder *QueryBuilderMySql::where(const QString &str)
 {
     _queryStr += " WHERE " + str;
 
@@ -71,7 +71,7 @@ AQueryBuilder *QueryBuilderMySql::where(QString str)
 //
 // My SQL command 'and'
 //
-AQueryBuilder *QueryBuilderMySql::andWhere(QString str)
+AQueryBuilder *QueryBuilderMySql::andWhere(const QString &str)
 {
     _queryStr += " AND " + str;
 
@@ -81,7 +81,7 @@ AQueryBuilder *QueryBuilderMySql::andWhere(QString str)
 //
 // My SQL command 'or'
 //
-AQueryBuilder *QueryBuilderMySql::orWhere(QString str)
+AQueryBuilder *QueryBuilderMySql::orWhere(const QString &str)
 {
     _queryStr += " OR " + str;
 
@@ -91,7 +91,7 @@ AQueryBuilder *QueryBuilderMySql::orWhere(QString str)
 //
 // My SQL command 'order by'
 //
-AQueryBuilder *QueryBuilderMySql::orderBy(QString str)
+AQueryBuilder *QueryBuilderMySql::orderBy(const QString &str)
 {
     _queryStr += " ORDER BY " + str;
 
@@ -101,7 +101,7 @@ AQueryBuilder *QueryBuilderMySql::orderBy(QString str)
 //
 // My SQL command 'limit'
 //
-AQueryBuilder *QueryBuilderMySql::limit(QString str)
+AQueryBuilder *QueryBuilderMySql::limit(const QString &str)
 {
     _queryStr += " LIMIT " + str;
 
@@ -121,7 +121,7 @@ AQueryBuilder *QueryBuilderMySql::limit(int nb)
 //
 //My SQL command 'update'
 //
-AQueryBuilder *QueryBuilderMySql::updateQuery(QString fields, QString whereClause)
+AQueryBuilder *QueryBuilderMySql::updateQuery(const QString &fields, const QString &whereClause)
 {
     _queryStr += "UPDATE " + _table + " SET " +
 	fields + " WHERE " + whereClause + ";";
@@ -131,7 +131,7 @@ AQueryBuilder *QueryBuilderMySql::updateQuery(QString fields, QString whereClaus
 //
 //My SQL command 'insert'
 //
-AQueryBuilder *QueryBuilderMySql::insertQuery(QString fields, QString values)
+AQueryBuilder *QueryBuilderMySql::insertQuery(const QString &fields, const QString &values)
 {
     _queryStr += "INSERT INTO " + _table +
 	" (" + fields + ") VALUES (" + values + ");";

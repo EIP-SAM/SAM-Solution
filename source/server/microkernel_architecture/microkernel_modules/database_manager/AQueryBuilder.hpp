@@ -6,45 +6,44 @@
 # include <QObject>
 # include <QString>
 # include <QVariant>
-
-# include <map>
+# include <QMap>
 
 class AQueryBuilder : public QObject
 {
     Q_OBJECT
 
 public:
-    AQueryBuilder(QString table, QSqlDatabase *db);
+    AQueryBuilder(const QString &table, QSqlDatabase *db);
     virtual ~AQueryBuilder();
 
     virtual AQueryBuilder *deleteRow() = 0;
-    virtual AQueryBuilder *select(QString str) = 0;
-    virtual AQueryBuilder *join(QString table, QString firstOn, QString secondOn) = 0;
-    virtual AQueryBuilder *leftJoin(QString table, QString firstOn, QString secondOn) = 0;
-    virtual AQueryBuilder *rightJoin(QString table, QString firstOn, QString secondOn) = 0;
-    virtual AQueryBuilder *where(QString str) = 0;
-    virtual AQueryBuilder *andWhere(QString str) = 0;
-    virtual AQueryBuilder *orWhere(QString str) = 0;
-    virtual AQueryBuilder *orderBy(QString str) = 0;
-    virtual AQueryBuilder *limit(QString str) = 0;
+    virtual AQueryBuilder *select(const QString &str) = 0;
+    virtual AQueryBuilder *join(const QString &table, const QString &firstOn, const QString &secondOn) = 0;
+    virtual AQueryBuilder *leftJoin(const QString &table, const QString &firstOn, const QString &secondOn) = 0;
+    virtual AQueryBuilder *rightJoin(const QString &table, const QString &firstOn, const QString &secondOn) = 0;
+    virtual AQueryBuilder *where(const QString &str) = 0;
+    virtual AQueryBuilder *andWhere(const QString &str) = 0;
+    virtual AQueryBuilder *orWhere(const QString &str) = 0;
+    virtual AQueryBuilder *orderBy(const QString &str) = 0;
+    virtual AQueryBuilder *limit(const QString &str) = 0;
     virtual AQueryBuilder *limit(int nb) = 0;
 
-    virtual AQueryBuilder *updateQuery(QString fields, QString whereClause = "") = 0;
-    virtual AQueryBuilder *insertQuery(QString fields, QString values = "") =0;
+    virtual AQueryBuilder *updateQuery(const QString &fields, const QString &whereClause = "") = 0;
+    virtual AQueryBuilder *insertQuery(const QString &fields, const QString &values = "") =0;
 
-    AQueryBuilder *bindValue(QString key, QString value);
-    AQueryBuilder *bindValue(QString key, int value);
+    AQueryBuilder *bindValue(const QString &key, const QString &value);
+    AQueryBuilder *bindValue(const QString &key, int value);
 
     QSqlQuery *build();
 
-    QString getQueryString() const;
+    const QString &getQueryString() const;
 
 protected:
     QSqlQuery *_queryObj;
     QSqlDatabase *_db;
     QString _queryStr;
     QString _table;
-    std::map<QString, QString> _bindedValues;
+    QMap<QString, QString> _bindedValues;
 
 };
 

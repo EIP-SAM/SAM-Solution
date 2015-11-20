@@ -8,23 +8,23 @@ class QueryBuilderMySql : public AQueryBuilder
     Q_OBJECT
 
 public:
-    QueryBuilderMySql(QString table, QSqlDatabase *db);
+    QueryBuilderMySql(const QString &table, QSqlDatabase *db);
     virtual ~QueryBuilderMySql();
 
     virtual AQueryBuilder *deleteRow();
-    virtual AQueryBuilder *select(QString str);
-    virtual AQueryBuilder *join(QString table, QString firstOn, QString secondOn);
-    virtual AQueryBuilder *leftJoin(QString table, QString firstOn, QString secondOn);
-    virtual AQueryBuilder *rightJoin(QString table, QString firstOn, QString secondOn);
-    virtual AQueryBuilder *where(QString str);
-    virtual AQueryBuilder *andWhere(QString str);
-    virtual AQueryBuilder *orWhere(QString str);
-    virtual AQueryBuilder *orderBy(QString str);
-    virtual AQueryBuilder *limit(QString str);
+    virtual AQueryBuilder *select(const QString &str);
+    virtual AQueryBuilder *join(const QString &table, const QString &firstOn, const QString &secondOn);
+    virtual AQueryBuilder *leftJoin(const QString &table, const QString &firstOn, const QString &secondOn);
+    virtual AQueryBuilder *rightJoin(const QString &table, const QString &firstOn, const QString &secondOn);
+    virtual AQueryBuilder *where(const QString &str);
+    virtual AQueryBuilder *andWhere(const QString &str);
+    virtual AQueryBuilder *orWhere(const QString &str);
+    virtual AQueryBuilder *orderBy(const QString &str);
+    virtual AQueryBuilder *limit(const QString &str);
     virtual AQueryBuilder *limit(int nb);
 
-    virtual AQueryBuilder *updateQuery(QString fields, QString whereClause = "");
-    virtual AQueryBuilder *insertQuery(QString fields, QString values = "");
+    virtual AQueryBuilder *updateQuery(const QString &fields, const QString &whereClause = "");
+    virtual AQueryBuilder *insertQuery(const QString &fields, const QString &values = "");
 };
 
 #endif // !QUERY_BUILDER_MYSQL_HPP_

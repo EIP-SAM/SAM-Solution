@@ -6,12 +6,8 @@
 // Init attributs
 // Create database instance
 //
-Entity::Entity()
+Entity::Entity() : _db(new QSqlDatabase()), _dbType(MYSQL_TYPE), _propertiesName(NULL), _propertiesValue(NULL)
 {
-    _db = new QSqlDatabase();
-    _dbType = MYSQL_TYPE;
-    _propertiesName = NULL;
-    _propertiesValue = NULL;
 }
 
 //
@@ -56,7 +52,7 @@ QString Entity::getTable() const
 //
 // Set the table attribute
 //
-void Entity::setTable(QString newTable)
+void Entity::setTable(const QString &newTable)
 {
     _table = newTable;
 }
@@ -89,7 +85,7 @@ QSqlQuery *Entity::prepareInsert() const
     QString fields;
     QString values;
 
-    for (unsigned int i = 1; i < _propertiesName->size(); ++i)
+    for (int i = 1; i < _propertiesName->size(); ++i)
     {
 	fields += _propertiesName->at(i);
 	if (i < _propertiesName->size() - 1)
@@ -102,7 +98,7 @@ QSqlQuery *Entity::prepareInsert() const
 
     builder->insertQuery(fields, values);
 
-    for (unsigned int i = 1; i < _propertiesValue->size(); ++i)
+    for (int i = 1; i < _propertiesValue->size(); ++i)
     {
 	builder->bindValue(":" + _propertiesName->at(i), _propertiesValue->at(i));
     }
@@ -119,7 +115,7 @@ QSqlQuery *Entity::prepareUpdate() const
     QString fields;
     QString whereClause = "id = '" + _propertiesValue->at(0)  + "'";
 
-    for (unsigned int i = 0; i < _propertiesName->size(); ++i)
+    for (int i = 0; i < _propertiesName->size(); ++i)
     {
 	fields += _propertiesName->at(i) + " = :" + _propertiesName->at(i);
 	if (i < _propertiesName->size() - 1)
@@ -128,7 +124,7 @@ QSqlQuery *Entity::prepareUpdate() const
 
     builder->updateQuery(fields, whereClause);
 
-    for (unsigned int i = 0; i < _propertiesValue->size(); ++i)
+    for (int i = 0; i < _propertiesValue->size(); ++i)
     {
 	builder->bindValue(":" + _propertiesName->at(i), _propertiesValue->at(i));
     }
@@ -158,8 +154,8 @@ bool Entity::startConnection()
 //
 void Entity::getAllProperties()
 {
-    _propertiesName = new std::vector<QString>;
-    _propertiesValue = new std::vector<QString>;
+    _propertiesName = new QVector<QString>;
+    _propertiesValue = new QVector<QString>;
 
     const QMetaObject *metaObject = this->metaObject();
     int count = metaObject->propertyCount();

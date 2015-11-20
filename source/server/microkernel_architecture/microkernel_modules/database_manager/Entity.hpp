@@ -8,6 +8,7 @@
 # include <QStringList>
 # include <QVariant>
 # include <QString>
+# include <QVector>
 # include <QSqlRecord>
 # include <QSqlQuery>
 # include "QueryBuilderMySql.hpp"
@@ -21,8 +22,8 @@ class Entity : public QObject
 private:
     QSqlDatabase *_db;
     QString _dbType;
-    std::vector<QString> *_propertiesName;
-    std::vector<QString> *_propertiesValue;
+    QVector<QString> *_propertiesName;
+    QVector<QString> *_propertiesValue;
     bool connect();
     bool startConnection();
     void getAllProperties();
@@ -32,7 +33,7 @@ private:
 protected:
     QString _table;
     QString getTable() const;
-    void setTable(QString newTable);
+    void setTable(const QString &newTable);
 
 public:
     Entity();
@@ -58,7 +59,7 @@ public:
 	->bindValue(":id", id)
 	;
 
-      std::vector<T *> result = this->request<T>(builder);
+      QVector<T *> result = this->request<T>(builder);
 
       if (result.size() == 0)
 	return NULL;
@@ -71,9 +72,9 @@ public:
     // Function in .hpp because of templating
     //
     template<class T>
-    std::vector<T *> request(AQueryBuilder *builder)
+    QVector<T *> request(AQueryBuilder *builder)
 	{
-	    std::vector<T *> result;
+	    QVector<T *> result;
 	    QSqlRecord recQuery;
 	    QSqlQuery *query;
 
@@ -85,7 +86,7 @@ public:
 	    {
 		recQuery = query->record();
 		T *entity = new T();
-		for (std::vector<QString>::iterator it = _propertiesName->begin();
+		for (QVector<QString>::iterator it = _propertiesName->begin();
 		     it != _propertiesName->end(); ++it)
 		{
 		    int index = recQuery.indexOf(*it);
