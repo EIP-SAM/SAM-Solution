@@ -26,8 +26,8 @@ private:
     bool connect();
     bool startConnection();
     void getAllProperties();
-    QSqlQuery prepareInsert() const;
-    QSqlQuery prepareUpdate() const;
+    QSqlQuery *prepareInsert() const;
+    QSqlQuery *prepareUpdate() const;
 
 protected:
     QString _table;
@@ -39,7 +39,7 @@ public:
     virtual ~Entity();
     bool save();
     bool deleteQuery(AQueryBuilder *builder);
-    AQueryBuilder *getQueryBuilder();
+    AQueryBuilder *getQueryBuilder() const;
 
 
     //

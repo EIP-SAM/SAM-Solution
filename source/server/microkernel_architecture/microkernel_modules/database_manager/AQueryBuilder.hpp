@@ -29,6 +29,9 @@ public:
     virtual AQueryBuilder *limit(QString str) = 0;
     virtual AQueryBuilder *limit(int nb) = 0;
 
+    virtual AQueryBuilder *updateQuery(QString fields, QString whereClause = "") = 0;
+    virtual AQueryBuilder *insertQuery(QString fields, QString values = "") =0;
+
     AQueryBuilder *bindValue(QString key, QString value);
     AQueryBuilder *bindValue(QString key, int value);
 

@@ -22,6 +22,9 @@ public:
     virtual AQueryBuilder *orderBy(QString str);
     virtual AQueryBuilder *limit(QString str);
     virtual AQueryBuilder *limit(int nb);
+
+    virtual AQueryBuilder *updateQuery(QString fields, QString whereClause = "");
+    virtual AQueryBuilder *insertQuery(QString fields, QString values = "");
 };
 
 #endif // !QUERY_BUILDER_MYSQL_HPP_

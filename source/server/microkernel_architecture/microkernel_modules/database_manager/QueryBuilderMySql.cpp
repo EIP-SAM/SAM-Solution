@@ -117,3 +117,23 @@ AQueryBuilder *QueryBuilderMySql::limit(int nb)
 
     return (this);
 }
+
+//
+//My SQL command 'update'
+//
+AQueryBuilder *QueryBuilderMySql::updateQuery(QString fields, QString whereClause)
+{
+    _queryStr += "UPDATE " + _table + " SET " +
+	fields + " WHERE " + whereClause + ";";
+    return (this);
+}
+
+//
+//My SQL command 'insert'
+//
+AQueryBuilder *QueryBuilderMySql::insertQuery(QString fields, QString values)
+{
+    _queryStr += "INSERT INTO " + _table +
+	" (" + fields + ") VALUES (" + values + ");";
+    return (this);
+}

@@ -67,7 +67,7 @@ void Entity::setTable(QString newTable)
 //
 bool Entity::save()
 {
-    QSqlQuery query;
+    QSqlQuery *query;
 
     if(!startConnection())
 	return false;
@@ -77,16 +77,15 @@ bool Entity::save()
     else
 	query = prepareUpdate();
 
-    return (query.exec());
+    return (query->exec());
 }
 
 //
 // Prepare the query for perform an Insert
 //
-QSqlQuery Entity::prepareInsert() const
+QSqlQuery *Entity::prepareInsert() const
 {
-    QSqlQuery queryObj;
-    QString query = "INSERT INTO " + _table;
+    AQueryBuilder *builder = this->getQueryBuilder();
     QString fields;
     QString values;
 
@@ -101,25 +100,24 @@ QSqlQuery Entity::prepareInsert() const
 	    values += ", ";
     }
 
-    queryObj.prepare(query + " (" + fields + ") VALUES (" + values + ");");
+    builder->insertQuery(fields, values);
 
     for (unsigned int i = 1; i < _propertiesValue->size(); ++i)
     {
-	queryObj.bindValue(":" + _propertiesName->at(i), _propertiesValue->at(i));
+	builder->bindValue(":" + _propertiesName->at(i), _propertiesValue->at(i));
     }
 
-    return queryObj;
+    return builder->build();
 }
 
 //
 // Prepare the query for perform an Update
 //
-QSqlQuery Entity::prepareUpdate() const
+QSqlQuery *Entity::prepareUpdate() const
 {
-    QSqlQuery queryObj;
-    QString query = "UPDATE " + _table;
+    AQueryBuilder *builder = this->getQueryBuilder();
     QString fields;
-    QString where = "WHERE id = '" + _propertiesValue->at(0)  + "'";
+    QString whereClause = "id = '" + _propertiesValue->at(0)  + "'";
 
     for (unsigned int i = 0; i < _propertiesName->size(); ++i)
     {
@@ -128,14 +126,14 @@ QSqlQuery Entity::prepareUpdate() const
 	    fields += ", ";
     }
 
-    queryObj.prepare(query + " SET " + fields + " " + where + ";");
+    builder->updateQuery(fields, whereClause);
 
     for (unsigned int i = 0; i < _propertiesValue->size(); ++i)
     {
-	queryObj.bindValue(":" + _propertiesName->at(i), _propertiesValue->at(i));
+	builder->bindValue(":" + _propertiesName->at(i), _propertiesValue->at(i));
     }
 
-    return queryObj;
+    return builder->build();
 }
 
 //
@@ -193,7 +191,7 @@ bool Entity::deleteQuery(AQueryBuilder *builder)
 // Get a new fresh instance of the
 // QueryBuilder, set with Entity data
 //
-AQueryBuilder *Entity::getQueryBuilder()
+AQueryBuilder *Entity::getQueryBuilder() const
 {
     AQueryBuilder *ret = NULL;
 
