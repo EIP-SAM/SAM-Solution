@@ -4,16 +4,22 @@
 ##                       ##
 ###########################
 
-QT       -= gui
-QT       += core \
-            network \
-            widgets
+QT -= \
+    gui
 
-TARGET   = server
+QT += \
+    core \
+    network \
+    widgets
 
-CONFIG   -= app_bundle
-CONFIG   += console \
-            c++11
+TARGET = server
+
+CONFIG -= \
+    app_bundle
+
+CONFIG += \
+    console \
+    c++11
 
 TEMPLATE = app
 
@@ -24,6 +30,7 @@ INCLUDEPATH += \
     $${COMMON_ALL}/qt_custom_extensions \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities \
+    $${COMMON_ALL}/microkernel_architecture/main_controller \
     microkernel_architecture/microkernel_modules/functionalities_manager \
     microkernel_architecture/microkernel_modules/network_manager \
     microkernel_architecture/microkernel_modules/main_controller
@@ -39,6 +46,7 @@ HEADERS += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBuffer.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionalitiesManager.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionality.hpp \
+    $${COMMON_ALL}/microkernel_architecture/main_controller/AMainController.hpp \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.hpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkServerManager.hpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkClient.hpp \
@@ -54,6 +62,7 @@ SOURCES += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBuffer.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionalitiesManager.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionality.cpp \
+    $${COMMON_ALL}/microkernel_architecture/main_controller/AMainController.cpp \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.cpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkServerManager.cpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkClient.cpp \

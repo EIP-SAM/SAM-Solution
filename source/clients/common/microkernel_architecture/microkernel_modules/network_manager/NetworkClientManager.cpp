@@ -69,6 +69,12 @@ void NetworkClientManager::onInstructionPushed()
         qDebug() << "Error: Bad news, there is no instruction in the queue";
         return ;
     }
+    if (instruction->getTransmitterProgId() != mainController->getProgId())
+    {
+        qDebug() << "Error: Trying to send a malicious instruction; Instruction deleted";
+        delete instruction;
+        return ;
+    }
     buffer = instruction->getData();
     while (writtenSize != instruction->getData().size())
     {
@@ -134,7 +140,18 @@ void NetworkClientManager::onReadyRead()
         if (!instruction->getNextReadSize())
         {
             if (instruction->finalizeFilling())
-                mainController->getInstructionBus().pushInstruction(instruction);
+            {
+                AFunctionality::eType fctType = mainController->getFunctionalityType(instruction->getFinalReceiver());
+
+                if (mainController->getProgId() == instruction->getTransmitterProgId() ||
+                    fctType == AFunctionality::MICROKERNEL || fctType == AFunctionality::INTERNAL)
+                {
+                    delete instruction;
+                    qDebug() << "Error: Malicious instruction received; Instruction deleted";
+                }
+                else
+                    mainController->pushInstruction(instruction);
+            }
             else
             {
                 delete instruction;

@@ -103,6 +103,25 @@ AFunctionality *AFunctionalitiesManager::loadLibrary(const QString &name)
 }
 
 //
+// Getter: Return which system architrecture level has the given functionality
+//
+AFunctionality::eType AFunctionalitiesManager::getFunctionalityType(AFunctionality::eClientId clientId) const
+{
+    QList<const QList<AFunctionality *> *> functionalitiesLevels = { &_microkernelFcts, &_internalFcts, &_externalFcts };
+    AFunctionality::eType levels[] = { AFunctionality::MICROKERNEL, AFunctionality::INTERNAL, AFunctionality::EXTERNAL };
+    int i = 0;
+
+    for (auto functionalities : functionalitiesLevels)
+    {
+        for (auto functionality : *functionalities)
+            if (functionality->getClientId() == clientId && clientId != AFunctionality::eClientId::INVALID)
+                return levels[i];
+        ++i;
+    }
+    return AFunctionality::INVALID;
+}
+
+//
 // Slot : Activated when a functionality started
 // Store a pointer ont this functionality in a list
 //
@@ -111,7 +130,6 @@ void AFunctionalitiesManager::_functionalityStarted()
     AFunctionality *fct = NULL;
 
     fct = static_cast<AFunctionality *>(QObject::sender());
-//    mainController->getInstructionBus().registerClient(fct->getClientId(), fct);
     _runningFcts << fct;
 }
 

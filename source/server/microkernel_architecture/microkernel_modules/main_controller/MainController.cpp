@@ -2,9 +2,9 @@
 #include "MainController.hpp"
 
 MainController::MainController(int &ac, char **av)
-    : _qtCore(ac, av), _fctsManager(this)
+    : AMainController(SAM_SERVER), _qtCore(ac, av)
 {
-    mainController = this;
+    mainController = !mainController ? this : mainController;
 }
 
 MainController::~MainController()
@@ -13,12 +13,5 @@ MainController::~MainController()
 
 int MainController::run()
 {
-    if (!_instructionBus.init() || !_fctsManager.init())
-        return (-1);
-    return (_qtCore.exec());
-}
-
-InstructionBus &MainController::getInstructionBus()
-{
-    return _instructionBus;
+    return !_init() ? -1 : _qtCore.exec();
 }

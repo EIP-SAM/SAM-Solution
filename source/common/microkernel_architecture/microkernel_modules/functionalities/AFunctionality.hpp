@@ -13,6 +13,15 @@ class AFunctionality : public AInstructionBusClient
 {
     Q_OBJECT
 
+public:
+    enum eType
+    {
+        INVALID = 0,
+        MICROKERNEL,
+        INTERNAL,
+        EXTERNAL
+    };
+
 private:
     QThread *_thread;
     bool _running;

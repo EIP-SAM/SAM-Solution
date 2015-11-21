@@ -31,6 +31,7 @@ INCLUDEPATH += \
     $${COMMON_ALL}/others \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities \
+    $${COMMON_ALL}/microkernel_architecture/main_controller \
     $${COMMON_CLIENTS}/microkernel_architecture/microkernel_modules/network_manager \
     microkernel_architecture/microkernel_modules/functionalities_manager \
     microkernel_architecture/internal_fcts_modules/gui/gui_controller \
@@ -45,6 +46,7 @@ HEADERS += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBuffer.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionalitiesManager.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionality.hpp \
+    $${COMMON_ALL}/microkernel_architecture/main_controller/AMainController.hpp \
     $${COMMON_CLIENTS}/microkernel_architecture/microkernel_modules/network_manager/NetworkClientManager.hpp \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.hpp \
     microkernel_architecture/internal_fcts_modules/gui/gui_controller/GUIController.hpp \
@@ -58,6 +60,7 @@ SOURCES += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBuffer.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionalitiesManager.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionality.cpp \
+    $${COMMON_ALL}/microkernel_architecture/main_controller/AMainController.cpp \
     $${COMMON_CLIENTS}/microkernel_architecture/microkernel_modules/network_manager/NetworkClientManager.cpp \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.cpp \
     microkernel_architecture/internal_fcts_modules/gui/gui_controller/GUIController.cpp \
