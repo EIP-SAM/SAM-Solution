@@ -1,9 +1,6 @@
-#include "TestAFunctionality.hpp"
-
 //
 // Constructor
 //
-
 TestAFunctionality::TestAFunctionality()
 {
 }
@@ -48,7 +45,7 @@ void TestAFunctionality::TestStop()
 
 	QSignalSpy startedThreadedStopSpy(
 		startedThreadedFunctionality,
-		stop());
+		isRunning());
 	startedThreadedFunctionality->start();
 	QTest::qWait(300);
 	startedThreadedFunctionality->stop();
@@ -61,7 +58,7 @@ void TestAFunctionality::TestStop()
 
 	QSignalSpy startedNonThreadedStopSpy(
 		startedNonThreadedFunctionality,
-		stop());
+		isRunning());
 	startedNonThreadedFunctionality->start();
 	QTest::qWait(300);
 	startedNonThreadedFunctionality->stop();
@@ -72,7 +69,7 @@ void TestAFunctionality::TestStop()
 		(AFunctionality::eClientId)1,
 		true);
 
-	QSignalSpy nonStartedStopSpy(nonStartedFunctionality, stop());
+	QSignalSpy nonStartedStopSpy(nonStartedFunctionality, isRunning());
 	nonStartedFunctionality->stop();
 	QTest::qWait(300);
 	QCOMPARE(nonStartedStopSpy.count(), 0);
