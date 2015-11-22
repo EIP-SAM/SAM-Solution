@@ -42,11 +42,18 @@ QSqlQuery *AQueryBuilder::build()
     _queryObj = new QSqlQuery(*(_db));
     _queryObj->prepare(_queryStr);
 
-    for (it = _bindedValues.begin(); it != _bindedValues.end(); ++it)
+    for (auto key : _bindedValues.keys())
     {
-	QVariant value(it.value());
-	_queryObj->bindValue(it.key(), value);
+	QVariant value(_bindedValues.value(key));
+	_queryObj->bindValue(key, value);
     }
+
+
+    // for (it = _bindedValues.begin(); it != _bindedValues.end(); ++it)
+    // {
+    // 	QVariant value(it.value());
+    // 	_queryObj->bindValue(it.key(), value);
+    // }
 
     return _queryObj;
 }

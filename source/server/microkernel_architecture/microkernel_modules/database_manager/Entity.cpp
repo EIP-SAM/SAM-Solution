@@ -19,11 +19,8 @@ Entity::~Entity()
     if (_db->isOpen())
 	_db->close();
 
-    if (_propertiesName)
-	delete _propertiesName;
-    if (_propertiesValue)
-	delete _propertiesValue;
-
+    delete _propertiesName;
+    delete _propertiesValue;
     delete _db;
 }
 
@@ -44,7 +41,7 @@ bool Entity::connect()
 //
 // Get the table attribute
 //
-QString Entity::getTable() const
+const QString &Entity::getTable() const
 {
     return _table;
 }

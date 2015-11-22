@@ -32,7 +32,7 @@ private:
 
 protected:
     QString _table;
-    QString getTable() const;
+    const QString &getTable() const;
     void setTable(const QString &newTable);
 
 public:
@@ -86,13 +86,12 @@ public:
 	    {
 		recQuery = query->record();
 		T *entity = new T();
-		for (QVector<QString>::iterator it = _propertiesName->begin();
-		     it != _propertiesName->end(); ++it)
+		for (auto prop : _propertiesName->toStdVector())
 		{
-		    int index = recQuery.indexOf(*it);
+		    int index = recQuery.indexOf(prop);
 		    if (index < 0)
 			continue;
-		    entity->setProperty((*it).toLocal8Bit().constData(),
+		    entity->setProperty(prop.toLocal8Bit().constData(),
 					query->value(index));
 		}
 		result.push_back(entity);
