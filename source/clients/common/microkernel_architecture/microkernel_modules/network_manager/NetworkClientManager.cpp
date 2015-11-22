@@ -55,7 +55,10 @@ void NetworkClientManager::disconnect()
 }
 
 //
-//
+// Slot activated in the case of a non threaded functionality
+// This functionality runs on the main thread in the Qt event loop
+// Handle what to do when a new instruction (from the instruction
+// bus) is received
 //
 void NetworkClientManager::onInstructionPushed()
 {
