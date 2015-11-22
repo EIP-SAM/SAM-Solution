@@ -29,7 +29,6 @@ protected:
         unsigned int returnType;
         int numberOfParameters;
     );
-    struct instructionHeader_t;
 
     //
     // `struct instructionParameterHeader_t` represents how the data
@@ -47,7 +46,6 @@ protected:
         int parameterSize;
         // byte_t parameterData[parameterSize];
     );
-    struct instructionParameterHeader_t;
 
     //
     // The following values are often used during the creation

@@ -27,7 +27,6 @@
     { \
         declaration \
     } \
-    __attribute__((__packed__))
 
 # elif _WIN32
 
@@ -37,7 +36,6 @@
     { \
         declaration \
     } \
-    __pragma(pack(pop))
 
 # endif // !_WIN32 || !__GNUC__
 
