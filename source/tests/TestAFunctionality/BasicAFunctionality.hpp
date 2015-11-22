@@ -3,6 +3,10 @@
 
 # include "AFunctionality.hpp"
 
+//
+// Test class of an basic functionality
+//
+
 class BasicAFunctionality : public AFunctionality {
 	Q_OBJECT
 
