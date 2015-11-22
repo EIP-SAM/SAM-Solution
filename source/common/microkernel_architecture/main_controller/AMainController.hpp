@@ -3,18 +3,11 @@
 
 # include "FunctionalitiesManager.hpp"
 # include "InstructionBus.hpp"
+# include "eProgId.hpp"
 
 class AMainController : public QObject
 {
     Q_OBJECT
-
-public:
-    enum eProgId
-    {
-        SAM_SERVER = 1,
-        SAM_ADMIN_CLIENT = 2,
-        SAM_USER_CLIENT = 3
-    };
 
 private:
     FunctionalitiesManager _fctsManager;

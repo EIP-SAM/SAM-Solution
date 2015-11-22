@@ -24,7 +24,7 @@ bool AMainController::pushInstruction(AInstruction *instruction)
     return _instructionBus.pushInstruction(instruction);
 }
 
-AMainController::eProgId AMainController::getProgId() const
+eProgId AMainController::getProgId() const
 {
     return _progId;
 }
