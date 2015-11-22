@@ -20,11 +20,12 @@ class AInstructionBusClient : public QObject
 public:
     enum eClientId : unsigned int
     {
+        // GENERAL CONTEXT
         INVALID = 0,
-        ALL = 1,
+        ALL,
 
-        NETWORK_MANAGER = 2,
-        GUI = 3,
+        NETWORK_MANAGER = 10,
+        GUI,
     };
 
 private:

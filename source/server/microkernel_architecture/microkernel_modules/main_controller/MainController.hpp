@@ -1,25 +1,21 @@
 #ifndef MAIN_CONTROLLER_HPP_
 # define MAIN_CONTROLLER_HPP_
 
+# include "AMainController.hpp"
 # include <QCoreApplication>
-# include "FunctionalitiesManager.hpp"
-# include "InstructionBus.hpp"
 
-class MainController : QObject
+class MainController : public AMainController
 {
     Q_OBJECT
 
 private:
     QCoreApplication _qtCore;
-    FunctionalitiesManager _fctsManager;
-    InstructionBus _instructionBus;
 
 public:
     MainController(int &, char **);
-    ~MainController();
+    virtual ~MainController();
 
-    int run();
-    InstructionBus &getInstructionBus();
+    virtual int run();
 };
 
 # ifdef __MAIN_CONTROLLER_PRIVATE_DECL

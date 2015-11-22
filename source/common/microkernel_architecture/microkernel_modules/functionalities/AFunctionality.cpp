@@ -10,7 +10,7 @@ AFunctionality::AFunctionality(eClientId clientId, bool threaded)
 {
     if (!_threaded)
         connect(this, SIGNAL(instructionPushed()), this, SLOT(onInstructionPushed()));
-    mainController->getInstructionBus().registerClient(_clientId, this);
+    mainController->registerClient(_clientId, this);
 }
 
 AFunctionality::~AFunctionality()

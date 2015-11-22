@@ -62,6 +62,14 @@ void AInstruction::resetMagicNumber()
 }
 
 //
+// Setter: Set transmitter program id
+//
+void AInstruction::setTransmitterProgId(MainController::eProgId progId)
+{
+    _header->transmitterProgId = progId;
+}
+
+//
 // Setter: Set first instruction bus client transmitter id
 //
 void AInstruction::setFirstTransmitter(AInstructionBusClient::eClientId firstTransmitter)
@@ -162,6 +170,14 @@ const AInstructionBusClient *AInstruction::getLocalTransmitter() const
 bool AInstruction::isMagicNumberValid() const
 {
     return _header->magicNumber == _MAGIC_NUMBER;
+}
+
+//
+// Getter: Return the program id who transmitted the instruction
+//
+MainController::eProgId AInstruction::getTransmitterProgId() const
+{
+    return _header->transmitterProgId;
 }
 
 //

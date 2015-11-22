@@ -1,6 +1,7 @@
 #ifndef AINSTRUCTION_HPP_
 # define AINSTRUCTION_HPP_
 
+# include "MainController.hpp"
 # include "AInstructionBusClient.hpp"
 # include "struct_packed.h"
 # include <QByteArray>
@@ -21,6 +22,7 @@ protected:
     //
     STRUCT_PACKED(instructionHeader_t,
         magicNumber_t magicNumber;
+        MainController::eProgId transmitterProgId;
         AInstructionBusClient::eClientId firstTransmitterId;
         AInstructionBusClient::eClientId finalReceiverId;
         unsigned int instructionCode;
@@ -50,9 +52,7 @@ protected:
     //
     // The following values are often used during the creation
     // or during the reading/filling of an `AInstruction`
-
     static const magicNumber_t _MAGIC_NUMBER;
-
     //
     // Regarding `instructionHeader_t`
     static const int _INSTRUCTION_HEADER_SIZE;
@@ -81,6 +81,7 @@ public:
 
     void setLocalTransmitter(AInstructionBusClient *);
     void resetMagicNumber();
+    void setTransmitterProgId(MainController::eProgId);
     void setFirstTransmitter(AInstructionBusClient::eClientId);
     void setFinalReceiver(AInstructionBusClient::eClientId);
     void setInstructionCode(unsigned int);
@@ -90,6 +91,7 @@ public:
 
     const AInstructionBusClient *getLocalTransmitter() const;
     bool isMagicNumberValid() const;
+    MainController::eProgId getTransmitterProgId() const;
     AInstructionBusClient::eClientId getFirstTransmitter() const;
     AInstructionBusClient::eClientId getFinalReceiver() const;
     unsigned int getInstructionCode() const;

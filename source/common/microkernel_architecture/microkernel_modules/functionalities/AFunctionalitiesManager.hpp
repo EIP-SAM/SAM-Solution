@@ -23,7 +23,9 @@ public:
 
     bool init();
     void shutdown();
-    AFunctionality *loadLibrary(const QString &name);
+    AFunctionality *loadLibrary(const QString &);
+
+    AFunctionality::eType getFunctionalityType(AFunctionality::eClientId) const;
 
 protected:
     virtual void _setFcts() = 0;

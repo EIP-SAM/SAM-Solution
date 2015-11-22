@@ -208,7 +208,18 @@ void NetworkServerManager::_onClientReadyRead(qintptr socketDescriptor)
         if (!instruction->getNextReadSize())
         {
             if (instruction->finalizeFilling())
-                mainController->getInstructionBus().pushInstruction(instruction);
+            {
+                AFunctionality::eType fctType = mainController->getFunctionalityType(instruction->getFinalReceiver());
+
+                if (mainController->getProgId() == instruction->getTransmitterProgId() ||
+                    fctType == AFunctionality::MICROKERNEL || fctType == AFunctionality::INTERNAL)
+                {
+                    delete instruction;
+                    qDebug() << "Error: Malicious instruction received; Instruction deleted";
+                }
+                else
+                    mainController->pushInstruction(instruction);
+            }
             else
             {
                 delete instruction;
@@ -285,6 +296,12 @@ void NetworkServerManager::onInstructionPushed()
     if (!instruction)
     {
         qDebug() << "Error: Bad news, there is no instruction in the queue";
+        return ;
+    }
+    if (instruction->getTransmitterProgId() != mainController->getProgId())
+    {
+        qDebug() << "Error: Trying to send a malicious instruction; Instruction deleted";
+        delete instruction;
         return ;
     }
     if (instruction->getPeerId() == 0 ||
