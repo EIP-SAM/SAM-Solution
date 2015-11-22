@@ -27,7 +27,8 @@ HEADERS += \
     $${COMMON_ALL}/others/struct_packed.h \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstruction.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionParameter.hpp \
-    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBuffer.hpp
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBuffer.hpp \
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/eProgId.hpp
 
 SOURCES += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstruction.cpp \

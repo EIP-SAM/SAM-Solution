@@ -32,7 +32,7 @@ TestInstructionBuffer::TestInstructionBuffer()
 void TestInstructionBuffer::testFillingValidInstructionWithoutParameter()
 {
     InstructionBuffer instruction;
-    instructionHeader_t instructionHeader = {0x10101042, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 0};
+    instructionHeader_t instructionHeader = {0x10101042, eProgId::INVALID, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 0};
 
     instruction = QByteArray((char *)&instructionHeader, sizeof(instructionHeader_t));
     QVERIFY(instruction.finalizeFilling() == true);
@@ -42,7 +42,7 @@ void TestInstructionBuffer::testFillingValidInstructionWithoutParameter()
 void TestInstructionBuffer::testFillingValidInstructionWithOneParameter()
 {
     InstructionBuffer instruction;
-    instructionHeader_t instructionHeader = {0x10101042, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 1};
+    instructionHeader_t instructionHeader = {0x10101042, eProgId::INVALID, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 1};
     instructionParameterHeader_t instructionParamHeader = {21, 0};
     Parameter *parameter = NULL;
 
@@ -58,7 +58,7 @@ void TestInstructionBuffer::testFillingValidInstructionWithOneParameter()
 void TestInstructionBuffer::testFillingTooMuchDataAppend()
 {
     InstructionBuffer instruction;
-    instructionHeader_t instructionHeader = {0x10101042, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 1};
+    instructionHeader_t instructionHeader = {0x10101042, eProgId::INVALID, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 1};
     instructionParameterHeader_t instructionParamHeader = {21, 0};
 
     instruction = QByteArray((char *)&instructionHeader, sizeof(instructionHeader_t));
@@ -71,7 +71,7 @@ void TestInstructionBuffer::testFillingTooMuchDataAppend()
 void TestInstructionBuffer::testFillingNotEnoughDataAppend()
 {
     InstructionBuffer instruction;
-    instructionHeader_t instructionHeader = {0x10101042, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 400};
+    instructionHeader_t instructionHeader = {0x10101042, eProgId::INVALID, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 400};
     instructionParameterHeader_t instructionParamHeader = {21, 0};
 
     instruction = QByteArray((char *)&instructionHeader, sizeof(instructionHeader_t));
@@ -84,7 +84,7 @@ void TestInstructionBuffer::testFillingNotEnoughDataAppend()
 void TestInstructionBuffer::testFillingParameterHeaderTruncated()
 {
     InstructionBuffer instruction;
-    instructionHeader_t instructionHeader = {0x10101042, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 1};
+    instructionHeader_t instructionHeader = {0x10101042, eProgId::INVALID, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 1};
     instructionParameterHeader_t instructionParamHeader = {21, 0};
 
     instruction = QByteArray((char *)&instructionHeader, sizeof(instructionHeader_t));
@@ -96,7 +96,7 @@ void TestInstructionBuffer::testFillingParameterHeaderTruncated()
 void TestInstructionBuffer::testFillingInstructionHeaderTruncated()
 {
     InstructionBuffer instruction;
-    instructionHeader_t instructionHeader = {0x10101042, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 1};
+    instructionHeader_t instructionHeader = {0x10101042, eProgId::INVALID, (AInstructionBusClient::eClientId)0, (AInstructionBusClient::eClientId)0, 0, 0, 1};
 
     instruction = QByteArray((char *)&instructionHeader, sizeof(instructionHeader_t) - 1);
     QVERIFY(instruction.finalizeFilling() == false);
