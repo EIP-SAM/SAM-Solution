@@ -1,9 +1,9 @@
 #ifndef AINSTRUCTION_HPP_
 # define AINSTRUCTION_HPP_
 
-# include "MainController.hpp"
 # include "AInstructionBusClient.hpp"
 # include "struct_packed.h"
+# include "eProgId.hpp"
 # include <QByteArray>
 
 typedef unsigned int magicNumber_t;
@@ -22,7 +22,7 @@ protected:
     //
     STRUCT_PACKED(instructionHeader_t,
         magicNumber_t magicNumber;
-        MainController::eProgId transmitterProgId;
+        eProgId transmitterProgId;
         AInstructionBusClient::eClientId firstTransmitterId;
         AInstructionBusClient::eClientId finalReceiverId;
         unsigned int instructionCode;
@@ -81,7 +81,7 @@ public:
 
     void setLocalTransmitter(AInstructionBusClient *);
     void resetMagicNumber();
-    void setTransmitterProgId(MainController::eProgId);
+    void setTransmitterProgId(eProgId);
     void setFirstTransmitter(AInstructionBusClient::eClientId);
     void setFinalReceiver(AInstructionBusClient::eClientId);
     void setInstructionCode(unsigned int);
@@ -91,7 +91,7 @@ public:
 
     const AInstructionBusClient *getLocalTransmitter() const;
     bool isMagicNumberValid() const;
-    MainController::eProgId getTransmitterProgId() const;
+    eProgId getTransmitterProgId() const;
     AInstructionBusClient::eClientId getFirstTransmitter() const;
     AInstructionBusClient::eClientId getFinalReceiver() const;
     unsigned int getInstructionCode() const;

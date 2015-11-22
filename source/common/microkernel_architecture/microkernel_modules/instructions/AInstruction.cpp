@@ -64,7 +64,7 @@ void AInstruction::resetMagicNumber()
 //
 // Setter: Set transmitter program id
 //
-void AInstruction::setTransmitterProgId(MainController::eProgId progId)
+void AInstruction::setTransmitterProgId(eProgId progId)
 {
     _header->transmitterProgId = progId;
 }
@@ -175,7 +175,7 @@ bool AInstruction::isMagicNumberValid() const
 //
 // Getter: Return the program id who transmitted the instruction
 //
-MainController::eProgId AInstruction::getTransmitterProgId() const
+eProgId AInstruction::getTransmitterProgId() const
 {
     return _header->transmitterProgId;
 }

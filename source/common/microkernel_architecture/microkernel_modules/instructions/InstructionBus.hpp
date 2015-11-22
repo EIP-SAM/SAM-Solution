@@ -1,12 +1,12 @@
 #ifndef INSTRUCTION_BUS_HPP_
 # define INSTRUCTION_BUS_HPP_
 
+# include "AInstructionBusClient.hpp"
 # include <QThread>
 # include <QMutex>
 # include <QQueue>
 # include <QList>
 # include <QMap>
-# include "AInstructionBusClient.hpp"
 
 class InstructionBus : public QObject
 {
