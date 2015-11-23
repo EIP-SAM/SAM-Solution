@@ -24,47 +24,16 @@ AFunctionalitiesManager::~AFunctionalitiesManager()
 }
 
 //
-// Initialize microkernel functionalities in a Qlist
+// Initialize the functionalities from the given Qlist
 //
-bool AFunctionalitiesManager::_initMicrokernelFcts()
+bool AFunctionalitiesManager::_initFunctionalities(QList<AFunctionality *> &fctList)
 {
-    foreach(AFunctionality *fct, _microkernelFcts)
+    for (AFunctionality *fct : fctList)
 	{
         if (!connect(fct, SIGNAL(started()), this, SLOT(_functionalityStarted())) ||
             !connect(fct, SIGNAL(stopped()), this, SLOT(_functionalityStopped())) ||
             !fct->start())
 		return false;
-	}
-    return true;
-}
-
-
-//
-// Initialize internal functionalities in a Qlist
-//
-bool AFunctionalitiesManager::_initInternalFcts()
-{
-    foreach(AFunctionality *fct, _internalFcts)
-	{
-        if (!connect(fct, SIGNAL(started()), this, SLOT(_functionalityStarted())) ||
-            !connect(fct, SIGNAL(stopped()), this, SLOT(_functionalityStopped())) ||
-            !fct->start())
-            return false;
-	}
-    return true;
-}
-
-//
-// Initialize external functionalities in a Qlist
-//
-bool AFunctionalitiesManager::_initExternalFcts()
-{
-    foreach(AFunctionality *fct, _externalFcts)
-	{
-        if (!connect(fct, SIGNAL(started()), this, SLOT(_functionalityStarted())) ||
-            !connect(fct, SIGNAL(stopped()), this, SLOT(_functionalityStopped())) ||
-            !fct->start())
-            return false;
 	}
     return true;
 }
@@ -75,9 +44,9 @@ bool AFunctionalitiesManager::_initExternalFcts()
 bool AFunctionalitiesManager::init()
 {
     _setFcts();
-    if (!_initMicrokernelFcts() ||
-        !_initInternalFcts() ||
-        !_initExternalFcts())
+    if (!_initFunctionalities(_microkernelFcts) ||
+        !_initFunctionalities(_internalFcts) ||
+        !_initFunctionalities(_externalFcts))
         return false;
     return true;
 }
@@ -91,7 +60,7 @@ void AFunctionalitiesManager::shutdown()
     if (_runningFcts.count() == 0)
         emit readyToDelete();
     else
-        foreach(AFunctionality *fct, _runningFcts)
+        for (AFunctionality *fct : _runningFcts)
             fct->stop();
 }
 

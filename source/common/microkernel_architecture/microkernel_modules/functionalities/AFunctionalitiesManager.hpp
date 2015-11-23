@@ -29,9 +29,7 @@ public:
 
 protected:
     virtual void _setFcts() = 0;
-    bool _initMicrokernelFcts();
-    bool _initInternalFcts();
-    bool _initExternalFcts();
+    bool _initFunctionalities(QList<AFunctionality *> &);
 
 protected slots:
     void _functionalityStarted();
