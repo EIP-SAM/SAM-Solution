@@ -19,8 +19,6 @@ signals:
 	void start();
 	void stop();
 
-public slots:
-	void isRunning();
 };
 
 #endif // !TESTAFUNCTIONALITY_HPP

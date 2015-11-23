@@ -18,7 +18,7 @@ void TestAFunctionality::TestStart()
 
 	QSignalSpy threadedStartSpy(
 		threadedFunctionality,
-		SIGNAL(start()));
+		SIGNAL(started()));
 	threadedFunctionality->start();
 	QTest::qWait(300);
 	QCOMPARE(threadedStartSpy.count(), 1);
@@ -28,7 +28,7 @@ void TestAFunctionality::TestStart()
 
 	QSignalSpy nonThreadedStartSpy(
 		nonThreadedFunctionality,
-		SIGNAL(start()));
+		SIGNAL(started()));
 	threadedFunctionality->start();
 	QTest::qWait(300);
 	QCOMPARE(nonThreadedStartSpy.count(), 1);
@@ -48,7 +48,7 @@ void TestAFunctionality::TestStop()
 
 	QSignalSpy startedThreadedStopSpy(
 		startedThreadedFunctionality,
-		SIGNAL(isRunning()));
+		SIGNAL(stopped()));
 	startedThreadedFunctionality->start();
 	QTest::qWait(300);
 	startedThreadedFunctionality->stop();
@@ -60,7 +60,7 @@ void TestAFunctionality::TestStop()
 
 	QSignalSpy startedNonThreadedStopSpy(
 		startedNonThreadedFunctionality,
-		SIGNAL(isRunning()));
+		SIGNAL(stopped()));
 	startedNonThreadedFunctionality->start();
 	QTest::qWait(300);
 	startedNonThreadedFunctionality->stop();
@@ -72,7 +72,7 @@ void TestAFunctionality::TestStop()
 
 	QSignalSpy nonStartedStopSpy(
 		nonStartedFunctionality,
-		SIGNAL(isRunning()));
+		SIGNAL(stopped()));
 	nonStartedFunctionality->stop();
 	QTest::qWait(300);
 	QCOMPARE(nonStartedStopSpy.count(), 0);

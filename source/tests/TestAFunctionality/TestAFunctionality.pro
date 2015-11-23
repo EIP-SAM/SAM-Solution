@@ -6,8 +6,9 @@ TARGET = TestAFunctionality
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
-QT       -= gui
-QT       += testlib
+QT       += \
+    testlib \
+    network
 
 TEMPLATE = app
 
@@ -22,8 +23,10 @@ SERVER_ALL = $${PWD}/../../server
 INCLUDEPATH += \
     $${SERVER_ALL}/microkernel_architecture/microkernel_modules/main_controller \
     $${SERVER_ALL}/microkernel_architecture/microkernel_modules/functionalities_manager \
+    $${SERVER_ALL}/microkernel_architecture/microkernel_modules/network_manager \
     $${COMMON_ALL}/microkernel_architecture/main_controller \
     $${COMMON_ALL}/others \
+    $${COMMON_ALL}/qt_custom_extensions \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/main_controller \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities
@@ -32,8 +35,11 @@ INCLUDEPATH += \
 HEADERS += \
 	$${SERVER_ALL}/microkernel_architecture/microkernel_modules/main_controller/MainController.hpp \
     $${SERVER_ALL}/microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.hpp \
+    $${SERVER_ALL}/microkernel_architecture/microkernel_modules/network_manager/NetworkServerManager.hpp \
 	$${COMMON_ALL}/microkernel_architecture/main_controller/AMainController.hpp \
     $${COMMON_ALL}/others/struct_packed.h \
+    $${COMMON_ALL}/qt_custom_extensions/_QFile.hpp \
+    $${COMMON_ALL}/qt_custom_extensions/_QTcpServer.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstruction.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionBusClient.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionParameter.hpp \
@@ -45,7 +51,10 @@ HEADERS += \
 
 SOURCES += \
 	$${SERVER_ALL}/microkernel_architecture/microkernel_modules/main_controller/MainController.cpp \
-    $${SERVER_ALL}/microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.hpp \
+    $${SERVER_ALL}/microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.cpp \
+    $${SERVER_ALL}/microkernel_architecture/microkernel_modules/network_manager/NetworkServerManager.hpp \
+    $${COMMON_ALL}/qt_custom_extensions/_QFile.cpp \
+    $${COMMON_ALL}/qt_custom_extensions/_QTcpServer.cpp \
 	$${COMMON_ALL}/microkernel_architecture/main_controller/AMainController.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstruction.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionBusClient.cpp \
