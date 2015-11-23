@@ -28,10 +28,16 @@ HEADERS += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstruction.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionParameter.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionBusClient.hpp \
-    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/eProgId.hpp
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBus.hpp \
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/eProgId.hpp \
+    FooBusClient.hpp \
+    BarBusClient.hpp
 
 SOURCES += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstruction.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionParameter.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionBusClient.cpp \
-    TestInstructionBus.cpp
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBus.cpp \
+    TestInstructionBus.cpp \
+    FooBusClient.cpp \
+    BarBusClient.cpp
