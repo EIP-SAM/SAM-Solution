@@ -2,13 +2,16 @@
 #include "MainController.hpp"
 
 //
-// Constructor and Destructor
+// Constructor
 //
-AFunctionalitiesManager::AFunctionalitiesManager(QObject *parent) : QObject(parent),
-                                    _shuttingDown(false)
+AFunctionalitiesManager::AFunctionalitiesManager(QObject *parent)
+  : QObject(parent), _shuttingDown(false)
 {
 }
 
+//
+// Destructor
+//
 AFunctionalitiesManager::~AFunctionalitiesManager()
 {
     shutdown();

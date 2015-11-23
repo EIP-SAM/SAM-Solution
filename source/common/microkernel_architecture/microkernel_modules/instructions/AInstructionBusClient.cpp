@@ -1,14 +1,19 @@
 #include "AInstructionBusClient.hpp"
 #include "AInstruction.hpp"
-
-#include <QDebug>
 #include <QThread>
+#include <QDebug>
 
+//
+// Constructor
+//
 AInstructionBusClient::AInstructionBusClient(eClientId clientId)
     : QObject(), _clientId(clientId)
 {
 }
 
+//
+// Destructor
+//
 AInstructionBusClient::~AInstructionBusClient()
 {
     AInstruction *instruction = NULL;

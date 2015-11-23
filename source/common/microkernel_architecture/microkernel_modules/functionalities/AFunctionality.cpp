@@ -2,7 +2,7 @@
 #include "MainController.hpp"
 
 //
-// Constructor and Destructor
+// Constructor
 //
 AFunctionality::AFunctionality(eClientId clientId, bool threaded)
     : AInstructionBusClient(clientId),
@@ -13,6 +13,9 @@ AFunctionality::AFunctionality(eClientId clientId, bool threaded)
     mainController->registerClient(_clientId, this);
 }
 
+//
+// Destructor
+//
 AFunctionality::~AFunctionality()
 {
     stop();

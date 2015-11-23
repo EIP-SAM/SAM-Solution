@@ -8,6 +8,7 @@ const QString NetworkClientManager::_ENCRYPTION_CERTIFICATE_FILE = "server.crt";
 const QSsl::SslProtocol NetworkClientManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 
 //
+// Constructor
 // Add signal to readReady.
 //
 NetworkClientManager::NetworkClientManager()
@@ -17,6 +18,9 @@ NetworkClientManager::NetworkClientManager()
     connect(&_socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
 }
 
+//
+// Destructor
+//
 NetworkClientManager::~NetworkClientManager()
 {
     disconnect();

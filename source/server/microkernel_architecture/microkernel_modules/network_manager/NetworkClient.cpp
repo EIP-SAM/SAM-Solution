@@ -69,7 +69,7 @@ bool NetworkClient::_bindSocketSignalsToSlots()
 }
 
 //
-//
+// Close client socket
 //
 void NetworkClient::close()
 {
