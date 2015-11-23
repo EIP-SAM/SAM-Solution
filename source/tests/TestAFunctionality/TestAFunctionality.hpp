@@ -7,14 +7,14 @@
 # include "BasicAFunctionality.hpp"
 
 class TestAFunctionality : public QObject {
-	Q_OBJECT
-
+    Q_OBJECT
+    
 public:
-	TestAFunctionality();
-
+    TestAFunctionality();
+			
 private slots:
-	void TestStart();
-	void TestStop();
+    void TestStart();
+    void TestStop();
 };
 
 #endif // !TESTAFUNCTIONALITY_HPP

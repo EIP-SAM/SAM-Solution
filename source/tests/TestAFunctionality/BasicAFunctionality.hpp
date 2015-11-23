@@ -8,17 +8,17 @@
 //
 
 class BasicAFunctionality : public AFunctionality {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	BasicAFunctionality(AFunctionality::eClientId clientId, bool threaded = true);
-	virtual ~BasicAFunctionality();
+    BasicAFunctionality(AFunctionality::eClientId clientId, bool threaded = true);
+    virtual ~BasicAFunctionality();
 
 protected slots:
-	virtual void _run();
+    virtual void _run();
 
 signals:
-	void TestRunStarted();
+    void TestRunStarted();
 };
 
 #endif // !BASICAFUNCTIONALITY_HPP

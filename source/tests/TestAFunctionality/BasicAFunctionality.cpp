@@ -16,5 +16,5 @@ BasicAFunctionality::~BasicAFunctionality()
 //
 void BasicAFunctionality::_run()
 {
-	emit TestRunStarted();
+    emit TestRunStarted();
 }
