@@ -44,6 +44,7 @@ HEADERS += \
 	$${COMMON_ALL}/qt_custom_extensions/_QTcpServer.hpp \
 	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstruction.hpp \
 	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBuffer.hpp \
+	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBus.hpp \
 	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionBusClient.hpp \
 	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionParameter.hpp \
 	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionality.hpp \
@@ -61,7 +62,8 @@ SOURCES += \
 	$${COMMON_ALL}/qt_custom_extensions/_QTcpServer.cpp \
 	$${COMMON_ALL}/microkernel_architecture/main_controller/AMainController.cpp \
 	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstruction.cpp \
-	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBuffer.hpp \
+	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBuffer.cpp \
+	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBus.cpp \
 	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionBusClient.cpp \
 	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/AInstructionParameter.cpp \
 	$${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionality.cpp \
