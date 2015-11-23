@@ -1,3 +1,5 @@
+#include "TestAFunctionality.hpp"
+
 //
 // Constructor
 //
@@ -11,20 +13,22 @@ TestAFunctionality::TestAFunctionality()
 //
 void TestAFunctionality::TestStart()
 {
-	BasicAFunctionality *threadedFunctionality(
-		(AFunctionality::eClientId)1,
-		true);
+	BasicAFunctionality *threadedFunctionality = 
+		new BasicAFunctionality((AFunctionality::eClientId)1, true);
 
-	QSignalSpy threadedStartSpy(threadedFunctionality, start());
+	QSignalSpy threadedStartSpy(
+		threadedFunctionality,
+		SIGNAL(start()));
 	threadedFunctionality->start();
 	QTest::qWait(300);
 	QCOMPARE(threadedStartSpy.count(), 1);
 
-	BasicAFunctionality *nonThreadedFunctionality(
-		(AFunctionality::eClientId)2,
-		false);
+	BasicAFunctionality *nonThreadedFunctionality = 
+		new BasicAFunctionality((AFunctionality::eClientId)2, false);
 
-	QSignalSpy nonThreadedStartSpy(nonThreadedFunctionality, start());
+	QSignalSpy nonThreadedStartSpy(
+		nonThreadedFunctionality,
+		SIGNAL(start()));
 	threadedFunctionality->start();
 	QTest::qWait(300);
 	QCOMPARE(nonThreadedStartSpy.count(), 1);
@@ -39,42 +43,39 @@ void TestAFunctionality::TestStart()
 //
 void TestAFunctionality::TestStop()
 {
-	BasicAFunctionality *startedThreadedFunctionality(
-		(AFunctionality::eClientId)1,
-		true);
+	BasicAFunctionality *startedThreadedFunctionality = 
+		new BasicAFunctionality((AFunctionality::eClientId)1, true);
 
 	QSignalSpy startedThreadedStopSpy(
 		startedThreadedFunctionality,
-		isRunning());
+		SIGNAL(isRunning()));
 	startedThreadedFunctionality->start();
 	QTest::qWait(300);
 	startedThreadedFunctionality->stop();
 	QTest::qWait(300);
 	QCOMPARE(startedThreadedStopSpy.count(), 1);
 
-	BasicAFunctionality *startedNonThreadedFunctionality(
-		(AFunctionality::eClientId)1,
-		false);
+	BasicAFunctionality *startedNonThreadedFunctionality = 
+		new BasicAFunctionality((AFunctionality::eClientId)1, false);
 
 	QSignalSpy startedNonThreadedStopSpy(
 		startedNonThreadedFunctionality,
-		isRunning());
+		SIGNAL(isRunning()));
 	startedNonThreadedFunctionality->start();
 	QTest::qWait(300);
 	startedNonThreadedFunctionality->stop();
 	QTest::qWait(300);
 	QCOMPARE(startedNonThreadedStopSpy.count(), 1);
 
-	BasicAFunctionality *nonStartedFunctionality(
-		(AFunctionality::eClientId)1,
-		true);
+	BasicAFunctionality *nonStartedFunctionality = 
+		new BasicAFunctionality((AFunctionality::eClientId)1, true);
 
-	QSignalSpy nonStartedStopSpy(nonStartedFunctionality, isRunning());
+	QSignalSpy nonStartedStopSpy(
+		nonStartedFunctionality,
+		SIGNAL(isRunning()));
 	nonStartedFunctionality->stop();
 	QTest::qWait(300);
 	QCOMPARE(nonStartedStopSpy.count(), 0);
 }
 
-QTEST_MAIN(TestAFunctionality)
-
-#include "TestAFunctionality.moc"
+QTEST_MAIN(TestAFunctionality);
