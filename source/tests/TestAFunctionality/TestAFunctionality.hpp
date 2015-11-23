@@ -13,8 +13,8 @@ public:
     TestAFunctionality();
 			
 private slots:
-    void TestStart();
-    void TestStop();
+    void testStart();
+    void testStop();
 };
 
 #endif // !TESTAFUNCTIONALITY_HPP

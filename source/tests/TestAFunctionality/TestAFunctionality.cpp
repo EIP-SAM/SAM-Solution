@@ -11,7 +11,7 @@ TestAFunctionality::TestAFunctionality()
 // Test the start signal for the functionality weither it is
 // threaded or not
 //
-void TestAFunctionality::TestStart()
+void TestAFunctionality::testStart()
 {
     bool result;
 
@@ -45,7 +45,7 @@ void TestAFunctionality::TestStart()
 // - Not threaded and started
 // - Not started
 //
-void TestAFunctionality::TestStop()
+void TestAFunctionality::testStop()
 {
     BasicAFunctionality startedThreadedFunctionality((AFunctionality::eClientId)1, true);
     QSignalSpy startedThreadedStopSpy(&startedThreadedFunctionality, SIGNAL(stopped()));
