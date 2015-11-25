@@ -2,6 +2,7 @@
 # define BASIC_FUNCTIONALITIES_MANAGER_HPP_
 
 # include "AFunctionalitiesManager.hpp"
+# include "BasicAFunctionality.hpp"
 
 class BasicFunctionalitiesManager : public AFunctionalitiesManager
 {
@@ -12,7 +13,7 @@ public:
     int getNumberOfRunningFcts() const;
     int getNumberOfMicrokernelFcts() const;
     int getNumberOfInternalFcts() const;
-    int getNumberofExternalFcts() const;
+    int getNumberOfExternalFcts() const;
 
 private:
     virtual void _setFcts();

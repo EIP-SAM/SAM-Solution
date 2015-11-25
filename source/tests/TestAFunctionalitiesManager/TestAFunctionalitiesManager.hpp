@@ -5,22 +5,23 @@
 # include "MainController.hpp"
 # include "BasicFunctionalitiesManager.hpp"
 
-class TestAFunctionalitiesManager : QOject {
+class TestAFunctionalitiesManager : public QObject
+{    
+    Q_OBJECT
     
-    QT_OBJECT
-    
-    private:
-        MainController *_mainController;
-        
-    public:
-        TestAFunctionalitiesManager();
-    
-    private slots:
-        void _testInit();
-        void _testShutdown();
-        void _testLoadLibrary();
-        void _testGetFunctionalityType();
-        
-}
+private:
+    MainController *_mainController;
+    int ac;
+    char **av;
+
+public:
+    TestAFunctionalitiesManager();
+				 
+private slots:
+    void _testInit();
+    void _testShutdown();
+    void _testLoadLibrary();
+    void _testGetFunctionalityType();       
+};
 
 #endif // !TEST_AFUNCTIONALITIES_MANAGER_HPP

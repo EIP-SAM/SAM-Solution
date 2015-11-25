@@ -12,18 +12,20 @@ TestAFunctionalitiesManager::TestAFunctionalitiesManager() : _mainController(NUL
 //
 void TestAFunctionalitiesManager::_testInit()
 {
-    _mainController = new MainController(1, NULL);
-    _mainController->getInstructionBus->init();
+    ac = 1;
+    av = NULL;
+    _mainController = new MainController(ac, av);
+    _mainController->getInstructionBus().init();
 
-    BasicFunctionalitiesManager fctsManager = _mainController->getFonctionalitiesManager();
-    bool functionalitiesManagerInitValue = fctsManager->init();
+    BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
+    bool functionalitiesManagerInitValue = fctsManager.init();
 
     QCOMPARE(functionalitiesManagerInitValue, true);
-    QCOMPARE(fctsManager->getNumberOfMicrokernelFcts(), 1);
-    QCOMPARE(fctsManager->getNumberOfInternalFcts(), 2);
-    QCOMPARE(fctsManager->getNumberofExternalFcts(), 3);
+    QCOMPARE(fctsManager.getNumberOfMicrokernelFcts(), 1);
+    QCOMPARE(fctsManager.getNumberOfInternalFcts(), 2);
+    QCOMPARE(fctsManager.getNumberOfExternalFcts(), 3);
     QTest::qWait(500);
-    QCOMPARE(fctsManager->getNumberOfRunningFcts(), 6);
+    QCOMPARE(fctsManager.getNumberOfRunningFcts(), 6);
 
     delete _mainController;
 }
@@ -31,23 +33,23 @@ void TestAFunctionalitiesManager::_testInit()
 //
 // Test shutDown function
 //
-void TestAfunctionalitiesManager::_testShutdown()
+void TestAFunctionalitiesManager::_testShutdown()
 {
-    _mainController = new MainController(1, NULL);
-    _mainController->getInstructionBus->init();
+    _mainController = new MainController(ac, av);
+    _mainController->getInstructionBus().init();
 
-    BasicFunctionalitiesManager fctsManager = 
-        _basicMainController->getFonctionalitiesManager();
+    BasicFunctionalitiesManager &fctsManager = 
+        _mainController->getFctsManager();
 
-    fctsManager->init();
+    fctsManager.init();
     QTest::qWait(500);
 
     QSignalSpy readyToDeleteSpy(&fctsManager, SIGNAL(readyToDelete()));
 
-    fctsManager->shutdown();
+    fctsManager.shutdown();
     QTest::qWait(500);
     QCOMPARE(readyToDeleteSpy.count(), 1);
-    QCOMPARE(fctsManager->getNumberOfRunningFcts(), 0);
+    QCOMPARE(fctsManager.getNumberOfRunningFcts(), 0);
 
     delete _mainController;
 }
@@ -64,26 +66,26 @@ void TestAFunctionalitiesManager::_testLoadLibrary()
 // Test getFunctionalityType
 //
 
-void TestAFunctionalitiesManager::getFunctionalityType()
+void TestAFunctionalitiesManager::_testGetFunctionalityType()
 {
-    _mainController = new MainController(1, NULL);
-    _mainController->getInstructionBus->init();
+    _mainController = new MainController(ac, av);
+    _mainController->getInstructionBus().init();
 
-    BasicFunctionalitiesManager fctsManager = 
-        _basicMainController->getFonctionalitiesManager();
+    BasicFunctionalitiesManager &fctsManager = 
+        _mainController->getFctsManager();
     
-    fctsManager->init();
+    fctsManager.init();
     QTest::qWait(500);
     
-    AFunctionality::eType resultType = AFunctionality::INVALID;
+    AFunctionality::eType result = AFunctionality::INVALID;
 
-    resultType = fctsManager->getFunctionalityType(AFunctionality::NETWORK_MANAGER);
+    result = fctsManager.getFunctionalityType(AFunctionality::eClientId::NETWORK_MANAGER);
     QCOMPARE(result, AFunctionality::MICROKERNEL);
     
-    resultType = fctsManager->getFunctionalityType(AFunctionality::INVALID);
+    result = fctsManager.getFunctionalityType(AFunctionality::eClientId::INVALID);
     QCOMPARE(result, AFunctionality::INVALID);
     
-    resultType = fctsManager->getFunctionalityType(AFunctionality::ALL);
+    result = fctsManager.getFunctionalityType(AFunctionality::eClientId::ALL);
     QCOMPARE(result, AFunctionality::INVALID);
 
     delete _mainController;

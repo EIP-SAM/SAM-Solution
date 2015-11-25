@@ -26,7 +26,7 @@ int BasicFunctionalitiesManager::getNumberOfRunningFcts() const
 //
 // Return how many microkernel functionalities there are
 //
-int BasicFunctionalitiesManager::getNumberOfMicrokernelFctsFcts() const
+int BasicFunctionalitiesManager::getNumberOfMicrokernelFcts() const
 {
     return _microkernelFcts.count();
 }
@@ -62,7 +62,7 @@ void BasicFunctionalitiesManager::_setFcts()
 //
 void BasicFunctionalitiesManager::_setMicrokernelFcts()
 {
-    _microkernelFcts << new BasicFunctionalities(AFunctionality::NETWORK_MANAGER, false);
+    _microkernelFcts << new BasicAFunctionality(AFunctionality::NETWORK_MANAGER, false);
 }
 
 //
@@ -70,8 +70,8 @@ void BasicFunctionalitiesManager::_setMicrokernelFcts()
 //
 void BasicFunctionalitiesManager::_setInternalFcts()
 {
-    _internalFcts << new BasicFunctionalities(AFunctionality::GUI, false);
-    _internalFcts << new BasicFunctionalities(AFunctionality::GUI, false);
+    _internalFcts << new BasicAFunctionality(AFunctionality::GUI, false);
+    _internalFcts << new BasicAFunctionality(AFunctionality::GUI, false);
 }
 
 //
@@ -79,7 +79,7 @@ void BasicFunctionalitiesManager::_setInternalFcts()
 //
 void BasicFunctionalitiesManager::_setExternalFcts()
 {
-    _externalFcts << new BasicFunctionalities(AFunctionality::GUI, false);
-    _internalFcts << new BasicFunctionalities(AFunctionality::GUI, false);
-    _internalFcts << new BasicFunctionalities(AFunctionality::GUI, false);
+    _externalFcts << new BasicAFunctionality(AFunctionality::GUI, false);
+    _internalFcts << new BasicAFunctionality(AFunctionality::GUI, false);
+    _internalFcts << new BasicAFunctionality(AFunctionality::GUI, false);
 }
