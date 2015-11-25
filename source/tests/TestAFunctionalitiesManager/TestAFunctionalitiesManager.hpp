@@ -2,7 +2,7 @@
 # define TEST_AFUNCTIONALITIES_MANAGER_HPP
 
 # include <QtTest>
-# include "BasicMainController.hpp"
+# include "MainController.hpp"
 # include "BasicFunctionalitiesManager.hpp"
 
 class TestAFunctionalitiesManager : QOject {
@@ -10,7 +10,7 @@ class TestAFunctionalitiesManager : QOject {
     QT_OBJECT
     
     private:
-        BasicMainController *_basicMainController;
+        MainController *_mainController;
         
     public:
         TestAFunctionalitiesManager();

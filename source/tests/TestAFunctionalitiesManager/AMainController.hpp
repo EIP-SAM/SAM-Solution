@@ -1,26 +1,26 @@
-#ifndef BASIC_MAIN_CONTROLLER_HPP
-# define BASIC_MAIN_CONTROLLER_HPP
+#ifndef AMAIN_CONTROLLER_HPP_
+# define AMAIN_CONTROLLER_HPP_
 
-# include "AFunctionalitiesManager.hpp"
+# include "BasicFunctionalitiesManager.hpp"
 # include "InstructionBus.hpp"
 # include "eProgId.hpp"
 
-class BasicMainController : public QObject
+class AMainController : public QObject
 {
     Q_OBJECT
-    
+
 protected:
-    BasicFunctionalitiesManager _basicFctsManager;
+    BasicFunctionalitiesManager _fctsManager;
     InstructionBus _instructionBus;
     const eProgId _progId;
 
 protected:
-    BasicMainController(eProgId);
+    AMainController(eProgId);
 
 public:
-    ~BasicMainController();
+    virtual ~AMainController();
 
-    int run();
+    virtual int run() = 0;
 
 protected:
     bool _init();
@@ -31,9 +31,6 @@ public:
 
     eProgId getProgId() const;
     AFunctionality::eType getFunctionalityType(AFunctionality::eClientId) const;
+};
 
-    BasicFonctionalitiesManager &getBasicFonctionalitiesManager() const;
-    InstructionBus &getInstructionBus() const;
-}
-
-#endif // !BASIC_MAIN_CONTROLLER_HPP
+#endif // !AMAIN_CONTROLLER_HPP_

@@ -3,10 +3,8 @@
 //
 // Constructor
 //
-TestAFunctionalitiesManager::TestAFunctionalitiesManager()
+TestAFunctionalitiesManager::TestAFunctionalitiesManager() : _mainController(NULL)
 {
-    _basicMainController = new BasicMainController(1, NULL);
-    _basicMainController->getInstructionBus->init();
 }
 
 //
@@ -14,7 +12,10 @@ TestAFunctionalitiesManager::TestAFunctionalitiesManager()
 //
 void TestAFunctionalitiesManager::_testInit()
 {
-    BasicFunctionalitiesManager fctsManager = _basicMainController->getBasicFonctionalitiesManager();
+    _mainController = new MainController(1, NULL);
+    _mainController->getInstructionBus->init();
+
+    BasicFunctionalitiesManager fctsManager = _mainController->getFonctionalitiesManager();
     bool functionalitiesManagerInitValue = fctsManager->init();
 
     QCOMPARE(functionalitiesManagerInitValue, true);
@@ -23,6 +24,8 @@ void TestAFunctionalitiesManager::_testInit()
     QCOMPARE(fctsManager->getNumberofExternalFcts(), 3);
     QTest::qWait(500);
     QCOMPARE(fctsManager->getNumberOfRunningFcts(), 6);
+
+    delete _mainController;
 }
 
 //
@@ -30,8 +33,11 @@ void TestAFunctionalitiesManager::_testInit()
 //
 void TestAfunctionalitiesManager::_testShutdown()
 {
+    _mainController = new MainController(1, NULL);
+    _mainController->getInstructionBus->init();
+
     BasicFunctionalitiesManager fctsManager = 
-        _basicMainController->getBasicFonctionalitiesManager();
+        _basicMainController->getFonctionalitiesManager();
 
     fctsManager->init();
     QTest::qWait(500);
@@ -42,6 +48,8 @@ void TestAfunctionalitiesManager::_testShutdown()
     QTest::qWait(500);
     QCOMPARE(readyToDeleteSpy.count(), 1);
     QCOMPARE(fctsManager->getNumberOfRunningFcts(), 0);
+
+    delete _mainController;
 }
 
 //
@@ -58,8 +66,11 @@ void TestAFunctionalitiesManager::_testLoadLibrary()
 
 void TestAFunctionalitiesManager::getFunctionalityType()
 {
+    _mainController = new MainController(1, NULL);
+    _mainController->getInstructionBus->init();
+
     BasicFunctionalitiesManager fctsManager = 
-        _basicMainController->getBasicFonctionalitiesManager();
+        _basicMainController->getFonctionalitiesManager();
     
     fctsManager->init();
     QTest::qWait(500);
@@ -74,4 +85,8 @@ void TestAFunctionalitiesManager::getFunctionalityType()
     
     resultType = fctsManager->getFunctionalityType(AFunctionality::ALL);
     QCOMPARE(result, AFunctionality::INVALID);
+
+    delete _mainController;
 }
+
+QTEST_MAIN(TestAFunctionalitiesManager);
