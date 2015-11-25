@@ -15,13 +15,15 @@ class NetworkServerManager : public ANetworkManager
     Q_OBJECT
 
 public:
-    NetworkServerManager(bool threaded = false);
+    NetworkServerManager(quint16 port);
     ~NetworkServerManager();
 
 private:
     static const QString _ENCRYPTION_KEY_FILE;
     static const QString _ENCRYPTION_CERTIFICATE_FILE;
     static const QSsl::SslProtocol _DEFAULT_PROTOCOL;
+
+    const quint16 _port;
 
     _QTcpServer _server;
     quint16 _portNumber;
@@ -31,7 +33,7 @@ private:
     QMap<quint64, NetworkClient *> _clientIds;
 
 public:
-    bool start(quint16 portNumber);
+    bool start();
 
 protected:
     virtual void _setPeerInputBuffer(InstructionBuffer *, quint64);

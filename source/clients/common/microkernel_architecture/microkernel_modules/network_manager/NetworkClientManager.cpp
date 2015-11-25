@@ -11,8 +11,8 @@ const QSsl::SslProtocol NetworkClientManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 // Constructor
 // Add signal to readReady.
 //
-NetworkClientManager::NetworkClientManager()
-    : ANetworkManager(false), _socket(this)
+NetworkClientManager::NetworkClientManager(const QString& hostname, quint16 port)
+    : ANetworkManager(false), _hostname(hostname), _port(port), _socket(this)
 {
     connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
     connect(&_socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
@@ -35,17 +35,17 @@ NetworkClientManager::~NetworkClientManager()
 void NetworkClientManager::_run()
 {
     qDebug() << Q_FUNC_INFO;
-    startConnection("localhost", 42042);
+    startConnection();
 }
 
 //
 // Connection to server and send a first message
 //
-void NetworkClientManager::startConnection(const QString &ip, quint16 port)
+void NetworkClientManager::startConnection()
 {
     _socket.setProtocol(_DEFAULT_PROTOCOL);
     _socket.addCaCertificates(_ENCRYPTION_CERTIFICATE_FILE);
-    _socket.connectToHostEncrypted(ip, port);
+    _socket.connectToHostEncrypted(_hostname, _port);
     if (!_socket.waitForEncrypted(15000))
         qDebug() << "Error:" << _socket.errorString();
 }

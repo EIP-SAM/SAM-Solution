@@ -32,7 +32,7 @@ void FunctionalitiesManager::_setFcts()
 //
 void FunctionalitiesManager::_setMicrokernelFcts()
 {
-    _microkernelFcts << new NetworkClientManager();
+    _microkernelFcts << new NetworkClientManager("localhost", 42042);
 }
 
 //

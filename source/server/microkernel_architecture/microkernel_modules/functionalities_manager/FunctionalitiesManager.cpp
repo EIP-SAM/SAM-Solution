@@ -31,7 +31,7 @@ void FunctionalitiesManager::_setFcts()
 //
 void FunctionalitiesManager::_setMicrokernelFcts()
 {
-    _microkernelFcts << new NetworkServerManager(false);
+    _microkernelFcts << new NetworkServerManager(42042);
 }
 
 //

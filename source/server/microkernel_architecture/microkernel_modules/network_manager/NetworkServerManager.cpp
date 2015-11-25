@@ -14,8 +14,8 @@ const QSsl::SslProtocol NetworkServerManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 //
 // Construct network server
 //
-NetworkServerManager::NetworkServerManager(bool threaded)
-    : ANetworkManager(threaded), _server(this)
+NetworkServerManager::NetworkServerManager(quint16 port)
+    : ANetworkManager(false), _port(port), _server(this)
 {
     qRegisterMetaType<QList<QSslError> >("QList<QSslError>");
 }
@@ -41,13 +41,13 @@ void NetworkServerManager::_run()
 {
     connect(&_server, SIGNAL(hasIncomingConnection(qintptr)),
             this, SLOT(_incomingConnection(qintptr)));
-    start(42042);
+    start();
 }
 
 //
 // Initialize and start server
 //
-bool NetworkServerManager::start(quint16 portNumber)
+bool NetworkServerManager::start()
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -59,7 +59,7 @@ bool NetworkServerManager::start(quint16 portNumber)
     qDebug() << QSslSocket::sslLibraryVersionString();
     if (!_initEncryptionKey(_ENCRYPTION_KEY_FILE) ||
         !_initEncryptionCertificate(_ENCRYPTION_CERTIFICATE_FILE) ||
-        !_listen(portNumber))
+        !_listen(_port))
         return (false);
     return (true);
 }

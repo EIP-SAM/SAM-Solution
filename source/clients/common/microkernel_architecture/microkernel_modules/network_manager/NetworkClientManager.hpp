@@ -13,15 +13,18 @@ private:
     static const QString _ENCRYPTION_CERTIFICATE_FILE;
     static const QSsl::SslProtocol _DEFAULT_PROTOCOL;
 
+    const QString _hostname;
+    const quint16 _port;
+
     QSslSocket _socket;
     InstructionBuffer *_inputBuffer = NULL;
     InstructionBuffer *_outputBuffer = NULL;
 
 public:
-    NetworkClientManager();
+    NetworkClientManager(const QString& hostname, quint16 port);
     virtual ~NetworkClientManager();
 
-    void startConnection(const QString &ip, quint16 port);
+    void startConnection();
     void disconnect();
 
 protected:
