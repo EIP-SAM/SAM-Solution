@@ -9,7 +9,7 @@ class BasicMainController : public QObject
 {
     Q_OBJECT
     
-private:
+protected:
     BasicFunctionalitiesManager _basicFctsManager;
     InstructionBus _instructionBus;
     const eProgId _progId;
@@ -32,7 +32,8 @@ public:
     eProgId getProgId() const;
     AFunctionality::eType getFunctionalityType(AFunctionality::eClientId) const;
 
-    BasicFonctionalitiesManager getBasicFonctionalitiesManager() const;
+    BasicFonctionalitiesManager &getBasicFonctionalitiesManager() const;
+    InstructionBus &getInstructionBus() const;
 }
 
 #endif // !BASIC_MAIN_CONTROLLER_HPP

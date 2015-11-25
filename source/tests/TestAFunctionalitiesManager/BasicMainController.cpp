@@ -66,7 +66,15 @@ AFunctionality::eType BasicAMainController::getFunctionalityType(AFunctionality:
 //
 // Getter: Return the basicFunctionalitiesManger
 //
-BasicFunctionalitiesManager BasicMainController::getBasicFonctionalitiesManager() const
+BasicFunctionalitiesManager &BasicMainController::getBasicFonctionalitiesManager() const
 {
     return _basicFctsManager;
+}
+
+//
+// Getter: Return the instructionBus
+//
+InstructionBus &BasicMainController::getInstructionBus() const
+{
+    return _insctructionBus;
 }
