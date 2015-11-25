@@ -16,6 +16,14 @@ BasicAMainController::~BasicAMainController()
 }
 
 //
+// Entry point of the controller
+//
+int BasicMainController::run()
+{
+    return !_init() ? -1 : _qtCore.exec();
+}
+
+//
 // Internal initializer
 //
 bool BasicAMainController::_init()
@@ -53,4 +61,12 @@ eProgId BasicAMainController::getProgId() const
 AFunctionality::eType BasicAMainController::getFunctionalityType(AFunctionality::eClientId clientId) const
 {
     return _fctsManager.getFunctionalityType(clientId);
+}
+
+//
+// Getter: Return the basicFunctionalitiesManger
+//
+BasicFunctionalitiesManager BasicMainController::getBasicFonctionalitiesManager() const
+{
+    return _basicFctsManager;
 }

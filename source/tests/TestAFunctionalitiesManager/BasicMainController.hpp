@@ -31,6 +31,8 @@ public:
 
     eProgId getProgId() const;
     AFunctionality::eType getFunctionalityType(AFunctionality::eClientId) const;
+
+    BasicFonctionalitiesManager getBasicFonctionalitiesManager() const;
 }
 
 #endif // !BASIC_MAIN_CONTROLLER_HPP
