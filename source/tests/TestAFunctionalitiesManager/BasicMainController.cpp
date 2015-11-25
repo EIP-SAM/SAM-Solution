@@ -3,7 +3,7 @@
 //
 // Constructor
 //
-AMainController::AMainController(eProgId progId)
+BasicAMainController::BasicAMainController(eProgId progId)
     : _basicFctsManager(this), _progId(progId)
 {
 }
@@ -11,14 +11,14 @@ AMainController::AMainController(eProgId progId)
 //
 // Destructor
 //
-AMainController::~AMainController()
+BasicAMainController::~BasicAMainController()
 {
 }
 
 //
 // Internal initializer
 //
-bool AMainController::_init()
+bool BasicAMainController::_init()
 {
     return _instructionBus.init() && _basicFctsManager.init();
 }
@@ -26,7 +26,7 @@ bool AMainController::_init()
 //
 // Wrapper for `InstructionBus::registerClient()`
 //
-bool AMainController::registerClient(AInstructionBusClient::eClientId clientId, AInstructionBusClient *client)
+bool BasicAMainController::registerClient(AInstructionBusClient::eClientId clientId, AInstructionBusClient *client)
 {
     return _instructionBus.registerClient(clientId, client);
 }
@@ -34,7 +34,7 @@ bool AMainController::registerClient(AInstructionBusClient::eClientId clientId, 
 //
 // Wrapper for `InstructionBus::pushInstruction()`
 //
-bool AMainController::pushInstruction(AInstruction *instruction)
+bool BasicAMainController::pushInstruction(AInstruction *instruction)
 {
     return _instructionBus.pushInstruction(instruction);
 }
@@ -42,7 +42,7 @@ bool AMainController::pushInstruction(AInstruction *instruction)
 //
 // Getter: Return program id (server, client user, client admin)
 //
-eProgId AMainController::getProgId() const
+eProgId BasicAMainController::getProgId() const
 {
     return _progId;
 }
@@ -50,7 +50,7 @@ eProgId AMainController::getProgId() const
 //
 // Getter: Return type of a functionality (microkernel, internal, external)
 //
-AFunctionality::eType AMainController::getFunctionalityType(AFunctionality::eClientId clientId) const
+AFunctionality::eType BasicAMainController::getFunctionalityType(AFunctionality::eClientId clientId) const
 {
     return _fctsManager.getFunctionalityType(clientId);
 }

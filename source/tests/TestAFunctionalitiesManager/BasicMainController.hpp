@@ -15,10 +15,10 @@ private:
     const eProgId _progId;
 
 protected:
-    AMainController(eProgId);
+    BasicMainController(eProgId);
 
 public:
-    ~AMainController();
+    ~BasicMainController();
 
     int run();
 
