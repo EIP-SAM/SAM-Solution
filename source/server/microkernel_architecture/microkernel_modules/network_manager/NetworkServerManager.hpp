@@ -1,17 +1,16 @@
 #ifndef NETWORK_SERVER_MANAGER_HPP_
 # define NETWORK_SERVER_MANAGER_HPP_
 
-# include <QSslKey>
+# include "ANetworkManager.hpp"
+# include "_QTcpServer.hpp"
 # include <QSslCertificate>
+# include <QSslKey>
 # include <QSslError>
 # include <QMap>
-# include "_QTcpServer.hpp"
-# include "AFunctionality.hpp"
 
 class NetworkClient;
-class AInstructionModel;
 
-class NetworkServerManager : public AFunctionality
+class NetworkServerManager : public ANetworkManager
 {
     Q_OBJECT
 
@@ -34,6 +33,10 @@ private:
 public:
     bool start(quint16 portNumber);
 
+protected:
+    virtual void _setPeerInputBuffer(InstructionBuffer *, quint64);
+    virtual InstructionBuffer *_getPeerInputBuffer(quint64) const;
+
 private:
     bool _initEncryptionKey(const QString &file);
     bool _initEncryptionCertificate(const QString &file);
@@ -50,6 +53,8 @@ private slots:
 
 protected slots:
     virtual void _run();
+
+public slots:
     virtual void onInstructionPushed();
 };
 

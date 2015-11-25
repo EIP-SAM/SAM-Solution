@@ -12,7 +12,7 @@ const QSsl::SslProtocol NetworkClientManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 // Add signal to readReady.
 //
 NetworkClientManager::NetworkClientManager()
-    : AFunctionality(NETWORK_MANAGER, false), _socket(this)
+    : ANetworkManager(false), _socket(this)
 {
     connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
     connect(&_socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
@@ -59,6 +59,24 @@ void NetworkClientManager::disconnect()
 }
 
 //
+// Set peer input buffer pointer
+//
+void NetworkClientManager::_setPeerInputBuffer(InstructionBuffer *buffer, quint64 peerId)
+{
+    (void)peerId;
+    _inputBuffer = buffer;
+}
+
+//
+// Get peer input buffer pointer
+//
+InstructionBuffer *NetworkClientManager::_getPeerInputBuffer(quint64 peerId) const
+{
+    (void)peerId;
+    return _inputBuffer;
+}
+
+//
 // Slot activated in the case of a non threaded functionality
 // This functionality runs on the main thread in the Qt event loop
 // Handle what to do when a new instruction (from the instruction
@@ -67,39 +85,15 @@ void NetworkClientManager::disconnect()
 void NetworkClientManager::onInstructionPushed()
 {
     InstructionBuffer *instruction = static_cast<InstructionBuffer *>(_popInstruction());
-    qint64 writtenSize = 0, ret = 0;
-    QByteArray buffer;
 
     qDebug() << Q_FUNC_INFO;
-    if (!instruction)
+    if (!_instructionPushedIsValid(instruction))
     {
-        qDebug() << "Error: Bad news, there is no instruction in the queue";
-        return ;
-    }
-    if (instruction->getTransmitterProgId() != mainController->getProgId())
-    {
-        qDebug() << "Error: Trying to send a malicious instruction; Instruction deleted";
         delete instruction;
         return ;
     }
-    buffer = instruction->getData();
-    while (writtenSize != instruction->getData().size())
-    {
-        if ((ret = _socket.write(buffer, buffer.size())) == -1)
-        {
-            qDebug() << "Error: An error occured while trying to write";
-            disconnect();
-            break ;
-        }
-        else if (ret == 0)
-        {
-            qDebug() << "Warning: Trying to write too much data";
-            break ;
-        }
-        writtenSize += ret;
-        if (writtenSize < ret)
-            buffer = buffer.left(ret);
-    }
+    if (!_write(instruction, _socket))
+        disconnect();
     delete instruction;
 }
 
@@ -110,62 +104,26 @@ void NetworkClientManager::onInstructionPushed()
 void NetworkClientManager::onReadyRead()
 {
     InstructionBuffer *instruction = _inputBuffer;
-    qint64 bytesAvailable = _socket.bytesAvailable(), readSize = -1, ret = -1;
-    QByteArray buffer;
+    qint64 bytesAvailable = _socket.bytesAvailable();
 
     qDebug() << Q_FUNC_INFO;
-
     while (bytesAvailable > 0)
     {
         if (!instruction)
         {
             instruction = new InstructionBuffer();
+            instruction->setPeerId(1);
             instruction->setLocalTransmitter(this);
             _inputBuffer = instruction;
         }
-        if (bytesAvailable <= instruction->getNextReadSize())
-            readSize = bytesAvailable;
-        else if (bytesAvailable > instruction->getNextReadSize())
-            readSize = instruction->getNextReadSize();
-        buffer.resize(readSize);
-        if ((ret = _socket.read(buffer.data(), readSize)) == -1)
+        if (!_read(instruction, _socket, bytesAvailable))
         {
-            qDebug() << "Error: An error occured while trying to read";
             disconnect();
+            delete _inputBuffer;
+            _inputBuffer = NULL;
             return ;
         }
-        else if (ret == 0)
-        {
-            qDebug() << "Warning: Trying to read more data than available";
-            break ;
-        }
-        buffer.resize(ret);
-        *instruction << buffer;
-        bytesAvailable -= ret;
-        qDebug() << "Had read" << ret << "bytes";
-        qDebug() << buffer;
-        if (!instruction->getNextReadSize())
-        {
-            if (instruction->finalizeFilling())
-            {
-                AFunctionality::eType fctType = mainController->getFunctionalityType(instruction->getFinalReceiver());
-
-                if (mainController->getProgId() == instruction->getTransmitterProgId() ||
-                    fctType == AFunctionality::MICROKERNEL || fctType == AFunctionality::INTERNAL)
-                {
-                    delete instruction;
-                    qDebug() << "Error: Malicious instruction received; Instruction deleted";
-                }
-                else
-                    mainController->pushInstruction(instruction);
-            }
-            else
-            {
-                delete instruction;
-                qDebug() << "Error: Malformed instruction received; Instruction deleted";
-            }
-            _inputBuffer = NULL;
-        }
+        _finalizeReceivedInstruction(instruction, 1);
     }
 }
 

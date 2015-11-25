@@ -17,7 +17,6 @@ NetworkClient::~NetworkClient()
 {
     qDebug() << Q_FUNC_INFO;
     disconnect(&_socket, 0, 0, 0);
-    disconnect(this, 0, 0, 0);
     close();
     delete _inputBuffer;
     delete _outputBuffer;
@@ -146,19 +145,19 @@ void NetworkClient::setOutputBuffer(InstructionBuffer *outputBuffer)
 //
 // Read data from socket when available
 //
-qint64 NetworkClient::read(QByteArray &data, qint64 size)
+qint64 NetworkClient::read(char *data, qint64 size)
 {
     qDebug() << Q_FUNC_INFO;
-    return _socket.read(data.data(), size);
+    return _socket.read(data, size);
 }
 
 //
 // Write data on socket
 //
-qint64 NetworkClient::write(const QByteArray &data, qint64 size)
+qint64 NetworkClient::write(const char *data, qint64 size)
 {
     qDebug() << Q_FUNC_INFO;
-    return _socket.write(data.constData(), size);
+    return _socket.write(data, size);
 }
 
 //

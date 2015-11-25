@@ -182,8 +182,7 @@ inline void InstructionBus::_dispatchInstruction(AInstruction *instruction)
         return ;
     if (!_localClientsRegister.contains(instruction->getFinalReceiver()))
     {
-        if (!_remoteClientsRegister.contains(instruction->getFinalReceiver()) ||
-            !_localClientsRegister.contains(AInstructionBusClient::eClientId::NETWORK_MANAGER))
+        if (!_localClientsRegister.contains(AInstructionBusClient::eClientId::NETWORK_MANAGER))
         {
             qDebug() << "Error:" << Q_FUNC_INFO << ": Unknown receiver, instruction deleted";
             delete instruction;

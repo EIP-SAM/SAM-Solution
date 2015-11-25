@@ -5,7 +5,6 @@
 # include <QThread>
 # include <QMutex>
 # include <QQueue>
-# include <QList>
 # include <QMap>
 
 class InstructionBus : public QObject
@@ -16,7 +15,6 @@ private:
     QThread *_thread;
     QMutex *_mutex;
     QMap<AInstructionBusClient::eClientId, AInstructionBusClient *> _localClientsRegister;
-    QList<AInstructionBusClient::eClientId> _remoteClientsRegister;
     QMap<AInstructionBusClient *, QQueue<AInstruction *> *> _transmitterClientsInstructions;
 
 public:

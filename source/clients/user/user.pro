@@ -31,6 +31,7 @@ INCLUDEPATH += \
     $${COMMON_ALL}/others \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities \
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/network_manager \
     $${COMMON_ALL}/microkernel_architecture/main_controller \
     $${COMMON_CLIENTS}/microkernel_architecture/microkernel_modules/network_manager \
     microkernel_architecture/microkernel_modules/functionalities_manager \
@@ -47,6 +48,7 @@ HEADERS += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/eProgId.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionalitiesManager.hpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionality.hpp \
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/network_manager/ANetworkManager.hpp \
     $${COMMON_ALL}/microkernel_architecture/main_controller/AMainController.hpp \
     $${COMMON_CLIENTS}/microkernel_architecture/microkernel_modules/network_manager/NetworkClientManager.hpp \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.hpp \
@@ -61,6 +63,7 @@ SOURCES += \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/instructions/InstructionBuffer.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionalitiesManager.cpp \
     $${COMMON_ALL}/microkernel_architecture/microkernel_modules/functionalities/AFunctionality.cpp \
+    $${COMMON_ALL}/microkernel_architecture/microkernel_modules/network_manager/ANetworkManager.cpp \
     $${COMMON_ALL}/microkernel_architecture/main_controller/AMainController.cpp \
     $${COMMON_CLIENTS}/microkernel_architecture/microkernel_modules/network_manager/NetworkClientManager.cpp \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.cpp \

@@ -15,7 +15,7 @@ const QSsl::SslProtocol NetworkServerManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 // Construct network server
 //
 NetworkServerManager::NetworkServerManager(bool threaded)
-    : AFunctionality(NETWORK_MANAGER, threaded), _server(this)
+    : ANetworkManager(threaded), _server(this)
 {
     qRegisterMetaType<QList<QSslError> >("QList<QSslError>");
 }
@@ -62,6 +62,22 @@ bool NetworkServerManager::start(quint16 portNumber)
         !_listen(portNumber))
         return (false);
     return (true);
+}
+
+//
+// Set peer input buffer pointer
+//
+void NetworkServerManager::_setPeerInputBuffer(InstructionBuffer *buffer, quint64 peerId)
+{
+    _clientIds[peerId]->setInputBuffer(buffer);
+}
+
+//
+// Get peer input buffer pointer
+//
+InstructionBuffer *NetworkServerManager::_getPeerInputBuffer(quint64 peerId) const
+{
+    return _clientIds[peerId]->getInputBuffer();
 }
 
 //
@@ -169,12 +185,10 @@ void NetworkServerManager::_onClientReadyRead(qintptr socketDescriptor)
 {
     NetworkClient *client = _clientSockets[socketDescriptor];
     InstructionBuffer *instruction = client->getInputBuffer();
-    qint64 bytesAvailable = client->bytesAvailable(), readSize = -1, ret = -1;
-    QByteArray buffer;
+    qint64 bytesAvailable = client->bytesAvailable();
 
     qDebug() << Q_FUNC_INFO;
     qDebug() << "" << socketDescriptor << "Ready to read" << bytesAvailable << "bytes";
-
     while (bytesAvailable > 0)
     {
         if (!instruction)
@@ -184,49 +198,12 @@ void NetworkServerManager::_onClientReadyRead(qintptr socketDescriptor)
             instruction->setLocalTransmitter(this);
             client->setInputBuffer(instruction);
         }
-        if (bytesAvailable <= instruction->getNextReadSize())
-            readSize = bytesAvailable;
-        else if (bytesAvailable > instruction->getNextReadSize())
-            readSize = instruction->getNextReadSize();
-        buffer.resize(readSize);
-        if ((ret = client->read(buffer, readSize)) == -1)
+        if (!_read(instruction, *client, bytesAvailable))
         {
-            qDebug() << "Error: An error occured while trying to read";
             _deleteClient(client);
             return ;
         }
-        else if (ret == 0)
-        {
-            qDebug() << "Warning: Trying to read more data than available";
-            break ;
-        }
-        buffer.resize(ret);
-        *instruction << buffer;
-        bytesAvailable -= ret;
-        qDebug() << "" << socketDescriptor << "Had read" << ret << "bytes";
-        qDebug() << buffer;
-        if (!instruction->getNextReadSize())
-        {
-            if (instruction->finalizeFilling())
-            {
-                AFunctionality::eType fctType = mainController->getFunctionalityType(instruction->getFinalReceiver());
-
-                if (mainController->getProgId() == instruction->getTransmitterProgId() ||
-                    fctType == AFunctionality::MICROKERNEL || fctType == AFunctionality::INTERNAL)
-                {
-                    delete instruction;
-                    qDebug() << "Error: Malicious instruction received; Instruction deleted";
-                }
-                else
-                    mainController->pushInstruction(instruction);
-            }
-            else
-            {
-                delete instruction;
-                qDebug() << "Error: Malformed instruction received; Instruction deleted";
-            }
-            client->setInputBuffer(NULL);
-        }
+        _finalizeReceivedInstruction(instruction, client->getClientId());
     }
 }
 
@@ -259,8 +236,6 @@ void NetworkServerManager::_deleteClient(NetworkClient *client)
     _server.disconnect(client, 0, 0, 0);
     _clientSockets.remove(client->getSocketDescriptor());
     _clientIds.remove(client->getClientId());
-    delete client->getInputBuffer();
-    delete client->getOutputBuffer();
     delete client;
     qDebug() << "Client deleted";
 }
@@ -289,18 +264,10 @@ void NetworkServerManager::onInstructionPushed()
 {
     InstructionBuffer *instruction = static_cast<InstructionBuffer *>(_popInstruction());
     NetworkClient *client = NULL;
-    qint64 writtenSize = 0, ret = 0;
-    QByteArray buffer;
 
     qDebug() << Q_FUNC_INFO;
-    if (!instruction)
+    if (!_instructionPushedIsValid(instruction))
     {
-        qDebug() << "Error: Bad news, there is no instruction in the queue";
-        return ;
-    }
-    if (instruction->getTransmitterProgId() != mainController->getProgId())
-    {
-        qDebug() << "Error: Trying to send a malicious instruction; Instruction deleted";
         delete instruction;
         return ;
     }
@@ -312,23 +279,7 @@ void NetworkServerManager::onInstructionPushed()
         return ;
     }
     client = _clientIds[instruction->getPeerId()];
-    buffer = instruction->getData();
-    while (writtenSize != instruction->getData().size())
-    {
-        if ((ret = client->write(buffer, buffer.size())) == -1)
-        {
-            qDebug() << "Error: An error occured while trying to write";
-            _deleteClient(client);
-            break ;
-        }
-        else if (ret == 0)
-        {
-            qDebug() << "Warning: Trying to write too much data";
-            break ;
-        }
-        writtenSize += ret;
-        if (writtenSize < ret)
-            buffer = buffer.left(ret);
-    }
+    if (!_write(instruction, *client))
+        _deleteClient(client);
     delete instruction;
 }

@@ -3,9 +3,9 @@
 
 # include <QSslSocket>
 # include "InstructionBuffer.hpp"
-# include "AFunctionality.hpp"
+# include "ANetworkManager.hpp"
 
-class NetworkClientManager : public AFunctionality
+class NetworkClientManager : public ANetworkManager
 {
     Q_OBJECT
 
@@ -23,6 +23,10 @@ public:
 
     void startConnection(const QString &ip, quint16 port);
     void disconnect();
+
+protected:
+    virtual void _setPeerInputBuffer(InstructionBuffer *, quint64);
+    virtual InstructionBuffer *_getPeerInputBuffer(quint64) const;
 
 public slots:
     virtual void onInstructionPushed();

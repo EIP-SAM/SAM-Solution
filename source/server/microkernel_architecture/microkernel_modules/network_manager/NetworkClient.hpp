@@ -33,8 +33,8 @@ public:
 
     void setInputBuffer(InstructionBuffer *);
     void setOutputBuffer(InstructionBuffer *);
-    qint64 write(const QByteArray &data, qint64 size);
-    qint64 read(QByteArray &data, qint64 size);
+    qint64 write(const char *data, qint64 size);
+    qint64 read(char *data, qint64 size);
 
 private:
     bool _bindSocketSignalsToSlots();
