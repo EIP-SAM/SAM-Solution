@@ -6,6 +6,7 @@
 
 class BasicFunctionalitiesManager : public AFunctionalitiesManager
 {
+
 public:
     BasicFunctionalitiesManager(QObject *parent = 0);
     virtual ~BasicFunctionalitiesManager();

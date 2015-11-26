@@ -6,9 +6,12 @@ TARGET = TestAFunctionalitiesManager
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
+QT  -= gui
 QT	+= \
 	testlib \
-	network
+    widgets \
+	network \
+    core
 
 TEMPLATE = app
 

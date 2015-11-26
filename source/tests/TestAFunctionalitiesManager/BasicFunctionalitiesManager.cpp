@@ -62,7 +62,7 @@ void BasicFunctionalitiesManager::_setFcts()
 //
 void BasicFunctionalitiesManager::_setMicrokernelFcts()
 {
-    _microkernelFcts << new BasicAFunctionality(AFunctionality::NETWORK_MANAGER, false);
+    _microkernelFcts << new BasicAFunctionality(AFunctionality::NETWORK_MANAGER, true);
 }
 
 //
@@ -70,7 +70,7 @@ void BasicFunctionalitiesManager::_setMicrokernelFcts()
 //
 void BasicFunctionalitiesManager::_setInternalFcts()
 {
-    _internalFcts << new BasicAFunctionality(AFunctionality::ALL, false);
+    _internalFcts << new BasicAFunctionality(AFunctionality::ALL, true);
 }
 
 //
@@ -78,6 +78,6 @@ void BasicFunctionalitiesManager::_setInternalFcts()
 //
 void BasicFunctionalitiesManager::_setExternalFcts()
 {
-    _externalFcts << new BasicAFunctionality(AFunctionality::GUI, false);
+    _externalFcts << new BasicAFunctionality(AFunctionality::GUI, true);
 
 }

@@ -1,4 +1,5 @@
 #include "TestAFunctionalitiesManager.hpp"
+#include <iostream>
 
 //
 // Constructor
@@ -11,19 +12,23 @@ TestAFunctionalitiesManager::TestAFunctionalitiesManager() : _mainController(NUL
 // Test init function
 //
 void TestAFunctionalitiesManager::_testInit()
-{
+{   
     ac = 1;
     av = NULL;
     _mainController = new MainController(ac, av);
     // _mainController->run();
     bool instructionBusInitValue = _mainController->getInstructionBus().init();
+    QTest::qWait(500);
     bool functionalitiesManagerInitValue = _mainController->getFctsManager().init();
-    
+    QTest::qWait(500);
+
+    std::cout << "before qtCore.exec() [" << instructionBusInitValue << "] [" << functionalitiesManagerInitValue << "]" << std::endl;
     if (instructionBusInitValue && functionalitiesManagerInitValue)
-    {
+    {   
+        _mainController->quitQtCore();
         _mainController->getQtCore().exec();
     }
-    
+    std::cout << "after qtCore.exec()" << std::endl;
     BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
 
     QCOMPARE(functionalitiesManagerInitValue, true);

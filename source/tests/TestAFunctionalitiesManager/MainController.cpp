@@ -1,4 +1,5 @@
 #define __MAIN_CONTROLLER_PRIVATE_DECL
+#include <QTimer>
 #include "MainController.hpp"
 
 //
@@ -47,4 +48,12 @@ InstructionBus &MainController::getInstructionBus()
 QCoreApplication &MainController::getQtCore()
 {
     return _qtCore;
+}
+
+//
+// Quit qtCore
+//
+void MainController::quitQtCore()
+{
+    QTimer::singleShot(10000, &_qtCore, SLOT(quit()));
 }
