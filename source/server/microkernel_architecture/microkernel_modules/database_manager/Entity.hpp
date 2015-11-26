@@ -49,23 +49,23 @@ public:
     //
     template<class T>
     T *find(int id)
-    {
-      if (!startConnection())
-	return NULL;
+	{
+	    if (!startConnection())
+		return NULL;
 
-      AQueryBuilder *builder = getQueryBuilder();
-      builder->select("*")
-	->where("id = :id")
-	->bindValue(":id", id)
-	;
+	    AQueryBuilder *builder = getQueryBuilder();
+	    builder->select("*")
+		->where("id = :id")
+		->bindValue(":id", id)
+		;
 
-      QVector<T *> result = this->request<T>(builder);
+	    QVector<T *> result = this->request<T>(builder);
 
-      if (result.size() == 0)
-	return NULL;
+	    if (result.size() == 0)
+		return NULL;
 
-      return result.at(0);
-    }
+	    return result.at(0);
+	}
 
     //
     // Send a query request and return the result
