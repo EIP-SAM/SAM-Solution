@@ -48,13 +48,6 @@ QSqlQuery *AQueryBuilder::build()
 	_queryObj->bindValue(key, value);
     }
 
-
-    // for (it = _bindedValues.begin(); it != _bindedValues.end(); ++it)
-    // {
-    // 	QVariant value(it.value());
-    // 	_queryObj->bindValue(it.key(), value);
-    // }
-
     return _queryObj;
 }
 
