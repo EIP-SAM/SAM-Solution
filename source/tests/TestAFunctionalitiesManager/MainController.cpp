@@ -40,3 +40,11 @@ InstructionBus &MainController::getInstructionBus()
 {
     return _instructionBus;
 }
+
+//
+// Get QtCore
+//
+QCoreApplication &MainController::getQtCore()
+{
+    return _qtCore;
+}

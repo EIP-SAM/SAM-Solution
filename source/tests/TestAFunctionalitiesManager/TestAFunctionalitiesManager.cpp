@@ -15,18 +15,28 @@ void TestAFunctionalitiesManager::_testInit()
     ac = 1;
     av = NULL;
     _mainController = new MainController(ac, av);
-    _mainController->getInstructionBus().init();
-
+    // _mainController->run();
+    bool instructionBusInitValue = _mainController->getInstructionBus().init();
+    bool functionalitiesManagerInitValue = _mainController->getFctsManager().init();
+    
+    if (instructionBusInitValue && functionalitiesManagerInitValue)
+    {
+        _mainController->getQtCore().exec();
+    }
+    
     BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
-    bool functionalitiesManagerInitValue = fctsManager.init();
 
     QCOMPARE(functionalitiesManagerInitValue, true);
     QCOMPARE(fctsManager.getNumberOfMicrokernelFcts(), 1);
-    QCOMPARE(fctsManager.getNumberOfInternalFcts(), 2);
-    QCOMPARE(fctsManager.getNumberOfExternalFcts(), 3);
+    QCOMPARE(fctsManager.getNumberOfInternalFcts(), 1);
+    QCOMPARE(fctsManager.getNumberOfExternalFcts(), 1);
     QTest::qWait(500);
-    QCOMPARE(fctsManager.getNumberOfRunningFcts(), 6);
+    QCOMPARE(fctsManager.getNumberOfRunningFcts(), 3);
 
+    QSignalSpy readyToDeleteSpy(&fctsManager, SIGNAL(readyToDelete()));
+    fctsManager.shutdown();
+    QTest::qWait(1000);
+    
     delete _mainController;
 }
 

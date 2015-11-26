@@ -70,8 +70,7 @@ void BasicFunctionalitiesManager::_setMicrokernelFcts()
 //
 void BasicFunctionalitiesManager::_setInternalFcts()
 {
-    _internalFcts << new BasicAFunctionality(AFunctionality::GUI, false);
-    _internalFcts << new BasicAFunctionality(AFunctionality::GUI, false);
+    _internalFcts << new BasicAFunctionality(AFunctionality::ALL, false);
 }
 
 //
@@ -80,6 +79,5 @@ void BasicFunctionalitiesManager::_setInternalFcts()
 void BasicFunctionalitiesManager::_setExternalFcts()
 {
     _externalFcts << new BasicAFunctionality(AFunctionality::GUI, false);
-    _internalFcts << new BasicAFunctionality(AFunctionality::GUI, false);
-    _internalFcts << new BasicAFunctionality(AFunctionality::GUI, false);
+
 }
