@@ -1,5 +1,3 @@
-#include <QDebug>
-#include <iostream>
 #include "Entity.hpp"
 
 //

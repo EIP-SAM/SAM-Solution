@@ -1,17 +1,18 @@
 #ifndef ENTITY_HPP_
 # define ENTITY_HPP_
 
+# include "QueryBuilderMySql.hpp"
+
 # include <QSqlDatabase>
 # include <QObject>
 # include <QMetaObject>
 # include <QMetaProperty>
-# include <QStringList>
 # include <QVariant>
 # include <QString>
 # include <QVector>
 # include <QSqlRecord>
 # include <QSqlQuery>
-# include "QueryBuilderMySql.hpp"
+# include <QDebug>
 
 # define MYSQL_TYPE "MYSQL"
 
