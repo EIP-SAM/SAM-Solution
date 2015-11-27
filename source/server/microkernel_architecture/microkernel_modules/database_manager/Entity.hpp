@@ -50,23 +50,23 @@ public:
     //
     template<class T>
     T *find(int id)
-	{
-	    if (!startConnection())
-		return NULL;
+    {
+	if (!startConnection())
+	    return NULL;
 
-	    AQueryBuilder *builder = getQueryBuilder();
-	    builder->select("*")
-		->where("id = :id")
-		->bindValue(":id", id)
-		;
+	AQueryBuilder *builder = getQueryBuilder();
+	builder->select("*")
+	    ->where("id = :id")
+	    ->bindValue(":id", id)
+	    ;
 
-	    QVector<T *> result = this->request<T>(builder);
+	QVector<T *> result = this->request<T>(builder);
 
-	    if (result.size() == 0)
-		return NULL;
+	if (result.size() == 0)
+	    return NULL;
 
-	    return result.at(0);
-	}
+	return result.at(0);
+    }
 
     //
     // Send a query request and return the result
@@ -74,31 +74,31 @@ public:
     //
     template<class T>
     QVector<T *> request(AQueryBuilder *builder)
-	{
-	    QVector<T *> result;
-	    QSqlRecord recQuery;
-	    QSqlQuery *query;
+    {
+	QVector<T *> result;
+	QSqlRecord recQuery;
+	QSqlQuery *query;
 
-	    if (!startConnection())
-		return (result);
-	    query = builder->build();
-	    query->exec();
-	    while (query->next())
-	    {
-		recQuery = query->record();
-		T *entity = new T();
-		for (auto prop : _propertiesName->toStdVector())
-		{
-		    int index = recQuery.indexOf(prop);
-		    if (index < 0)
-			continue;
-		    entity->setProperty(prop.toLocal8Bit().constData(),
-					query->value(index));
-		}
-		result.push_back(entity);
-	    }
+	if (!startConnection())
 	    return (result);
+	query = builder->build();
+	query->exec();
+	while (query->next())
+	{
+	    recQuery = query->record();
+	    T *entity = new T();
+	    for (auto prop : _propertiesName->toStdVector())
+	    {
+		int index = recQuery.indexOf(prop);
+		if (index < 0)
+		    continue;
+		entity->setProperty(prop.toLocal8Bit().constData(),
+				    query->value(index));
+	    }
+	    result.push_back(entity);
 	}
+	return (result);
+    }
 };
 
 #endif // !ENTITY_HPP_
