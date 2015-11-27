@@ -16,22 +16,16 @@ void TestAFunctionalitiesManager::_testInit()
     ac = 1;
     av = NULL;
     _mainController = new MainController(ac, av);
-    // _mainController->run();
-    bool instructionBusInitValue = _mainController->getInstructionBus().init();
-    QTest::qWait(500);
-    bool functionalitiesManagerInitValue = _mainController->getFctsManager().init();
-    QTest::qWait(500);
-
-    std::cout << "before qtCore.exec() [" << instructionBusInitValue << "] [" << functionalitiesManagerInitValue << "]" << std::endl;
-    if (instructionBusInitValue && functionalitiesManagerInitValue)
-    {   
-        _mainController->quitQtCore();
-        _mainController->getQtCore().exec();
-    }
-    std::cout << "after qtCore.exec()" << std::endl;
     BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
+    InstructionBus &instructionBus = _mainController->getInstructionBus();
 
-    QCOMPARE(functionalitiesManagerInitValue, true);
+    QTest::qWait(500);
+    instructionBus.init();
+    QTest::qWait(500);
+    bool fctsManagerInitValue = fctsManager.init();
+    QTest::qWait(500);
+
+    QCOMPARE(fctsManagerInitValue, true);
     QCOMPARE(fctsManager.getNumberOfMicrokernelFcts(), 1);
     QCOMPARE(fctsManager.getNumberOfInternalFcts(), 1);
     QCOMPARE(fctsManager.getNumberOfExternalFcts(), 1);
@@ -51,11 +45,12 @@ void TestAFunctionalitiesManager::_testInit()
 void TestAFunctionalitiesManager::_testShutdown()
 {
     _mainController = new MainController(ac, av);
-    _mainController->getInstructionBus().init();
+    BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
+    InstructionBus &instructionBus = _mainController->getInstructionBus();
 
-    BasicFunctionalitiesManager &fctsManager = 
-        _mainController->getFctsManager();
-
+    QTest::qWait(500);
+    instructionBus.init();
+    QTest::qWait(500);
     fctsManager.init();
     QTest::qWait(500);
 
@@ -84,11 +79,12 @@ void TestAFunctionalitiesManager::_testLoadLibrary()
 void TestAFunctionalitiesManager::_testGetFunctionalityType()
 {
     _mainController = new MainController(ac, av);
-    _mainController->getInstructionBus().init();
+    BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
+    InstructionBus &instructionBus = _mainController->getInstructionBus();
 
-    BasicFunctionalitiesManager &fctsManager = 
-        _mainController->getFctsManager();
-    
+    QTest::qWait(500);
+    instructionBus.init();
+    QTest::qWait(500);
     fctsManager.init();
     QTest::qWait(500);
     
@@ -102,8 +98,12 @@ void TestAFunctionalitiesManager::_testGetFunctionalityType()
     
     result = fctsManager.getFunctionalityType(AFunctionality::eClientId::ALL);
     QCOMPARE(result, AFunctionality::INVALID);
+    
+    QTest::qWait(500);
+    fctsManager.shutdown();
+    QTest::qWait(1000);
 
     delete _mainController;
 }
 
-QTEST_MAIN(TestAFunctionalitiesManager);
+QTEST_GUILESS_MAIN(TestAFunctionalitiesManager);

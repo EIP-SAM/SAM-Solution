@@ -18,8 +18,6 @@ public:
     virtual int run();
     BasicFunctionalitiesManager &getFctsManager();
     InstructionBus &getInstructionBus();
-    QCoreApplication &getQtCore();
-    void quitQtCore();
 };
 
 # ifdef __MAIN_CONTROLLER_PRIVATE_DECL

@@ -41,19 +41,3 @@ InstructionBus &MainController::getInstructionBus()
 {
     return _instructionBus;
 }
-
-//
-// Get QtCore
-//
-QCoreApplication &MainController::getQtCore()
-{
-    return _qtCore;
-}
-
-//
-// Quit qtCore
-//
-void MainController::quitQtCore()
-{
-    QTimer::singleShot(10000, &_qtCore, SLOT(quit()));
-}
