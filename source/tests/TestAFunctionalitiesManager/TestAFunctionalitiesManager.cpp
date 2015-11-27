@@ -1,5 +1,4 @@
 #include "TestAFunctionalitiesManager.hpp"
-#include <iostream>
 
 //
 // Constructor
@@ -30,8 +29,6 @@ void TestAFunctionalitiesManager::_testInit()
     QCOMPARE(fctsManager.getNumberOfExternalFcts(), 1);
     QTest::qWait(100);
     QCOMPARE(fctsManager.getNumberOfRunningFcts(), 3);
-
-    QSignalSpy readyToDeleteSpy(&fctsManager, SIGNAL(readyToDelete()));
 }
 
 //
@@ -42,7 +39,7 @@ void TestAFunctionalitiesManager::_testGetFunctionalityType()
     _mainController = new MainController(ac, av);
     BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
 
-    bool fctsManagerInitValue = fctsManager.init();
+    fctsManager.init();
     QTest::qWait(100);
     
     AFunctionality::eType result = AFunctionality::INVALID;
@@ -72,6 +69,8 @@ void TestAFunctionalitiesManager::_testShutdown()
     QSignalSpy readyToDeleteSpy(&fctsManager, SIGNAL(readyToDelete()));
 
     fctsManager.shutdown();
+    QTest::qWait(1000);
+
     QCOMPARE(readyToDeleteSpy.count(), 1);
     QCOMPARE(fctsManager.getNumberOfRunningFcts(), 0);
 
