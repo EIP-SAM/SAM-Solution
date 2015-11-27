@@ -19,24 +19,20 @@ void TestAFunctionalitiesManager::_testInit()
     BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
     InstructionBus &instructionBus = _mainController->getInstructionBus();
 
-    QTest::qWait(500);
     instructionBus.init();
-    QTest::qWait(500);
+    QTest::qWait(100);
     bool fctsManagerInitValue = fctsManager.init();
-    QTest::qWait(500);
+    QTest::qWait(100);
 
     QCOMPARE(fctsManagerInitValue, true);
     QCOMPARE(fctsManager.getNumberOfMicrokernelFcts(), 1);
     QCOMPARE(fctsManager.getNumberOfInternalFcts(), 1);
     QCOMPARE(fctsManager.getNumberOfExternalFcts(), 1);
-    QTest::qWait(500);
+    QTest::qWait(100);
     QCOMPARE(fctsManager.getNumberOfRunningFcts(), 3);
 
     QSignalSpy readyToDeleteSpy(&fctsManager, SIGNAL(readyToDelete()));
     fctsManager.shutdown();
-    QTest::qWait(1000);
-    
-    delete _mainController;
 }
 
 //
@@ -44,15 +40,10 @@ void TestAFunctionalitiesManager::_testInit()
 //
 void TestAFunctionalitiesManager::_testShutdown()
 {
-    _mainController = new MainController(ac, av);
     BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
-    InstructionBus &instructionBus = _mainController->getInstructionBus();
 
-    QTest::qWait(500);
-    instructionBus.init();
-    QTest::qWait(500);
     fctsManager.init();
-    QTest::qWait(500);
+    QTest::qWait(100);
 
     QSignalSpy readyToDeleteSpy(&fctsManager, SIGNAL(readyToDelete()));
 
@@ -60,8 +51,6 @@ void TestAFunctionalitiesManager::_testShutdown()
     QTest::qWait(500);
     QCOMPARE(readyToDeleteSpy.count(), 1);
     QCOMPARE(fctsManager.getNumberOfRunningFcts(), 0);
-
-    delete _mainController;
 }
 
 //
@@ -80,11 +69,7 @@ void TestAFunctionalitiesManager::_testGetFunctionalityType()
 {
     _mainController = new MainController(ac, av);
     BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
-    InstructionBus &instructionBus = _mainController->getInstructionBus();
 
-    QTest::qWait(500);
-    instructionBus.init();
-    QTest::qWait(500);
     fctsManager.init();
     QTest::qWait(500);
     
@@ -94,9 +79,6 @@ void TestAFunctionalitiesManager::_testGetFunctionalityType()
     QCOMPARE(result, AFunctionality::MICROKERNEL);
     
     result = fctsManager.getFunctionalityType(AFunctionality::eClientId::INVALID);
-    QCOMPARE(result, AFunctionality::INVALID);
-    
-    result = fctsManager.getFunctionalityType(AFunctionality::eClientId::ALL);
     QCOMPARE(result, AFunctionality::INVALID);
     
     QTest::qWait(500);
