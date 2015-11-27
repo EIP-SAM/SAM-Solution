@@ -19,9 +19,9 @@ public:
 				 
 private slots:
     void _testInit();
-    void _testShutdown();
+    void _testGetFunctionalityType();
     void _testLoadLibrary();
-    void _testGetFunctionalityType();       
+    void _testShutdown();
 };
 
 #endif // !TEST_AFUNCTIONALITIES_MANAGER_HPP

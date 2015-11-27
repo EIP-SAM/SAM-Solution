@@ -32,25 +32,26 @@ void TestAFunctionalitiesManager::_testInit()
     QCOMPARE(fctsManager.getNumberOfRunningFcts(), 3);
 
     QSignalSpy readyToDeleteSpy(&fctsManager, SIGNAL(readyToDelete()));
-    fctsManager.shutdown();
 }
 
 //
-// Test shutDown function
+// Test getFunctionalityType
 //
-void TestAFunctionalitiesManager::_testShutdown()
+void TestAFunctionalitiesManager::_testGetFunctionalityType()
 {
+    _mainController = new MainController(ac, av);
     BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
 
-    fctsManager.init();
+    bool fctsManagerInitValue = fctsManager.init();
     QTest::qWait(100);
+    
+    AFunctionality::eType result = AFunctionality::INVALID;
 
-    QSignalSpy readyToDeleteSpy(&fctsManager, SIGNAL(readyToDelete()));
-
-    fctsManager.shutdown();
-    QTest::qWait(500);
-    QCOMPARE(readyToDeleteSpy.count(), 1);
-    QCOMPARE(fctsManager.getNumberOfRunningFcts(), 0);
+    result = fctsManager.getFunctionalityType(AFunctionality::eClientId::NETWORK_MANAGER);
+    QCOMPARE(result, AFunctionality::MICROKERNEL);
+    
+    result = fctsManager.getFunctionalityType(AFunctionality::eClientId::INVALID);
+    QCOMPARE(result, AFunctionality::INVALID);
 }
 
 //
@@ -62,28 +63,17 @@ void TestAFunctionalitiesManager::_testLoadLibrary()
 }
 
 //
-// Test getFunctionalityType
+// Test shutDown function
 //
-
-void TestAFunctionalitiesManager::_testGetFunctionalityType()
+void TestAFunctionalitiesManager::_testShutdown()
 {
-    _mainController = new MainController(ac, av);
     BasicFunctionalitiesManager &fctsManager = _mainController->getFctsManager();
 
-    fctsManager.init();
-    QTest::qWait(500);
-    
-    AFunctionality::eType result = AFunctionality::INVALID;
+    QSignalSpy readyToDeleteSpy(&fctsManager, SIGNAL(readyToDelete()));
 
-    result = fctsManager.getFunctionalityType(AFunctionality::eClientId::NETWORK_MANAGER);
-    QCOMPARE(result, AFunctionality::MICROKERNEL);
-    
-    result = fctsManager.getFunctionalityType(AFunctionality::eClientId::INVALID);
-    QCOMPARE(result, AFunctionality::INVALID);
-    
-    QTest::qWait(500);
     fctsManager.shutdown();
-    QTest::qWait(1000);
+    QCOMPARE(readyToDeleteSpy.count(), 1);
+    QCOMPARE(fctsManager.getNumberOfRunningFcts(), 0);
 
     delete _mainController;
 }
