@@ -1,38 +1,26 @@
+#define __MAIN_CONTROLLER_PRIVATE_DECL
 #include "MainController.hpp"
-#include "GUIController.hpp"
-#include "NetworkClientManager.hpp"
 
-#include <QDebug>
-
-MainController::MainController(int ac, char **av)
-    : _qtCore(ac, av)
+//
+// Constructor
+//
+MainController::MainController(int &ac, char **av)
+    : AMainController(SAM_ADMIN_CLIENT), _qtCore(ac, av)
 {
+    mainController = !mainController ? this : mainController;
 }
 
+//
+// Destructor
+//
 MainController::~MainController()
 {
-    delete _network;
 }
 
+//
+// Entry point of the main controller
+//
 int MainController::run()
 {
-    qDebug() << Q_FUNC_INFO;
-
-    if (!_initNetwork())
-    {
-        return (-1);
-    }
-    return (_qtCore.exec());
-}
-
-bool MainController::_initNetwork()
-{
-    qDebug() << Q_FUNC_INFO;
-
-    if (!(_network = new NetworkClientManager(this)))
-    {
-        return (false);
-    }
-    _network->startConnection("localhost", 42042);
-    return (true);
+    return !_init() ? -1 : _qtCore.exec();
 }

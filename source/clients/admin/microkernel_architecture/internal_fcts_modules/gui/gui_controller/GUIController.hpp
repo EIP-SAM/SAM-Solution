@@ -1,9 +1,10 @@
 #ifndef GUI_CONTROLLER_HPP_
 # define GUI_CONTROLLER_HPP_
 
+# include "AFunctionality.hpp"
 # include <QQmlApplicationEngine>
 
-class GUIController : public QObject
+class GUIController : public AFunctionality
 {
     Q_OBJECT
 
@@ -11,14 +12,13 @@ private:
     QQmlApplicationEngine _qmlEngine;
 
 public:
-    explicit GUIController(QObject *parent = 0);
-    ~GUIController();
+    GUIController();
+    virtual ~GUIController();
 
     void init();
 
-signals:
-
-public slots:
+protected slots:
+    virtual void _run();
 };
 
 #endif // !GUI_CONTROLLER_HPP_

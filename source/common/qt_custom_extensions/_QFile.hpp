@@ -11,10 +11,6 @@ public:
     explicit _QFile(QObject *parent = 0);
 
     static const QByteArray *readFile(const QString &filename);
-
-signals:
-
-public slots:
 };
 
 #endif // !_QFILE_HPP_

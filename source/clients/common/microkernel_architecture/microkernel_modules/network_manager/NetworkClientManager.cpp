@@ -1,87 +1,135 @@
-#include <QByteArray>
 #include "NetworkClientManager.hpp"
+#include "MainController.hpp"
+#include <QByteArray>
+
+#include <QDebug>
 
 const QString NetworkClientManager::_ENCRYPTION_CERTIFICATE_FILE = "server.crt";
 const QSsl::SslProtocol NetworkClientManager::_DEFAULT_PROTOCOL = QSsl::TlsV1_2;
 
 //
+// Constructor
 // Add signal to readReady.
 //
-
-NetworkClientManager::NetworkClientManager(QObject *parent)
-    : QObject(parent), _client(this)
+NetworkClientManager::NetworkClientManager(const QString& hostname, quint16 port)
+    : ANetworkManager(false), _hostname(hostname), _port(port), _socket(this)
 {
-    connect(&_client, SIGNAL(readyRead()), this, SLOT(readMsg()));
-    connect(&_client, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
+    connect(&_socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    connect(&_socket, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
 }
 
+//
+// Destructor
+//
 NetworkClientManager::~NetworkClientManager()
 {
+    disconnect();
+    delete _inputBuffer;
+    delete _outputBuffer;
+}
+
+//
+// Entry point of the functionality
+// Start the network client
+//
+void NetworkClientManager::_run()
+{
+    qDebug() << Q_FUNC_INFO;
+    startConnection();
 }
 
 //
 // Connection to server and send a first message
 //
-
-void NetworkClientManager::startConnection(const QString &ip, quint16 port)
+void NetworkClientManager::startConnection()
 {
-    _client.setProtocol(_DEFAULT_PROTOCOL);
-    _client.addCaCertificates(_ENCRYPTION_CERTIFICATE_FILE);
-    _client.connectToHostEncrypted(ip, port);
-    if (_client.waitForEncrypted(3000))
-    {
-        qDebug() << "Client connected";
-        AInstructionModel *instruction = new AInstructionModel;
-        QByteArray *a = instruction->getByteArray();
-        *a = "allo?";
-        writeMsg(instruction);
-    }
-    else
-    {
-        qDebug() << "Error: " << _client.errorString();
-    }
+    _socket.setProtocol(_DEFAULT_PROTOCOL);
+    _socket.addCaCertificates(_ENCRYPTION_CERTIFICATE_FILE);
+    _socket.connectToHostEncrypted(_hostname, _port);
+    if (!_socket.waitForEncrypted(15000))
+        qDebug() << "Error:" << _socket.errorString();
 }
 
 //
 // Disconnect socket from host
 //
-
 void NetworkClientManager::disconnect()
 {
-    _client.close();
+    _socket.close();
 }
 
 //
-// Send to the server through the network message
+// Set peer input buffer pointer
 //
-
-bool NetworkClientManager::writeMsg(AInstructionModel *instruction)
+void NetworkClientManager::_setPeerInputBuffer(InstructionBuffer *buffer, quint64 peerId)
 {
-    if (_client.write(*(instruction->getByteArray())) == -1)
+    (void)peerId;
+    _inputBuffer = buffer;
+}
+
+//
+// Get peer input buffer pointer
+//
+InstructionBuffer *NetworkClientManager::_getPeerInputBuffer(quint64 peerId) const
+{
+    (void)peerId;
+    return _inputBuffer;
+}
+
+//
+// Slot activated in the case of a non threaded functionality
+// This functionality runs on the main thread in the Qt event loop
+// Handle what to do when a new instruction (from the instruction
+// bus) is received
+//
+void NetworkClientManager::onInstructionPushed()
+{
+    InstructionBuffer *instruction = static_cast<InstructionBuffer *>(_popInstruction());
+
+    qDebug() << Q_FUNC_INFO;
+    if (!_instructionPushedIsValid(instruction))
     {
-        qDebug() << "Error message not send";
-        return (false);
+        delete instruction;
+        return ;
     }
-  return (true);
+    if (!_write(instruction, _socket))
+        disconnect();
+    delete instruction;
 }
 
 //
-// Read message from the server and return AInstructionModel
+// Read message from the server and push an AInstruction
+// to the instruction bus
 //
-
-QByteArray *NetworkClientManager::readMsg()
+void NetworkClientManager::onReadyRead()
 {
-    QByteArray *byteArray = new QByteArray();
+    InstructionBuffer *instruction = _inputBuffer;
+    qint64 bytesAvailable = _socket.bytesAvailable();
 
-    *byteArray = _client.read(1024);
-    qDebug() << "Incoming data :" << *byteArray;
-    return (byteArray);
+    qDebug() << Q_FUNC_INFO;
+    while (bytesAvailable > 0)
+    {
+        if (!instruction)
+        {
+            instruction = new InstructionBuffer();
+            instruction->setPeerId(1);
+            instruction->setLocalTransmitter(this);
+            _inputBuffer = instruction;
+        }
+        if (!_read(instruction, _socket, bytesAvailable))
+        {
+            disconnect();
+            delete _inputBuffer;
+            _inputBuffer = NULL;
+            return ;
+        }
+        _finalizeReceivedInstruction(instruction, 1);
+    }
 }
 
 //
-// Handle disconnected QSslSocket signal
+// Handle QSslSocket disconnected signal
 //
-
 void NetworkClientManager::onDisconnected()
 {
     qDebug() << "Disconnected from host";
