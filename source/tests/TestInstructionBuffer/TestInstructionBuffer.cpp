@@ -1,6 +1,6 @@
+#include "InstructionBuffer.hpp"
 #include <QString>
 #include <QtTest>
-#include "InstructionBuffer.hpp"
 
 //
 // Note: Test class inherit from `InstructionBuffer` to be able to

@@ -1,8 +1,8 @@
 #ifndef NETWORK_CLIENT_HPP_
 # define NETWORK_CLIENT_HPP_
 
-# include <QSslSocket>
 # include "InstructionBuffer.hpp"
+# include <QSslSocket>
 
 class NetworkClient : public QObject
 {

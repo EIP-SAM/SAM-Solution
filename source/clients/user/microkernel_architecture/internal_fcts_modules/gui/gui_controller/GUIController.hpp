@@ -1,8 +1,8 @@
 #ifndef GUI_CONTROLLER_HPP_
 # define GUI_CONTROLLER_HPP_
 
-# include <QQmlApplicationEngine>
 # include "AFunctionality.hpp"
+# include <QQmlApplicationEngine>
 
 class GUIController : public AFunctionality
 {

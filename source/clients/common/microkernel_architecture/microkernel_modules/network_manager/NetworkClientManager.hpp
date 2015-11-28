@@ -1,9 +1,9 @@
 #ifndef NETWORK_CLIENT_MANAGER_HPP_
 # define NETWORK_CLIENT_MANAGER_HPP_
 
-# include <QSslSocket>
 # include "InstructionBuffer.hpp"
 # include "ANetworkManager.hpp"
+# include <QSslSocket>
 
 class NetworkClientManager : public ANetworkManager
 {

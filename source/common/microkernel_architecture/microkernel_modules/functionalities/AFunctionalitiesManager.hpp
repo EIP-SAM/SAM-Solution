@@ -1,10 +1,9 @@
 #ifndef AFUNCTIONALITIES_MANAGER_HPP_
 # define AFUNCTIONALITIES_MANAGER_HPP_
 
+# include "AFunctionality.hpp"
 # include <QList>
 # include <QString>
-
-# include "AFunctionality.hpp"
 
 class AFunctionalitiesManager : public QObject
 {

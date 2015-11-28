@@ -1,8 +1,8 @@
 #ifndef MAIN_CONTROLLER_HPP_
 # define MAIN_CONTROLLER_HPP_
 
-# include <QCoreApplication>
 # include "AMainController.hpp"
+# include <QCoreApplication>
 
 class MainController : public AMainController
 {

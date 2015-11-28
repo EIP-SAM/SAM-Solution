@@ -1,6 +1,6 @@
 #define __MAIN_CONTROLLER_PRIVATE_DECL
-#include <QTimer>
 #include "MainController.hpp"
+#include <QTimer>
 
 //
 // Constructor

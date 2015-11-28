@@ -1,8 +1,8 @@
 #ifndef AFUNCTIONALITY_HPP_
 # define AFUNCTIONALITY_HPP_
 
-# include <QThread>
 # include "AInstructionBusClient.hpp"
+# include <QThread>
 
 //
 // Note: Overload the run() method in child classes
