@@ -1,30 +1,26 @@
+#define __MAIN_CONTROLLER_PRIVATE_DECL
 #include "MainController.hpp"
-#include "NetworkServer.hpp"
 
-MainController::MainController(int ac, char **av)
-    : _qtCore(ac, av)
+//
+// Constructor
+//
+MainController::MainController(int &ac, char **av)
+    : AMainController(SAM_SERVER), _qtCore(ac, av)
 {
+    mainController = !mainController ? this : mainController;
 }
 
+//
+// Destructor
+//
 MainController::~MainController()
 {
-    delete _network;
 }
 
+//
+// Entry point of the main controller
+//
 int MainController::run()
 {
-    if (!_initNetwork())
-        return (-1);
-
-    return (_qtCore.exec());
-}
-
-bool MainController::_initNetwork()
-{
-    if (!(_network = new NetworkServer(this)))
-        return (false);
-
-    _network->start(42042);
-
-    return (true);
+    return !_init() ? -1 : _qtCore.exec();
 }

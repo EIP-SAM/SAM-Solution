@@ -3,6 +3,7 @@
 *.lib
 *.so
 *.dll
+*.exe
 
 *~
 *.autosave
@@ -10,3 +11,4 @@
 *.pro.user*
 *build*
 moc_*
+Makefile

@@ -1,26 +1,31 @@
 #ifndef MAIN_CONTROLLER_HPP_
 # define MAIN_CONTROLLER_HPP_
 
-# include <QApplication>
+# include "AMainController.hpp"
+# include <QGuiApplication>
 
-class NetworkClientManager;
-
-class MainController : public QObject
+class MainController : public AMainController
 {
     Q_OBJECT
 
 private:
-    QApplication _qtCore;
-    NetworkClientManager *_network = NULL;
+    QGuiApplication _qtCore;
 
 public:
-    MainController(int, char **);
-    ~MainController();
+    MainController(int &, char **);
+    virtual ~MainController();
 
-    int run();
-
-private:
-    bool _initNetwork();
+    virtual int run();
 };
+
+# ifdef __MAIN_CONTROLLER_PRIVATE_DECL
+
+MainController *mainController = NULL;
+
+# else
+
+extern MainController *mainController;
+
+# endif // !__MAIN_CONTROLLER_PRIVATE_DECL
 
 #endif // !MAIN_CONTROLLER_HPP_
