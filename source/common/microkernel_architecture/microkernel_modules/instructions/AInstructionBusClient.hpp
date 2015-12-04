@@ -24,8 +24,10 @@ public:
         INVALID = 0,
         ALL,
 
+        // CLIENTS
         NETWORK_MANAGER = 10,
         GUI,
+        STATISTIC_MANAGER
     };
 
 private:
