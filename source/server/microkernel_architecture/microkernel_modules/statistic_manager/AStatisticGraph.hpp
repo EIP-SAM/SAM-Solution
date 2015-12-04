@@ -2,6 +2,8 @@
 # define ASTATISTICGRAPH_HPP_
 
 #include "AStatisticData.hpp"
+#include "AInstructionParameter.hpp"
+#include "AInstruction.hpp"
 
 class AStatisticGraph : AStatisticData
 {
