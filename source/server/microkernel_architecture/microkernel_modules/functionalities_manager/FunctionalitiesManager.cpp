@@ -1,5 +1,6 @@
 #include "FunctionalitiesManager.hpp"
 #include "NetworkServerManager.hpp"
+#include "StatisticManager.hpp"
 
 //
 // Constructor
@@ -46,4 +47,5 @@ void FunctionalitiesManager::_setInternalFcts()
 //
 void FunctionalitiesManager::_setExternalFcts()
 {
+    _externalFcts << new StatisticManager;
 }

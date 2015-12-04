@@ -34,7 +34,8 @@ INCLUDEPATH += \
     $${COMMON_ALL}/microkernel_architecture/main_controller \
     microkernel_architecture/microkernel_modules/functionalities_manager \
     microkernel_architecture/microkernel_modules/network_manager \
-    microkernel_architecture/microkernel_modules/main_controller
+    microkernel_architecture/microkernel_modules/main_controller \
+    microkernel_architecture/microkernel_modules/statistic_manager
 
 HEADERS += \
     $${COMMON_ALL}/others/struct_packed.h \
@@ -53,7 +54,8 @@ HEADERS += \
     microkernel_architecture/microkernel_modules/functionalities_manager/FunctionalitiesManager.hpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkServerManager.hpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkClient.hpp \
-    microkernel_architecture/microkernel_modules/main_controller/MainController.hpp
+    microkernel_architecture/microkernel_modules/main_controller/MainController.hpp \
+    microkernel_architecture/microkernel_modules/statistic_manager/StatisticManager.hpp
 
 SOURCES += \
     $${COMMON_ALL}/qt_custom_extensions/_QFile.cpp \
@@ -71,4 +73,5 @@ SOURCES += \
     microkernel_architecture/microkernel_modules/network_manager/NetworkServerManager.cpp \
     microkernel_architecture/microkernel_modules/network_manager/NetworkClient.cpp \
     microkernel_architecture/microkernel_modules/main_controller/MainController.cpp \
+    microkernel_architecture/microkernel_modules/statistic_manager/StatisticManager.cpp \
     microkernel_architecture/main.cpp
