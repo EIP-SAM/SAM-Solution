@@ -1,4 +1,5 @@
 #include "AStatisticTab.hpp"
+#include "AInstructionParameter.hpp"
 
 AStatisticTab::AStatisticTab()
 {
@@ -8,23 +9,30 @@ AStatisticTab::~AStatisticTab()
 {
 }
 
-void AStatisticTab::setTabX(List<Float> tab)
+void AStatisticTab::setTabX(vector<float> tab)
 {
-  _TabX = tab;
+  Parameter *param;
+  QByteArray* ins = new QByteArray(reinterpret_cast<const char*>(tab.data()), tab.size());
+
+  param = this->createParameter(tab.size);
+  param->setRawData(&ins);
 }
 
-void AStatisticTab::setTabY(List<Float> tab)
+void AStatisticTab::setTabY(vector<float> tab)
 {
-  _TabY = tab;
+  Parameter *param;
+  QByteArray* ins = new QByteArray(reinterpret_cast<const char*>(tab.data()), tab.size());
+
+  param = this->createParameter(tab.size);
+  param->setRawData(&ins);
 }
 
-List<Float> AStatisticTab::getTabX()
+vector<float> AStatisticTab::getTabX()
 {
   return (_TabX);
 }
 
-
-List<Float> AStatisticTab::getTabY()
+vector<float> AStatisticTab::getTabY()
 {
   return (_TabY);
 }
