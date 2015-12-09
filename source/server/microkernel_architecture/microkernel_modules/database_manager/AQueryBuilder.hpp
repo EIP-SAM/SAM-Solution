@@ -7,6 +7,10 @@
 # include <QString>
 # include <QVariant>
 # include <QMap>
+# include <QDebug>
+
+# define MYSQL_TYPE "QMYSQL"
+# define SQLITE_TYPE "QSQLITE"
 
 class AQueryBuilder : public QObject
 {
@@ -37,6 +41,8 @@ public:
     QSqlQuery *build();
 
     const QString &getQueryString() const;
+
+    static QSqlDatabase *connect(const std::string &dbType);
 
 protected:
     QSqlQuery *_queryObj;

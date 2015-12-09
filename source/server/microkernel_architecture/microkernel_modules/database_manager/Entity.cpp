@@ -4,7 +4,7 @@
 // Init attributs
 // Create database instance
 //
-Entity::Entity() : _db(new QSqlDatabase()), _dbType(MYSQL_TYPE), _propertiesName(NULL), _propertiesValue(NULL)
+Entity::Entity() : _db(NULL), _dbType(MYSQL_TYPE), _propertiesName(NULL), _propertiesValue(NULL)
 {
 }
 
@@ -28,11 +28,8 @@ Entity::~Entity()
 //
 bool Entity::connect()
 {
-    *_db = QSqlDatabase::addDatabase("QMYSQL");
-    _db->setHostName("127.0.0.1");
-    _db->setDatabaseName("test");
-    _db->setUserName("root");
-    _db->setPassword("root");
+    _db = AQueryBuilder::connect(_dbType.toUtf8().constData());
+
     return _db->open();
 }
 
@@ -68,7 +65,10 @@ bool Entity::save()
     else
 	query = prepareUpdate();
 
-    return (query->exec());
+    bool ret = query->exec();
+    if (!ret)
+	qDebug() << query->lastError();
+    return (ret);
 }
 
 //
@@ -133,7 +133,7 @@ QSqlQuery *Entity::prepareUpdate() const
 //
 bool Entity::startConnection()
 {
-    if (!_db->isOpen())
+    if (!_db || !_db->isOpen())
     {
 	if (!connect())
 	    return false;
@@ -188,6 +188,8 @@ AQueryBuilder *Entity::getQueryBuilder() const
 
     if (_dbType == MYSQL_TYPE)
 	ret = new QueryBuilderMySql(_table, _db);
+    else if (_dbType == SQLITE_TYPE)
+	ret = new QueryBuilderSqlite(_table, _db);
     else
 	qDebug() << "Unknown database type";
 

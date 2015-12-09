@@ -55,3 +55,22 @@ const QString &AQueryBuilder::getQueryString() const
 {
     return _queryStr;
 }
+
+QSqlDatabase *AQueryBuilder::connect(const std::string &dbType)
+{
+    QSqlDatabase *ret = new QSqlDatabase();
+    *ret = QSqlDatabase::addDatabase(dbType.c_str());
+
+    if (dbType == MYSQL_TYPE) {
+	ret->setHostName("127.0.0.1");
+	ret->setDatabaseName("test");
+	ret->setUserName("root");
+	ret->setPassword("root");
+    } else if (dbType == SQLITE_TYPE) {
+	ret->setDatabaseName("/opt/databases/sam.db");
+    }
+    else
+	qDebug() << "Unknown database type";
+
+    return (ret);
+}

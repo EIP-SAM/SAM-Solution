@@ -2,6 +2,7 @@
 # define ENTITY_HPP_
 
 # include "QueryBuilderMySql.hpp"
+# include "QueryBuilderSqlite.hpp"
 
 # include <QSqlDatabase>
 # include <QObject>
@@ -12,9 +13,7 @@
 # include <QVector>
 # include <QSqlRecord>
 # include <QSqlQuery>
-# include <QDebug>
-
-# define MYSQL_TYPE "MYSQL"
+# include <QSqlError>
 
 class Entity : public QObject
 {
