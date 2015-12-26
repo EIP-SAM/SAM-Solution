@@ -2,6 +2,9 @@
 #include "Connect.hpp"
 #include "ReturnType.hpp"
 
+//
+// Constructor
+//
 Connect::Connect(const QString &login, const QString &password, eProgId transmitterProgid,
 		 AInstructionBusClient::eClientId firstTransmitterId,
 		 AInstructionBusClient::eClientId finalReceiverId)
@@ -12,6 +15,9 @@ Connect::Connect(const QString &login, const QString &password, eProgId transmit
     _createParameterOfConnect();
 }
 
+//
+// Copy constructor
+//
 Connect::Connect(Connect *co)
 {
     _initInstructionHeader(co->getTransmitterProgId(), co->getFirstTransmitter(), co->getFinalReceiver());
@@ -20,6 +26,16 @@ Connect::Connect(Connect *co)
     _createParameterOfConnect();
 }
 
+//
+// Destructor
+//
+Connect::~Connect()
+{
+}
+
+//
+// Init all elements of the instruction's header
+//
 void Connect::_initInstructionHeader(eProgId transmitterProgid,
 				     AInstructionBusClient::eClientId firstTransmitterId,
 				     AInstructionBusClient::eClientId finalReceiverId)
@@ -32,6 +48,9 @@ void Connect::_initInstructionHeader(eProgId transmitterProgid,
     setReturnType(ReturnType::BOOLEAN);
 }
 
+//
+// Add parameters which compose connect message to `_data`
+//
 void Connect::_createParameterOfConnect()
 {
     AInstruction::Parameter *loginParameter = createParameter(_login.size());
@@ -43,25 +62,33 @@ void Connect::_createParameterOfConnect()
     qStringPasswordParameter->setRawData(_password);
 }
 
-Connect::~Connect()
-{
-}
-
+//
+// Getter `_login`
+//
 QString Connect::getLogin() const
 {
     return (_login);
 }
 
+//
+// Setter `_login`
+//
 void Connect::setLogin(const QString &login)
 {
     _login = login;
 }
 
+//
+// Getter `_password`
+//
 QString Connect::getPassword() const
 {
     return (_password);
 }
 
+//
+// Setter `_password`
+//
 void Connect::setPassword(const QString &password)
 {
     _password = password;
