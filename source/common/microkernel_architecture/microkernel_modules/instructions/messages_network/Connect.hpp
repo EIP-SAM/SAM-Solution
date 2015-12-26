@@ -20,7 +20,7 @@ private:
     void _createParameterOfConnect();
 
 public:
-    Connect(QString login, QString password, eProgId transmitterProgId,
+    Connect(const QString &login, const QString &password, eProgId transmitterProgId,
 	    AInstructionBusClient::eClientId firstTransmitterId,
 	    AInstructionBusClient::eClientId finalReceiverId);
     Connect(Connect *co);
@@ -28,9 +28,9 @@ public:
     virtual ~Connect();
 
     QString getLogin() const;
-    void setLogin(QString login);
+    void setLogin(const QString &login);
     QString getPassword() const;
-    void setPassword(QString password);
+    void setPassword(const QString &password);
 };
 
 # ifdef __CONNECT_PRIVATE_DEF

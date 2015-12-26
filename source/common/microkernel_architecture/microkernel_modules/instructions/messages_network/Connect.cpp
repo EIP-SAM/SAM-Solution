@@ -1,10 +1,8 @@
 #define __CONNECT_PRIVATE_DEF
 #include "Connect.hpp"
 #include "ReturnType.hpp"
-#include <string>
-#include <iostream>
 
-Connect::Connect(QString login, QString password, eProgId transmitterProgid,
+Connect::Connect(const QString &login, const QString &password, eProgId transmitterProgid,
 		 AInstructionBusClient::eClientId firstTransmitterId,
 		 AInstructionBusClient::eClientId finalReceiverId)
 {
@@ -54,7 +52,7 @@ QString Connect::getLogin() const
     return (_login);
 }
 
-void Connect::setLogin(QString login)
+void Connect::setLogin(const QString &login)
 {
     _login = login;
 }
@@ -64,7 +62,7 @@ QString Connect::getPassword() const
     return (_password);
 }
 
-void Connect::setPassword(QString password)
+void Connect::setPassword(const QString &password)
 {
     _password = password;
 }
