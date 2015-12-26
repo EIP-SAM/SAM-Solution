@@ -1,9 +1,6 @@
 #include "TestInstructionConnect.hpp"
-#include "AInstruction.hpp"
 #include "ReturnType.hpp"
 #include "AInstructionBusClient.hpp"
-#include <QtTest/QtTest>
-#include <iostream>
 
 TestInstructionConnect::TestInstructionConnect()
 {
