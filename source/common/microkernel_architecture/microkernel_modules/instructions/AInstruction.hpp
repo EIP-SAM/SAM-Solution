@@ -62,6 +62,8 @@ protected:
 
 public:
     class Parameter;
+    class IntParameter;
+    class QStringParameter;
 
 protected:
     QByteArray _data;
@@ -100,10 +102,17 @@ public:
 protected:
     instructionParameterHeader_t *_getParameterNumber(int) const;
     void _ensureMinimumDataSize(int minSize = _INSTRUCTION_HEADER_SIZE);
-    void _setPointerToData();
     bool _parameterIsValid(instructionParameterHeader_t *);
     void _resizeParameter(instructionParameterHeader_t *, int);
     void _resetPointersToParameters();
+
+    //
+    // Reset instruction header pointer with new `_data` byte array
+    //
+    inline void _setPointerToData()
+	{
+	    _header = (instructionHeader_t *)_data.data();
+	}
 };
 
 # include "AInstructionParameter.hpp"

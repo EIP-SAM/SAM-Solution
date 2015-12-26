@@ -1,6 +1,8 @@
 #ifndef AINSTRUCTION_PARAMETER_HPP_
 # define AINSTRUCTION_PARAMETER_HPP_
 
+# include "AInstruction.hpp"
+
 class AInstruction;
 class QByteArray;
 struct instructionParameterHeader_t;
@@ -22,6 +24,7 @@ public:
     void setSize(int);
 
     instructionParameterHeader_t *getHeader() const;
+    AInstruction &getAInstruction() const;
     bool isValid() const;
     QByteArray getRawData() const;
     unsigned int getType() const;

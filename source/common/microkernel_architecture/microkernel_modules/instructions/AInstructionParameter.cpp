@@ -86,6 +86,15 @@ AInstruction::instructionParameterHeader_t *AInstruction::Parameter::getHeader()
     return _header;
 }
 
+
+//
+// Getter: `_parent`
+//
+AInstruction &AInstruction::Parameter::getAInstruction() const
+{
+    return _parent;
+}
+
 //
 // Getter: parameter is valid
 //

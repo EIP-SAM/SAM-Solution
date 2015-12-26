@@ -252,14 +252,6 @@ void AInstruction::_ensureMinimumDataSize(int minSize)
 }
 
 //
-// Reset instruction header pointer with new `_data` byte array
-//
-inline void AInstruction::_setPointerToData()
-{
-    _header = (instructionHeader_t *)_data.data();
-}
-
-//
 // Iterate over parameters to find if `parameterHeader` is a valid pointer
 //
 bool AInstruction::_parameterIsValid(instructionParameterHeader_t *parameterHeader)
