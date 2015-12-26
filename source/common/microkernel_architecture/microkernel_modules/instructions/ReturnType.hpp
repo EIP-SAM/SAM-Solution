@@ -7,7 +7,8 @@ enum ReturnType
     INTEGER,
     UNSIGNED_INTEGER,
     BOOLEAN,
-    QSTRING
+    QSTRING,
+    QLIST_USERS
 };
 
 #endif // !RETURN_TYPE_HPP_
