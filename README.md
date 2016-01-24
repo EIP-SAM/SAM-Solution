@@ -1,3 +1,6 @@
+/!\ This repository is deprecated, consider using SAM-Solution-Node-js instead  
+https://github.com/EIP-SAM/SAM-Solution-Node-js
+
 # SAM-Solution
 System Administration Manager
 
